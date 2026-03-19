@@ -1,0 +1,42 @@
+# Apresentação {.unnumbered}
+
+Este site reúne minhas anotações das aulas de **Lego III: Inferência Causal**, disciplina do programa de pós-graduação do [IESP-UERJ](https://iesp.uerj.br). As anotações são produzidas em [Quarto](https://quarto.org) e publicadas automaticamente via GitHub Pages.
+
+## Sobre a disciplina
+
+O objetivo do curso é fornecer conhecimentos teóricos e aplicados sobre métodos para responder a questões causais usando dados observacionais, quase-experimentais e experimentais. Responder a questões causais exige pensar contrafactualmente — uma habilidade essencial para cientistas sociais.
+
+**Professores:** Pedro H. G. Ferreira de Souza, Carlos Antonio Costa Ribeiro e Rogério J. Barbosa
+
+**Período:** 1º semestre de 2026 — quartas-feiras, 9h–12h
+
+## Plano de aulas
+
+| Aulas | Tópico |
+|---|---|
+| 1–2 | Grafos Acíclicos Dirigidos (DAGs) |
+| 3 | O ideal experimental |
+| 4 | Resultados potenciais |
+| 5 | *Matching* |
+| 6 | Regressão e análise causal |
+| 7 | Variáveis instrumentais |
+| 8 | *Regression Discontinuity* |
+| 9–10 | Regressão com dados longitudinais |
+| 11–14 | Diferenças em diferenças |
+| 15 | Prova final |
+
+## Leituras principais
+
+- @cunningham2021mixtape
+- @huntingtonklein2022effect
+- @morgan2015counterfactuals
+- @angrist2009harmless
+- @angrist2015mastering
+
+## Como usar estas notas
+
+As anotações estão organizadas por aula na barra lateral à esquerda. Cada página corresponde a uma aula e cobre os principais tópicos discutidos.
+
+::: callout-note
+Estas são anotações pessoais e podem conter imprecisões. Use-as como complemento, não como substituto do material oficial da disciplina.
+:::
