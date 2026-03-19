@@ -23,6 +23,9 @@ jobs:
           r-version: "4.4"
           use-public-rspm: true
 
+      - name: Install system dependencies
+        run: sudo apt-get install -y libglpk-dev libxml2-dev
+
       - name: Install R packages
         run: |
           Rscript -e "install.packages(c('knitr', 'rmarkdown', 'ggdag', 'ggplot2'))"
