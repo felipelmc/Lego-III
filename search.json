@@ -1,0 +1,195 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Lego III",
+    "section": "",
+    "text": "Apresentação\nEste site reúne minhas anotações das aulas de Lego III: Inferência Causal, disciplina do programa de pós-graduação do IESP-UERJ. As anotações são produzidas em Quarto e publicadas automaticamente via GitHub Pages.",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#sobre-a-disciplina",
+    "href": "index.html#sobre-a-disciplina",
+    "title": "Lego III",
+    "section": "Sobre a disciplina",
+    "text": "Sobre a disciplina\nO objetivo do curso é fornecer conhecimentos teóricos e aplicados sobre métodos para responder a questões causais usando dados observacionais, quase-experimentais e experimentais. Responder a questões causais exige pensar contrafactualmente — uma habilidade essencial para cientistas sociais.\nProfessores: Pedro H. G. Ferreira de Souza, Carlos Antonio Costa Ribeiro e Rogério J. Barbosa\nPeríodo: 1º semestre de 2026 — quartas-feiras, 9h–12h",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#plano-de-aulas",
+    "href": "index.html#plano-de-aulas",
+    "title": "Lego III",
+    "section": "Plano de aulas",
+    "text": "Plano de aulas\n\n\n\nAulas\nTópico\n\n\n\n\n1–2\nGrafos Acíclicos Dirigidos (DAGs)\n\n\n3\nO ideal experimental\n\n\n4\nResultados potenciais\n\n\n5\nMatching\n\n\n6\nRegressão e análise causal\n\n\n7\nVariáveis instrumentais\n\n\n8\nRegression Discontinuity\n\n\n9–10\nRegressão com dados longitudinais\n\n\n11–14\nDiferenças em diferenças\n\n\n15\nProva final",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#leituras-principais",
+    "href": "index.html#leituras-principais",
+    "title": "Lego III",
+    "section": "Leituras principais",
+    "text": "Leituras principais\n\nCunningham (2021)\nHuntington-Klein (2022)\nMorgan and Winship (2015)\nAngrist and Pischke (2009)\nAngrist and Pischke (2015)",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#como-usar-estas-notas",
+    "href": "index.html#como-usar-estas-notas",
+    "title": "Lego III",
+    "section": "Como usar estas notas",
+    "text": "Como usar estas notas\nAs anotações estão organizadas por aula na barra lateral à esquerda. Cada página corresponde a uma aula e cobre os principais tópicos discutidos.\n\n\n\n\n\n\nNote\n\n\n\nEstas são anotações pessoais e podem conter imprecisões. Use-as como complemento, não como substituto do material oficial da disciplina.\n\n\n\n\n\n\n\n\nAngrist, Joshua D., and Jörn-Steffen Pischke. 2009. Mostly Harmless Econometrics: An Empiricist’s Companion. Princeton: Princeton University Press.\n\n\n———. 2015. Mastering ‘Metrics: The Path from Cause to Effect. Princeton: Princeton University Press.\n\n\nCunningham, Scott. 2021. Causal Inference: The Mixtape. New Haven: Yale University Press.\n\n\nHuntington-Klein, Nick. 2022. The Effect: An Introduction to Research Design and Causality. Boca Raton: Chapman & Hall.\n\n\nMorgan, Stephen L., and Christopher Winship. 2015. Counterfactuals and Causal Inference: Methods and Principles for Social Research. 2nd ed. Cambridge: Cambridge University Press.",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-01.html",
+    "href": "aulas/aula-01.html",
+    "title": "1  Aula 1",
+    "section": "",
+    "text": "1.1 Diagramas causais\nUm grafo acíclico dirigido (DAG) é uma representação gráfica de relações causais. A seta básica \\(X \\rightarrow Y\\) carrega vários significados simultâneos:\nDuas propriedades importantes das causas nos DAGs:",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Aula 1</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-01.html#diagramas-causais",
+    "href": "aulas/aula-01.html#diagramas-causais",
+    "title": "1  Aula 1",
+    "section": "",
+    "text": "\\(X\\) é parte do processo gerador de dados (PGD) de \\(Y\\)\nContrafactual: se \\(X\\) não tivesse ocorrido, \\(Y\\) provavelmente também não teria\nSe propositalmente mudássemos o valor de \\(X\\), \\(Y\\) provavelmente se alteraria\nEm resumo: \\(X\\) causa \\(Y\\)\n\n\n\nMúltiplas causas. Um mesmo \\(Y\\) pode ter várias causas: \\(X_1 \\rightarrow Y\\), \\(X_2 \\rightarrow Y\\), \\(X_3 \\rightarrow Y\\). Cada \\(X_i\\) é uma causa parcial.\nCausas são probabilísticas. Elas alteram a distribuição de \\(Y\\), não determinam seu valor com certeza. Estamos falando de coletivos de unidades de observação.\n\n\nPor que acíclico?\nSetas unidirecionais não funcionam em ciclos. Um DAG deve ser acíclico — cadeias do tipo \\(A \\rightarrow D \\rightarrow E \\rightarrow F \\rightarrow A\\) são proibidas. Há uma justificativa lógica: ciclos geram tautologias. Há também uma justificativa operacional: o aciclo viabiliza certas propriedades matemáticas que seriam impossíveis de outra forma.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Aula 1</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-01.html#como-escolher-as-setas",
+    "href": "aulas/aula-01.html#como-escolher-as-setas",
+    "title": "1  Aula 1",
+    "section": "1.2 Como escolher as setas",
+    "text": "1.2 Como escolher as setas\nÉ muito difícil escolher quais setas não criar, porque o mundo é de fato complicado. A melhor forma de decidir quais setas incluir é por meio de revisão de literatura — em particular, revisão sistemática e meta-análise.\n\nRevisão sistemática: permite identificar se o efeito existe e em que direção opera\nMeta-análise: fornece pistas sobre a magnitude e a forma funcional da relação\n\n\n\n\n\n\n\nNote\n\n\n\nO DAG não informa nada sobre a forma funcional da relação entre as variáveis — apenas sobre sua existência e direção. A revisão de literatura preenche essa lacuna.\n\n\n\nSimplificação de DAGs\nNa prática, é necessário simplificar. Quatro estratégias úteis:\n\nEliminar fatores desimportantes (ligação obscura com \\(Y\\) ou muito distante)\nAgregar variáveis redundantes ou usar apenas uma delas\nEliminar irrelevâncias\nDesconsiderar a representação de mediadores, se a mediação não é o alvo do interesse",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Aula 1</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-01.html#relações-triádicas-fundamentais",
+    "href": "aulas/aula-01.html#relações-triádicas-fundamentais",
+    "title": "1  Aula 1",
+    "section": "1.3 Relações triádicas fundamentais",
+    "text": "1.3 Relações triádicas fundamentais\nToda a estrutura de um DAG pode ser decomposta em três tipos de relações entre três variáveis:\n\n1. Mediação (chain)\n\\(X \\rightarrow M \\rightarrow Y\\) — e possivelmente também \\(X \\rightarrow Y\\) diretamente.\n\n\nCode\ndag_mediacao &lt;- dagify(\n  M ~ X,\n  Y ~ M + X,\n  coords = list(\n    x = c(X = 0, M = 1, Y = 2),\n    y = c(X = 0, M = 0, Y = 0)\n  )\n)\nggdag(dag_mediacao) + theme_dag()\n\n\n\n\n\n\n\n\n\n\n\n2. Confusão / Confounder (fork)\nUm determinante comum \\(Z\\) que causa tanto \\(X\\) quanto \\(Y\\):\n\n\nCode\ndag_fork &lt;- dagify(\n  X ~ Z,\n  Y ~ Z,\n  coords = list(\n    x = c(Z = 1, X = 0, Y = 2),\n    y = c(Z = 1, X = 0, Y = 0)\n  )\n)\nggdag(dag_fork) + theme_dag()\n\n\n\n\n\n\n\n\n\n\n\n3. Colisão / Collider (inverted fork)\nDuas causas independentes que convergem num mesmo efeito: \\(X \\rightarrow C \\leftarrow Y\\).\n\n\nCode\ndag_collider &lt;- dagify(\n  C ~ X + Y,\n  coords = list(\n    x = c(X = 0, Y = 2, C = 1),\n    y = c(X = 1, Y = 1, C = 0)\n  )\n)\nggdag(dag_collider) + theme_dag()\n\n\n\n\n\n\n\n\n\n\nO exemplo de Hollywood\nSuponha que atores em Hollywood sejam selecionados por talento ou beleza — e que, na população geral, talento e beleza sejam independentes. Uma vez dentro desse grupo, observamos uma correlação negativa entre as duas características: quanto menos talentoso, mais belo — e vice-versa.\nEssa correlação não existe na população; ela é criada pela seleção. Beleza e talento explicam conjuntamente a chance de estar em Hollywood — que é o collider.\n\n\n\n\n\n\nWarning\n\n\n\nControlar por um collider tem o mesmo efeito de selecionar uma amostra que é fruto de um collider. Colliders são armadilhas como variáveis de controle.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Aula 1</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-01.html#implicações-observáveis",
+    "href": "aulas/aula-01.html#implicações-observáveis",
+    "title": "1  Aula 1",
+    "section": "1.4 Implicações observáveis",
+    "text": "1.4 Implicações observáveis\nO DAG nos ajuda a desenhar diversas formas funcionais que, na prática, deveriam produzir os mesmos efeitos causais para uma variável de interesse. Um único DAG pode gerar dezenas de proposições empiricamente testáveis — independências condicionais, regressões equivalentes, restrições de sobreidentificação.\nA função principal dos DAGs é, portanto, gerar implicações observáveis que podem ser confrontadas com os dados.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Aula 1</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-02.html",
+    "href": "aulas/aula-02.html",
+    "title": "2  Aula 2",
+    "section": "",
+    "text": "2.1 A ideia de controlar por variáveis como sendo “bloquear caminhos”\nToda a parte de DAG é uma manipulação de probabilidades conjuntas e condicionais. É uma forma de escrever equações \\(P(X|Y) \\times P(Y)\\). Só que o Judea Pearl percebeu que você consegue, sem entrar nessa notação formal, resolver quase que as mesmas coisas mas graficamente. Não falaremos muito da notação formal, mas no Causal Inference in Statistics: a Primer, do próprio Judea Pearl, entramos em mais detalhes sobre isso.\nSuponha o seguinte DAG:\nCode\ndag_ses &lt;- dagify(\n  Renda ~ SES,\n  Casa  ~ Renda + SES,\n  coords = list(\n    x = c(SES = 0, Renda = 1, Casa = 2),\n    y = c(SES = 1, Renda = 0, Casa = 0)\n  )\n)\n\nggdag(dag_ses) + theme_dag()\nAqui, estamos dizendo que casa ~ renda + SES. Se fazemos simplesmente casa ~ renda, o efeito de renda está contaminado por SES. Afinal, tudo que não especificamos na regressão vira resíduo.\nNa prática, se parcializarmos a renda pelo que é explicado pelo SES, conseguimos ir “eliminando caminhos”, ou “cortar setas”.\nO problema é que parcializar, na vida, é essencialmente impossível. O controle por variáveis, portanto, é uma assumption muito forte. É impossível representar todos os caminhos causais com muita certeza.\nUma coisa é \\(P(Y|X)\\) e outra é \\(P(Y|\\text{do}(X))\\). A primeira pode ser endógena, enquanto a segunda é necessariamente causal. \\(\\text{do}(X)\\) significa que algo foi forçado.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Aula 2</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-02.html#a-ideia-de-controlar-por-variáveis-como-sendo-bloquear-caminhos",
+    "href": "aulas/aula-02.html#a-ideia-de-controlar-por-variáveis-como-sendo-bloquear-caminhos",
+    "title": "2  Aula 2",
+    "section": "",
+    "text": "Important\n\n\n\nControlando por variáveis, conseguimos uma versão parcializada. Mas o fato de que fizemos isso com SES em relação à renda não significa que removemos todas as setas. Suponha, por exemplo, que cor/raça esteja ligando as duas coisas. Então a parcialização não é suficiente.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Aula 2</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-02.html#recap-de-regressão-parcial",
+    "href": "aulas/aula-02.html#recap-de-regressão-parcial",
+    "title": "2  Aula 2",
+    "section": "2.2 Recap de regressão parcial",
+    "text": "2.2 Recap de regressão parcial\nUsualmente, queremos explicar \\(Y\\) como função de mais de uma variável, por exemplo \\(Y = \\beta_0 + \\beta_1 x + \\beta_2 w + \\epsilon\\). \\(\\beta_1\\) é o efeito parcial de \\(x\\) controlado por \\(w\\).\nRegressão simples (1): queremos o resíduo \\(\\hat{\\epsilon}_y = y - (a_0 + a_1 w)\\)\nRegressão simples (2): queremos o resíduo \\(\\hat{\\epsilon}_x = x - (c_0 + c_1 w)\\)\nA regressão parcial combina as duas coisas:\n\\[\n\\hat{\\epsilon}_y = b_0 + b_1 \\hat{\\epsilon}_x\n\\]\nEssa regressão acima, sem controles, na verdade já está controlada, porque de saída removemos de \\(y\\) a parte explicada de \\(w\\) — e fizemos o mesmo com \\(x\\). Isso significa, em essência, que \\(\\beta_1 = b_1\\).",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Aula 2</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-02.html#caminhos-causais-exemplo-1",
+    "href": "aulas/aula-02.html#caminhos-causais-exemplo-1",
+    "title": "2  Aula 2",
+    "section": "2.3 Caminhos causais — Exemplo 1",
+    "text": "2.3 Caminhos causais — Exemplo 1\nConsidere o seguinte DAG:\n\n\nCode\ndag_ex1 &lt;- dagify(\n  D ~ A + B,\n  F ~ A,\n  Y ~ F + D,\n  A ~ U,\n  B ~ U,\n  coords = list(\n    x = c(U = 0, A = 1, B = 1, F = 2, D = 2, Y = 3),\n    y = c(U = 0, A = 1, B = -1, F = 1, D = -1, Y = 0)\n  )\n)\n\nggdag(dag_ex1) + theme_dag()\n\n\n\n\n\n\n\n\n\nOs caminhos causais de \\(D\\) até \\(Y\\) são:\n\n\\(D \\rightarrow Y\\)\n\\(D \\leftarrow A \\rightarrow F \\rightarrow Y\\)\n\\(D \\leftarrow B \\leftarrow U \\rightarrow A \\rightarrow F \\rightarrow Y\\)\n\n\nBackdoors\nPergunta: como tirar a parte de \\(D\\) que é explicada por \\(A\\) e \\(B\\)? Ou seja, como remover a relação de \\(D\\) com \\(A\\) e \\(B\\) — os backdoors?\n\\[\nY = \\beta_0 + \\beta_1 D + \\beta_2 A + \\beta_3 B\n\\]\n\n\n\n\n\n\nNote\n\n\n\n“Parcializar é cortar caminhos. Parcializar é controlar por variáveis. Logo, controlar por variáveis é cortar caminhos.”\nAo controlar, estamos bloqueando backdoors.\n\n\nSe controlarmos por \\(F\\), também estaremos controlando pelas coisas em (2). Logo, as cadeias (2) e (3) estão interrompidas, sobrando apenas (1):\n\\[\nY = \\alpha_0 + \\alpha_1 D + \\alpha_2 F\n\\]\n\n\nRegressões equivalentes\nNesse caso, temos algumas regressões equivalentes — todas deveriam revelar o mesmo efeito de \\(D\\):\n\\[\nY \\sim D + A \\qquad Y \\sim D + A + F \\qquad Y \\sim D + F + B\n\\] \\[\nY \\sim D + F \\qquad Y \\sim D + A + B \\qquad Y \\sim D + A + F + B\n\\]\n\n\n\n\n\n\nImportant\n\n\n\nEm essência, todas essas funções deveriam revelar o mesmo efeito de \\(D\\). Se um efeito é diferente dos demais, o diagrama foi invalidado.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Aula 2</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-02.html#colliders",
+    "href": "aulas/aula-02.html#colliders",
+    "title": "2  Aula 2",
+    "section": "2.4 Colliders",
+    "text": "2.4 Colliders\nVamos lembrar das relações triádicas:\n\n\n\n\n\n\n\n\nEstrutura\nTipo\nStatus do caminho\n\n\n\n\n\\(X \\rightarrow M \\rightarrow Y\\)\nCadeia (chain)\nAberto; fecha ao controlar por \\(M\\)\n\n\n\\(X \\leftarrow C \\rightarrow Y\\)\nBifurcação (fork)\nAberto; fecha ao controlar por \\(C\\)\n\n\n\\(X \\rightarrow C \\leftarrow Y\\)\nColisão (collider)\nJá fechado; abre ao controlar por \\(C\\)\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nControlar por um collider abre um caminho antes inexistente.\nNa tríade \\(X \\rightarrow C \\leftarrow Y\\), \\(X \\perp Y\\): são ortogonais, independentes. Controlar por \\(C\\) cria uma associação espúria entre \\(X\\) e \\(Y\\).\n\n\n\nSimulação\n\n\nCode\nset.seed(42)\nn &lt;- 100000\n\nx &lt;- rnorm(n)\ny &lt;- rnorm(n)\nc &lt;- 2 * x + 1.5 * y + rnorm(n) + 10\n\nm1 &lt;- lm(y ~ x)        # zero efeitos\nm2 &lt;- lm(y ~ x + c)    # efeitos criados pelo collider\n\nsummary(m1)$coefficients[\"x\", ]\n\n\n    Estimate   Std. Error      t value     Pr(&gt;|t|) \n-0.002855772  0.003159365 -0.903906787  0.366047007 \n\n\nCode\nsummary(m2)$coefficients[\"x\", ]\n\n\n     Estimate    Std. Error       t value      Pr(&gt;|t|) \n-9.263904e-01  2.620265e-03 -3.535483e+02  0.000000e+00 \n\n\nEm m1, o efeito de \\(x\\) sobre \\(y\\) é essencialmente zero. Em m2, ao controlar por \\(c\\) (o collider), criamos um efeito espúrio.\n\n\nPor que controlar por um collider abre caminhos?\nSeja \\(\\tilde{X} = x - (\\alpha_0 + \\alpha_1 c)\\) e \\(\\tilde{Y} = y - (\\delta_0 + \\delta_1 c)\\). Então:\n\\[\n\\text{cov}(\\tilde{X}, \\tilde{Y}) = \\text{cov}(x - \\alpha_1 c,\\; y - \\delta_1 c)\n\\]\n\\[\n= \\underbrace{\\text{cov}(x, y)}_{= 0} + \\text{cov}(x, -\\delta_1 c) + \\text{cov}(-\\alpha_1 c, y) + \\text{cov}(-\\alpha_1 c, -\\delta_1 c)\n\\]\n\\[\n= -\\gamma_1\\,\\text{cov}(x, c) - \\delta_1\\,\\text{cov}(c, y) + \\alpha_1 \\delta_1\\,\\text{var}(c) \\neq 0\n\\]\nÉ nesse sentido que controlar por um collider cria um caminho antes inexistente: em princípio parecia que estávamos removendo \\(c\\), mas como \\(c\\) não estava lá desde o início, acabamos incluindo-o.\n\n\n\n\n\n\nNote\n\n\n\nEstamos olhando para relações lineares, mas isso vale para quaisquer especificações funcionais.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Aula 2</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-02.html#exemplos",
+    "href": "aulas/aula-02.html#exemplos",
+    "title": "2  Aula 2",
+    "section": "2.5 Exemplos",
+    "text": "2.5 Exemplos\n\nExemplo 2\n\n\nCode\ndag_ex2 &lt;- dagify(\n  Y ~ D + A,\n  B ~ D + A,\n  C ~ D + B,\n  coords = list(\n    x = c(D = 0, A = 2, B = 1, C = 0, Y = 2),\n    y = c(D = 1, A = 1, B = 0, C = -1, Y = 0)\n  )\n)\n\nggdag(dag_ex2) + theme_dag()\n\n\n\n\n\n\n\n\n\nCaminhos causais (\\(D \\rightarrow Y\\)):\n\n\\(D \\rightarrow Y\\) (causal)\n\\(D \\rightarrow \\boxed{B} \\leftarrow A \\rightarrow Y\\) — \\(B\\) é collider; caminho não-causal (seta pra trás)\n\\(D \\rightarrow \\boxed{C} \\leftarrow B \\leftarrow A \\rightarrow Y\\) — \\(C\\) é collider\n\nMínimos controles necessários: \\(Y \\sim D + A\\), ou mesmo nenhum.\nSimulação:\n\n\nCode\nset.seed(42)\nn &lt;- 10000\n\nD &lt;- rnorm(n)\nA &lt;- rnorm(n)\nB &lt;- D + A + rnorm(n)\nC &lt;- D + B + rnorm(n)\nY &lt;- D + A + rnorm(n)\n\n\n\n\n\nExemplo 3\n\n\nCode\ndag_ex3 &lt;- dagify(\n  D ~ G,\n  S ~ D + O + H,\n  O ~ D + H,\n  latent = \"H\",\n  labels = c(\n    G = \"Sexo\", D = \"Discriminação\",\n    S = \"Salário\", O = \"Ocupação\",\n    H = \"Habilidades\\n(não obs.)\"\n  ),\n  coords = list(\n    x = c(G = 0, D = 1, O = 2, S = 3, H = 3),\n    y = c(G = 0, D = 0, O = -1, S = 0, H = -1)\n  )\n)\n\nggdag(dag_ex3, use_labels = \"label\", text = FALSE) + theme_dag()\n\n\n\n\n\n\n\n\n\nCaminhos causais (\\(G \\rightarrow S\\)):\n\n\\(G \\rightarrow D \\rightarrow S\\) — aberto (causal)\n\\(G \\rightarrow D \\rightarrow O \\rightarrow S\\) — aberto (causal)\n\\(G \\rightarrow D \\rightarrow \\boxed{O} \\leftarrow H \\rightarrow S\\) — fechado (\\(O\\) é collider)\n\nMínimos controles necessários: nenhum. \\(S \\sim D\\).\n\n\\(S \\sim G + D\\) elimina todos os efeitos, porque \\(D\\) é o único mediador existente.\n\\(S \\sim G + O\\) introduz viés — não podemos controlar por Ocupação, pois ela é o collider.\n\n\n\n\n\n\n\nWarning\n\n\n\nSe controlo pelo collider, abro o caminho. Mas se controlo por uma variável que vem depois do collider (por exemplo, \\(H\\), se fosse observável), o caminho fecha novamente.\nEm (1), se controlo por \\(D\\), corto todas as setas.\n\n\n\n\n\nExemplo 5 — Descendentes de collider\n\n\nCode\ndag_ex5 &lt;- dagify(\n  Y ~ X + A,\n  B ~ X + A,\n  C ~ B,\n  coords = list(\n    x = c(X = 0, A = 2, B = 1, C = 1, Y = 2),\n    y = c(X = 1, A = 1, B = 0, C = -1, Y = 0)\n  )\n)\n\nggdag(dag_ex5) + theme_dag()\n\n\n\n\n\n\n\n\n\nCaminhos causais (\\(X \\rightarrow Y\\)):\n\n\\(X \\rightarrow Y\\) (causal)\n\\(X \\rightarrow \\boxed{B} \\leftarrow A \\rightarrow Y\\) — \\(B\\) é collider; caminho não-causal\n\nMínimos controles: nenhum.\nO que acontece se controlarmos por \\(C\\)? Afinal, \\(\\text{cov}(C, B) \\neq 0\\). De fato, \\(C\\) é causado por \\(B\\), logo \\(C = a_0 + a_1 B\\). Por isso, controlar por \\(C\\) é análogo a controlar por \\(B\\):\n\\[\nY \\sim X + C \\iff Y \\sim X + B\n\\]\nEquação viesada de interesse:\n\\[\n\\text{(1)}\\quad Y = \\beta_0 + \\underbrace{\\beta_1 X + \\beta_2 B}_{\\text{viesado}}\n\\]\n\\[\n\\text{(2)}\\quad Y = \\beta_0 + \\beta_1 X + \\beta_3 C + \\varepsilon\n\\]\nSubstituindo \\(C = a_0 + a_1 B + U\\):\n\\[\n= (\\beta_0 + \\beta_3 a_0) + \\beta_1 X + \\beta_3 a_1 B + (\\beta_3 U + \\varepsilon)\n\\]\nO viés introduzido ao controlar pelo descendente \\(C\\) é análogo ao viés de controlar pelo próprio collider \\(B\\).\n\n\n\nExemplo 6\n\n\nCode\ndag_ex6 &lt;- dagify(\n  X ~ U + E,\n  Y ~ X + D,\n  D ~ U,\n  coords = list(\n    x = c(U = 0, E = 2, X = 1, D = 0, Y = 2),\n    y = c(U = 0, E = 0, X = 0, D = -1, Y = 0)\n  )\n)\n\nggdag(dag_ex6) + theme_dag()\n\n\n\n\n\n\n\n\n\nCaminhos causais (\\(D \\rightarrow Y\\)):\n\n\\(D \\rightarrow Y\\) — causal; aberto\n\\(D \\leftarrow U \\rightarrow X \\rightarrow Y\\) — não-causal; fechado ao controlar por \\(X\\)\n\\(D \\leftarrow U \\rightarrow \\boxed{X} \\leftarrow E \\rightarrow Y\\) — \\(X\\) é collider; abre ao controlar por \\(X\\)\n\nColliders: \\(X\\) (filho de \\(U\\) e \\(E\\)). Filhos de collider: \\(\\emptyset\\) (\\(Y\\) é nossa variável de interesse).\nMínimos controles: não é possível identificar o efeito causal.\n\n\n\nExemplo 7\n\n\nCode\ndag_ex7 &lt;- dagify(\n  Y ~ D + A + C,\n  B ~ D + A,\n  C ~ D + B,\n  coords = list(\n    x = c(D = 0, A = 2, B = 1, C = 1, Y = 2),\n    y = c(D = 1, A = 1, B = 0, C = -1, Y = 0)\n  )\n)\n\nggdag(dag_ex7) + theme_dag()\n\n\n\n\n\n\n\n\n\nCaminhos causais (\\(D \\rightarrow Y\\)):\n\n\\(D \\rightarrow Y\\) (efeito direto)\n\\(D \\rightarrow B \\rightarrow C \\rightarrow Y\\) (causal)\n\\(D \\rightarrow \\boxed{B} \\leftarrow A \\rightarrow Y\\) — \\(B\\) é collider; não-causal\n\\(D \\rightarrow \\boxed{C} \\leftarrow B \\leftarrow A \\rightarrow Y\\) — \\(C\\) é collider; não-causal\n\nMínimos controles:\n\nEfeito total: nenhum.\nEfeito direto: não estimável diretamente, pois controlar por \\(B\\) ou \\(C\\) (os mediadores) abriria os caminhos de collider.\n\nColliders e seus filhos: \\(\\{B, C\\}\\) — filhos estão desconectados dos caminhos causais. Mas, na verdade, é possível controlar por \\(A\\) e fechar o caminho que se abriu:\n\\[\nY \\sim \\boxed{D} + C + A \\quad \\rightarrow \\quad \\text{efeito causal direto}\n\\]",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Aula 2</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-02.html#sobre-efeito-total-e-efeito-direto",
+    "href": "aulas/aula-02.html#sobre-efeito-total-e-efeito-direto",
+    "title": "2  Aula 2",
+    "section": "2.6 Sobre efeito total e efeito direto",
+    "text": "2.6 Sobre efeito total e efeito direto\nConsidere \\(E \\rightarrow O \\rightarrow S\\) (com \\(E \\rightarrow S\\) também):\n\nEducação afeta ocupação, que afeta salário — mas educação também afeta salário diretamente.\nControlar por ocupação nos dá o efeito dessa parte da educação que afeta salário mas não afeta ocupação (efeito direto).\nNão controlar nos dá o efeito total.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Aula 2</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-02.html#d-separação",
+    "href": "aulas/aula-02.html#d-separação",
+    "title": "2  Aula 2",
+    "section": "2.7 D-Separação",
+    "text": "2.7 D-Separação\nDizemos que duas variáveis estão d-separadas quando todos os caminhos entre elas forem bloqueados.\nExemplos:\n\n\\(X \\rightarrow C \\leftarrow Y\\): \\(X\\) e \\(Y\\) estão d-separadas (collider não controlado).\n\\(X \\rightarrow C \\rightarrow Y\\): após controlar por \\(C\\), \\(X\\) e \\(Y\\) estão d-separadas.\n\\(A \\rightarrow B \\rightarrow D\\), \\(A \\rightarrow C \\rightarrow D\\): após controlar por \\(B\\) e \\(C\\), \\(A\\) e \\(D\\) estão d-separadas.\n\nIndependências condicionais implicadas: \\(A \\perp\\!\\!\\!\\perp D \\mid B, C\\)\n\nVoltando ao Exemplo 1\n\n\nCode\nggdag(dag_ex1) + theme_dag()\n\n\n\n\n\n\n\n\n\nCaminhos causais (\\(D \\rightarrow Y\\)):\n\n\\(D \\rightarrow Y\\) — efeito direto\n\\(D \\leftarrow B \\leftarrow U \\rightarrow A \\rightarrow F \\rightarrow Y\\) — viés\n\\(D \\leftarrow A \\rightarrow F \\rightarrow Y\\) — viés\n\nColliders: \\(\\emptyset\\). Ajustes mínimos: \\(\\{F, A\\}\\).\nIndependências condicionais implicadas:\n\\[\nB \\perp\\!\\!\\!\\perp Y \\mid D, A \\qquad Y \\perp\\!\\!\\!\\perp B \\mid D, F \\qquad F \\perp\\!\\!\\!\\perp B \\mid A \\qquad \\cdots\n\\]\n\n\n\n\n\n\nNote\n\n\n\nQuando eu desenho um DAG, ele me dá o significado das relações e as implicações observáveis. As independências condicionais são testáveis nos dados — e é isso que nos permite validar ou invalidar um modelo causal.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Aula 2</span>"
+    ]
+  }
+]
