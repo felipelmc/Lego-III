@@ -3,6 +3,55 @@ title: "Aula 4"
 date: 2026-04-01
 ---
 
+## Resultados potenciais
+
+Para cada unidade $i$, definimos dois **resultados potenciais**:
+
+- $Y_i(1)$: resultado que seria observado se a unidade recebesse o tratamento ($A_i = 1$)
+- $Y_i(0)$: resultado que seria observado se a unidade não recebesse o tratamento ($A_i = 0$)
+
+O resultado observado é $Y_i = A_i \cdot Y_i(1) + (1 - A_i) \cdot Y_i(0)$.
+
+::: callout-important
+**Problema fundamental da inferência causal:** para qualquer indivíduo, observamos apenas *um* resultado potencial — nunca observamos o contrafactual. O efeito causal individual $Y_i(1) - Y_i(0)$ é, portanto, fundamentalmente não identificável.
+:::
+
+### SUTVA
+
+O pressuposto SUTVA (*Stable Unit Treatment Value Assumption*) tem duas partes:
+
+1. **Sem interferência:** o resultado potencial de $i$ não depende do tratamento atribuído a $j \neq i$
+$$Y_i(a) \perp\!\!\!\perp A_j \quad \forall\, i \neq j$$
+
+2. **Versão única do tratamento:** não há versões ocultas de $A$ — cada nível de tratamento é bem definido e consistente entre unidades
+
+SUTVA é necessário para que a notação $Y_i(a)$ seja bem definida e para que a consistency valha.
+
+---
+
+## Estimandos causais
+
+Dado que o efeito individual não é identificável, trabalhamos com efeitos médios populacionais:
+
+**ATE** (*Average Treatment Effect*) — efeito médio na população:
+$$\tau_{\text{ATE}} = \mathbb{E}[Y(1) - Y(0)]$$
+
+**ATT** (*Average Treatment Effect on the Treated*) — efeito médio entre os tratados:
+$$\tau_{\text{ATT}} = \mathbb{E}[Y(1) - Y(0) \mid A = 1]$$
+
+**ATU** (*Average Treatment Effect on the Untreated*) — efeito médio entre os não tratados:
+$$\tau_{\text{ATU}} = \mathbb{E}[Y(1) - Y(0) \mid A = 0]$$
+
+Os três estimandos se relacionam pela lei da expectativa total:
+
+$$\tau_{\text{ATE}} = P(A=1)\cdot\tau_{\text{ATT}} + P(A=0)\cdot\tau_{\text{ATU}}$$
+
+::: callout-note
+ATE, ATT e ATU só coincidem quando o efeito do tratamento é homogêneo entre tratados e não tratados — o que raramente é garantido em estudos observacionais.
+:::
+
+---
+
 ## Experimento randomizado
 
 Em um experimento randomizado, a atribuição do tratamento $A$ obedece a um mecanismo aleatório. A principal consequência é:
@@ -11,9 +60,7 @@ $$
 \text{Randomização} \Rightarrow A \perp\!\!\!\perp (Y^0, Y^1) \quad \text{(em média)}
 $$
 
-Isso torna o dado "faltante ao acaso" (*missing at random*): a atribuição do tratamento é independente do que se esperaria desse tratamento para cada indivíduo particular. Em outras palavras, $A$ é ortogonal aos *potential outcomes*.
-
-Para qualquer indivíduo, observamos apenas **um** resultado potencial — não observamos o contrafactual. Em um experimento randomizado, o resultado potencial não observado surge ao acaso, por design.
+Isso torna o dado "faltante ao acaso" (*missing at random*): a atribuição do tratamento é independente do que se esperaria desse tratamento para cada indivíduo particular. Em um experimento randomizado, o resultado potencial não observado surge ao acaso, por design.
 
 ---
 
@@ -29,11 +76,27 @@ Também chamada de **independência contrafactual**. Significa que os resultados
 
 ### Identificação em experimento
 
-A exchangeability marginal permite identificar o ATE diretamente a partir dos dados observados:
+A exchangeability marginal permite identificar o ATE diretamente. A derivação parte da definição e aplica a independência:
 
 $$
-\mathbb{E}[Y^1] - \mathbb{E}[Y^0] = \mathbb{E}[Y \mid A = 1] - \mathbb{E}[Y \mid A = 0]
+\mathbb{E}[Y(1)] \overset{(1)}{=} \mathbb{E}[Y(1) \mid A = 1] \overset{(2)}{=} \mathbb{E}[Y \mid A = 1]
 $$
+
+onde (1) usa exchangeability ($Y(1) \perp\!\!\!\perp A$) e (2) usa consistency ($Y = Y(1)$ quando $A = 1$). Analogamente para $\mathbb{E}[Y(0)]$. Portanto:
+
+$$
+\tau_{\text{ATE}} = \mathbb{E}[Y(1)] - \mathbb{E}[Y(0)] = \mathbb{E}[Y \mid A = 1] - \mathbb{E}[Y \mid A = 0]
+$$
+
+### Estimação ingênua e viés de seleção
+
+Em estudos observacionais, a diferença de médias observadas é um estimador **viesado**. Para ver isso, decomponha:
+
+$$
+\underbrace{\mathbb{E}[Y \mid A=1] - \mathbb{E}[Y \mid A=0]}_{\text{diferença observada}} = \underbrace{\mathbb{E}[Y(1) - Y(0) \mid A=1]}_{\text{ATT}} + \underbrace{\mathbb{E}[Y(0) \mid A=1] - \mathbb{E}[Y(0) \mid A=0]}_{\text{viés de seleção}}
+$$
+
+O viés de seleção mede a diferença nos resultados potenciais de controle entre tratados e não tratados — isto é, o quanto os grupos diferiam *antes* do tratamento. Em experimentos, a randomização garante que esse termo seja zero em esperança.
 
 ---
 
@@ -47,25 +110,11 @@ $$
 
 É como se fosse o mundo observacional: existe alguma variável na qual é preciso condicionar. A diferença é que, por design, sabe-se que condicionar em $L$ é **suficiente** para fazer a análise.
 
----
-
-## Average Treatment Effect (ATE)
-
-Devido à randomização:
+Sob exchangeability condicional, o ATE é identificado pela **fórmula de padronização**:
 
 $$
-\mathbb{E}[Y(1)] = \mathbb{E}[Y(1) \mid A = 1]
+\tau_{\text{ATE}} = \mathbb{E}_L\!\left[\mathbb{E}[Y \mid A = 1, L] - \mathbb{E}[Y \mid A = 0, L]\right]
 $$
-
-$$
-\mathbb{E}[Y(0)] = \mathbb{E}[Y(0) \mid A = 0]
-$$
-
-Podemos estimar $\mathbb{E}[Y(1)]$ com a média dos resultados no grupo tratado ($\bar{Y}_1$), e o mesmo vale para $\mathbb{E}[Y(0)]$.
-
-::: callout-note
-A diferença dessas médias é um estimador **não-viesado** do ATE.
-:::
 
 ---
 
@@ -81,7 +130,7 @@ Em estudos observacionais:
 
 **1. Consistency** — A intervenção precisa estar bem definida e o resultado observado deve corresponder ao resultado potencial sob o tratamento recebido:
 
-$$Y_i = Y_i^a \quad \text{se } A_i = a$$
+$$Y_i = Y_i(a) \quad \text{se } A_i = a$$
 
 **2. Exchangeability** — Após condicionar em $L$, tratados e não tratados devem ser comparáveis em termos de resultados potenciais:
 
