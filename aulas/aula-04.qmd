@@ -1,0 +1,96 @@
+---
+title: "Aula 4"
+date: 2026-04-01
+---
+
+## Experimento randomizado
+
+Em um experimento randomizado, a atribuição do tratamento $A$ obedece a um mecanismo aleatório. A principal consequência é:
+
+$$
+\text{Randomização} \Rightarrow A \perp\!\!\!\perp (Y^0, Y^1) \quad \text{(em média)}
+$$
+
+Isso torna o dado "faltante ao acaso" (*missing at random*): a atribuição do tratamento é independente do que se esperaria desse tratamento para cada indivíduo particular. Em outras palavras, $A$ é ortogonal aos *potential outcomes*.
+
+Para qualquer indivíduo, observamos apenas **um** resultado potencial — não observamos o contrafactual. Em um experimento randomizado, o resultado potencial não observado surge ao acaso, por design.
+
+---
+
+## Exchangeability
+
+### Exchangeability marginal
+
+$$
+Y^a \perp\!\!\!\perp A, \quad a \in \{0, 1\}
+$$
+
+Também chamada de **independência contrafactual**. Significa que os resultados potenciais são independentes do tratamento recebido — o que só é plausível quando a alocação é genuinamente aleatória.
+
+### Identificação em experimento
+
+A exchangeability marginal permite identificar o ATE diretamente a partir dos dados observados:
+
+$$
+\mathbb{E}[Y^1] - \mathbb{E}[Y^0] = \mathbb{E}[Y \mid A = 1] - \mathbb{E}[Y \mid A = 0]
+$$
+
+---
+
+## Randomização condicional
+
+Ocorre quando a probabilidade de receber o tratamento varia por um fator prognóstico $L$. Nesse caso, a exchangeability só vale dentro dos estratos de $L$:
+
+$$
+Y^a \perp\!\!\!\perp A \mid L \quad \text{(exchangeability condicional)}
+$$
+
+É como se fosse o mundo observacional: existe alguma variável na qual é preciso condicionar. A diferença é que, por design, sabe-se que condicionar em $L$ é **suficiente** para fazer a análise.
+
+---
+
+## Average Treatment Effect (ATE)
+
+Devido à randomização:
+
+$$
+\mathbb{E}[Y(1)] = \mathbb{E}[Y(1) \mid A = 1]
+$$
+
+$$
+\mathbb{E}[Y(0)] = \mathbb{E}[Y(0) \mid A = 0]
+$$
+
+Podemos estimar $\mathbb{E}[Y(1)]$ com a média dos resultados no grupo tratado ($\bar{Y}_1$), e o mesmo vale para $\mathbb{E}[Y(0)]$.
+
+::: callout-note
+A diferença dessas médias é um estimador **não-viesado** do ATE.
+:::
+
+---
+
+## Estudos observacionais
+
+Em estudos observacionais:
+
+- O pesquisador **não controla** o tratamento $A$
+- A ideia é analisar os dados "como se fossem" de um experimento condicionalmente randomizado
+- Isso exige **condições explícitas de identificabilidade**
+
+### Três condições para inferência causal em estudos observacionais
+
+**1. Consistency** — A intervenção precisa estar bem definida e o resultado observado deve corresponder ao resultado potencial sob o tratamento recebido:
+
+$$Y_i = Y_i^a \quad \text{se } A_i = a$$
+
+**2. Exchangeability** — Após condicionar em $L$, tratados e não tratados devem ser comparáveis em termos de resultados potenciais:
+
+$$Y^a \perp\!\!\!\perp A \mid L$$
+
+**3. Positivity** — Em cada estrato relevante de $L$, deve haver chance positiva de observar **ambos** os tratamentos:
+
+$$P(A = a \mid L = l) > 0 \quad \forall\, a,\, l$$
+
+::: callout-important
+As três condições — consistency, exchangeability e positivity — são pressupostos não testáveis diretamente. Em estudos observacionais, sua plausibilidade depende do conhecimento substantivo sobre o fenômeno estudado.
+:::

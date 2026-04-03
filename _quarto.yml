@@ -22,6 +22,8 @@ book:
       chapters:
         - aulas/aula-01.qmd
         - aulas/aula-02.qmd
+        - aulas/aula-03.qmd
+        - aulas/aula-04.qmd
 
 bibliography: references.bib
 
