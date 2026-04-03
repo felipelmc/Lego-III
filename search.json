@@ -44,7 +44,7 @@
     "href": "index.html#como-usar-estas-notas",
     "title": "Lego III",
     "section": "Como usar estas notas",
-    "text": "Como usar estas notas\nAs anotações estão organizadas por aula na barra lateral à esquerda. Cada página corresponde a uma aula e cobre os principais tópicos discutidos.\n\n\n\n\n\n\nNote\n\n\n\nEstas são anotações pessoais e podem conter imprecisões. Use-as como complemento, não como substituto do material oficial da disciplina.\n\n\n\n\n\n\n\n\nAngrist, Joshua D., and Jörn-Steffen Pischke. 2009. Mostly Harmless Econometrics: An Empiricist’s Companion. Princeton: Princeton University Press.\n\n\n———. 2015. Mastering ‘Metrics: The Path from Cause to Effect. Princeton: Princeton University Press.\n\n\nCunningham, Scott. 2021. Causal Inference: The Mixtape. New Haven: Yale University Press.\n\n\nHuntington-Klein, Nick. 2022. The Effect: An Introduction to Research Design and Causality. Boca Raton: Chapman & Hall.\n\n\nMorgan, Stephen L., and Christopher Winship. 2015. Counterfactuals and Causal Inference: Methods and Principles for Social Research. 2nd ed. Cambridge: Cambridge University Press.",
+    "text": "Como usar estas notas\nAs anotações estão organizadas por aula na barra lateral à esquerda. Cada página corresponde a uma aula e cobre os principais tópicos discutidos.\n\n\n\n\n\n\nNote\n\n\n\nEstas são anotações pessoais e podem conter imprecisões. Use-as como complemento, não como substituto do material oficial da disciplina.\n\n\n\n\n\n\n\n\nAngrist, Joshua D., and Jörn-Steffen Pischke. 2009. Mostly Harmless Econometrics: An Empiricist’s Companion. Princeton University Press.\n\n\nAngrist, Joshua D., and Jörn-Steffen Pischke. 2015. Mastering ‘Metrics: The Path from Cause to Effect. Princeton University Press.\n\n\nCunningham, Scott. 2021. Causal Inference: The Mixtape. Yale University Press.\n\n\nHuntington-Klein, Nick. 2022. The Effect: An Introduction to Research Design and Causality. Chapman & Hall.\n\n\nMorgan, Stephen L., and Christopher Winship. 2015. Counterfactuals and Causal Inference: Methods and Principles for Social Research. 2nd ed. Cambridge University Press.",
     "crumbs": [
       "Apresentação"
     ]
@@ -190,6 +190,116 @@
     "crumbs": [
       "Aulas",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Aula 2</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-03.html",
+    "href": "aulas/aula-03.html",
+    "title": "3  Aula 3",
+    "section": "",
+    "text": "3.1 Retomando o Exemplo 1 — Independências condicionais implicadas\nVoltamos ao DAG da aula anterior:\nCode\ndag_ex1 &lt;- dagify(\n  D ~ A + B,\n  F ~ A,\n  Y ~ F + D,\n  A ~ U,\n  B ~ U,\n  coords = list(\n    x = c(U = 0, A = 1, B = 1, F = 2, D = 2, Y = 3),\n    y = c(U = 0, A = 1, B = -1, F = 1, D = -1, Y = 0)\n  )\n)\nggdag(dag_ex1) + theme_dag()\nCaminhos causais de \\(D\\) até \\(Y\\):",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Aula 3</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-03.html#retomando-o-exemplo-1-independências-condicionais-implicadas",
+    "href": "aulas/aula-03.html#retomando-o-exemplo-1-independências-condicionais-implicadas",
+    "title": "3  Aula 3",
+    "section": "",
+    "text": "\\(D \\rightarrow Y\\)\n\\(D \\leftarrow B \\leftarrow U \\rightarrow A \\rightarrow F \\rightarrow Y\\)\n\\(D \\leftarrow A \\rightarrow F \\rightarrow Y\\)\n\n\n\\(D \\perp\\!\\!\\!\\perp F \\mid A\\)\nPara verificar, enumeramos todos os caminhos entre \\(D\\) e \\(F\\):\n\n\n\nCaminho\nStatus\n\n\n\n\n\\(D \\leftarrow A \\rightarrow F\\)\nAberto\n\n\n\\(D \\rightarrow Y \\leftarrow F\\)\nFechado (collider em \\(Y\\))\n\n\n\\(D \\leftarrow B \\leftarrow U \\rightarrow A \\rightarrow F\\)\nAberto\n\n\n\nOs dois caminhos abertos passam por \\(A\\). Logo, se controlarmos por \\(A\\), \\(D\\) e \\(F\\) se tornam independentes.\nIsso tem uma implicação concreta: os resíduos de \\(D\\) e os resíduos de \\(F\\) nas regressões abaixo são independentes entre si:\n\\[\n\\tilde{D} = D - (\\hat{\\delta}_0 + \\hat{\\delta}_1 A)\n\\]\n\\[\n\\tilde{F} = F - (\\hat{\\gamma}_0 + \\hat{\\gamma}_1 A)\n\\]\nonde \\(\\hat{\\gamma}_0 + \\hat{\\gamma}_1 A\\) é o valor predito de \\(F\\) na regressão \\(F = \\gamma_0 + \\gamma_1 A + \\omega\\).\n\n\nOutras independências condicionais implicadas\n\n\n\n\n\n\n\nIndependência\nImplicação empírica\n\n\n\n\n\\(Y \\perp\\!\\!\\!\\perp B \\mid D, F\\)\n\\(\\text{corr}(\\tilde{Y}_1, \\tilde{B}_1) = 0\\) — equivale a \\(Y \\sim D + A\\) e \\(B \\sim D + A\\)\n\n\n\\(Y \\perp\\!\\!\\!\\perp B \\mid D, A\\)\n\\(\\text{corr}(\\tilde{Y}_2, \\tilde{B}_2) = 0\\)\n\n\n\\(Y \\perp\\!\\!\\!\\perp A \\mid D, F\\)\n\\(\\text{corr}(\\tilde{Y}_3, \\tilde{A}) = 0\\)\n\n\n\\(F \\perp\\!\\!\\!\\perp B \\mid A\\)\n—\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nAs implicações observáveis servem para testar a validade do DAG. Se uma independência condicional implicada pelo DAG for refutada nos dados, o diagrama precisa ser revisado.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Aula 3</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-03.html#front-door-adjustments",
+    "href": "aulas/aula-03.html#front-door-adjustments",
+    "title": "3  Aula 3",
+    "section": "3.2 Front Door Adjustments",
+    "text": "3.2 Front Door Adjustments\nAté aqui estávamos pensando em controlar os backdoors — os caminhos com seta para trás. Mas é possível, estrategicamente, controlar os caminhos com seta para frente. Isso equivale a prestar atenção ao mediador.\n\n\nCode\ndag_fd &lt;- dagify(\n  M ~ X,\n  Y ~ M + X,\n  coords = list(\n    x = c(X = 0, M = 1, Y = 2),\n    y = c(X = 0, M = 0, Y = 0)\n  )\n)\nggdag(dag_fd) + theme_dag()\n\n\n\n\n\n\n\n\n\nControlar pelo mediador \\(M\\) em \\(X \\rightarrow M \\rightarrow Y\\) dá o efeito direto de \\(X\\) sobre \\(Y\\) — a parte do efeito que não passa pelo mediador.\n\nExemplo 8 — Experimento aleatório (vacina)\n\n\nCode\ndag_vacina &lt;- dagify(\n  Vacina ~ Sorteio,\n  Imunidade ~ Vacina,\n  coords = list(\n    x = c(Sorteio = 0, Vacina = 1, Imunidade = 2),\n    y = c(Sorteio = 0, Vacina = 0, Imunidade = 0)\n  )\n)\nggdag(dag_vacina) + theme_dag()\n\n\n\n\n\n\n\n\n\nO resultado do sorteio (0 ou 1) determina se o indivíduo recebe ou não a vacina, que por sua vez afeta o resultado imunológico. A correlação entre sorteio e imunidade expressa tão somente o efeito da vacina — o sorteio não tem outro caminho até o resultado.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Aula 3</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-03.html#exemplo-9-cigarro-alcatrão-e-câncer",
+    "href": "aulas/aula-03.html#exemplo-9-cigarro-alcatrão-e-câncer",
+    "title": "3  Aula 3",
+    "section": "3.3 Exemplo 9 — Cigarro, alcatrão e câncer",
+    "text": "3.3 Exemplo 9 — Cigarro, alcatrão e câncer\nQueremos estimar o efeito do cigarro sobre o câncer, sabendo que genética é um confounder.\n\n\nCode\ndag_cigarro &lt;- dagify(\n  Alcatrao ~ Cigarro,\n  Cancer   ~ Alcatrao + Genetica,\n  Cigarro  ~ Genetica,\n  coords = list(\n    x = c(Cigarro = 0, Alcatrao = 1, Cancer = 2, Genetica = 1),\n    y = c(Cigarro = 0, Alcatrao = 0, Cancer = 0, Genetica = -1.5)\n  )\n)\nggdag(dag_cigarro) + theme_dag()\n\n\n\n\n\n\n\n\n\nCaminhos causais (Cigarro → Câncer):\n\n\\(\\text{Ci} \\rightarrow A \\rightarrow \\text{Ca}\\) — causal\n\\(\\text{Ci} \\leftarrow G \\rightarrow \\text{Ca}\\) — não causal (backdoor por genética)\n\nO efeito do cigarro sobre o alcatrão é isolável porque:\n\n\\(\\text{Ci} \\rightarrow A\\): aberto\n\\(\\text{Ci} \\leftarrow G \\rightarrow \\text{Ca} \\leftarrow A\\): fechado (\\(\\text{Ca}\\) é collider)\n\nIsso permite aplicar o critério front door em três passos:\nPasso 1: Estimar o efeito do cigarro sobre o alcatrão: \\[\\hat{A} = \\hat{\\alpha}_0 + \\hat{\\alpha}_1 \\cdot \\text{Cigarro}\\]\nPasso 2: Estimar o efeito do alcatrão sobre o câncer, controlando pelo cigarro: \\[\\widehat{\\text{Câncer}} = \\hat{\\beta}_0 + \\hat{\\beta}_1 \\cdot \\text{Cigarro} + \\hat{\\beta}_2 \\cdot \\text{Alcatrão}\\]\nPasso 3: O efeito causal do cigarro sobre o câncer (via alcatrão) é: \\[\\text{Efeito} = \\hat{\\alpha}_1 \\times \\hat{\\beta}_2\\]",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Aula 3</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-03.html#exemplo-10-passe-livre-e-comparecimento-eleitoral",
+    "href": "aulas/aula-03.html#exemplo-10-passe-livre-e-comparecimento-eleitoral",
+    "title": "3  Aula 3",
+    "section": "3.4 Exemplo 10 — Passe livre e comparecimento eleitoral",
+    "text": "3.4 Exemplo 10 — Passe livre e comparecimento eleitoral\n\n\nCode\ndag_passe &lt;- dagify(\n  Mobilidade    ~ PasseLivre + U,\n  Comparecimento ~ Mobilidade + PasseLivre + U,\n  coords = list(\n    x = c(PasseLivre = 0, Mobilidade = 1, Comparecimento = 2, U = 1),\n    y = c(PasseLivre = 0, Mobilidade = 0, Comparecimento = 0, U = -1.5)\n  )\n)\nggdag(dag_passe) + theme_dag()\n\n\n\n\n\n\n\n\n\nO passe livre afeta o comparecimento eleitoral via mobilidade urbana, mas há um fator não observado \\(U\\) que confunde a relação entre mobilidade e comparecimento. A estratégia front door resolve isso em três passos:\nPasso 1: Estimar o efeito do passe livre sobre a variação de mobilidade: \\[\\Delta \\text{mobilidade} \\sim \\text{passe livre} \\quad (\\hat{\\alpha})\\]\nPasso 2: Estimar o efeito da variação de mobilidade sobre o comparecimento, controlando pelo passe livre: \\[\\text{comparecimento} \\sim \\Delta m + \\text{passe} \\quad (\\hat{\\beta}_1)\\]\nPasso 3: Efeito causal = \\(\\hat{\\alpha} \\times \\hat{\\beta}\\)",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Aula 3</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-04.html",
+    "href": "aulas/aula-04.html",
+    "title": "4  Aula 4",
+    "section": "",
+    "text": "4.1 Experimento randomizado\nEm um experimento randomizado, a atribuição do tratamento \\(A\\) obedece a um mecanismo aleatório. A principal consequência é:\n\\[\n\\text{Randomização} \\Rightarrow A \\perp\\!\\!\\!\\perp (Y^0, Y^1) \\quad \\text{(em média)}\n\\]\nIsso torna o dado “faltante ao acaso” (missing at random): a atribuição do tratamento é independente do que se esperaria desse tratamento para cada indivíduo particular. Em outras palavras, \\(A\\) é ortogonal aos potential outcomes.\nPara qualquer indivíduo, observamos apenas um resultado potencial — não observamos o contrafactual. Em um experimento randomizado, o resultado potencial não observado surge ao acaso, por design.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Aula 4</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-04.html#exchangeability",
+    "href": "aulas/aula-04.html#exchangeability",
+    "title": "4  Aula 4",
+    "section": "4.2 Exchangeability",
+    "text": "4.2 Exchangeability\n\nExchangeability marginal\n\\[\nY^a \\perp\\!\\!\\!\\perp A, \\quad a \\in \\{0, 1\\}\n\\]\nTambém chamada de independência contrafactual. Significa que os resultados potenciais são independentes do tratamento recebido — o que só é plausível quando a alocação é genuinamente aleatória.\n\n\nIdentificação em experimento\nA exchangeability marginal permite identificar o ATE diretamente a partir dos dados observados:\n\\[\n\\mathbb{E}[Y^1] - \\mathbb{E}[Y^0] = \\mathbb{E}[Y \\mid A = 1] - \\mathbb{E}[Y \\mid A = 0]\n\\]",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Aula 4</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-04.html#randomização-condicional",
+    "href": "aulas/aula-04.html#randomização-condicional",
+    "title": "4  Aula 4",
+    "section": "4.3 Randomização condicional",
+    "text": "4.3 Randomização condicional\nOcorre quando a probabilidade de receber o tratamento varia por um fator prognóstico \\(L\\). Nesse caso, a exchangeability só vale dentro dos estratos de \\(L\\):\n\\[\nY^a \\perp\\!\\!\\!\\perp A \\mid L \\quad \\text{(exchangeability condicional)}\n\\]\nÉ como se fosse o mundo observacional: existe alguma variável na qual é preciso condicionar. A diferença é que, por design, sabe-se que condicionar em \\(L\\) é suficiente para fazer a análise.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Aula 4</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-04.html#average-treatment-effect-ate",
+    "href": "aulas/aula-04.html#average-treatment-effect-ate",
+    "title": "4  Aula 4",
+    "section": "4.4 Average Treatment Effect (ATE)",
+    "text": "4.4 Average Treatment Effect (ATE)\nDevido à randomização:\n\\[\n\\mathbb{E}[Y(1)] = \\mathbb{E}[Y(1) \\mid A = 1]\n\\]\n\\[\n\\mathbb{E}[Y(0)] = \\mathbb{E}[Y(0) \\mid A = 0]\n\\]\nPodemos estimar \\(\\mathbb{E}[Y(1)]\\) com a média dos resultados no grupo tratado (\\(\\bar{Y}_1\\)), e o mesmo vale para \\(\\mathbb{E}[Y(0)]\\).\n\n\n\n\n\n\nNote\n\n\n\nA diferença dessas médias é um estimador não-viesado do ATE.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Aula 4</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-04.html#estudos-observacionais",
+    "href": "aulas/aula-04.html#estudos-observacionais",
+    "title": "4  Aula 4",
+    "section": "4.5 Estudos observacionais",
+    "text": "4.5 Estudos observacionais\nEm estudos observacionais:\n\nO pesquisador não controla o tratamento \\(A\\)\nA ideia é analisar os dados “como se fossem” de um experimento condicionalmente randomizado\nIsso exige condições explícitas de identificabilidade\n\n\nTrês condições para inferência causal em estudos observacionais\n1. Consistency — A intervenção precisa estar bem definida e o resultado observado deve corresponder ao resultado potencial sob o tratamento recebido:\n\\[Y_i = Y_i^a \\quad \\text{se } A_i = a\\]\n2. Exchangeability — Após condicionar em \\(L\\), tratados e não tratados devem ser comparáveis em termos de resultados potenciais:\n\\[Y^a \\perp\\!\\!\\!\\perp A \\mid L\\]\n3. Positivity — Em cada estrato relevante de \\(L\\), deve haver chance positiva de observar ambos os tratamentos:\n\\[P(A = a \\mid L = l) &gt; 0 \\quad \\forall\\, a,\\, l\\]\n\n\n\n\n\n\nImportant\n\n\n\nAs três condições — consistency, exchangeability e positivity — são pressupostos não testáveis diretamente. Em estudos observacionais, sua plausibilidade depende do conhecimento substantivo sobre o fenômeno estudado.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Aula 4</span>"
     ]
   }
 ]
