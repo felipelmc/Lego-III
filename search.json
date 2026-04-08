@@ -323,5 +323,82 @@
       "Aulas",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Aula 4</span>"
     ]
+  },
+  {
+    "objectID": "aulas/aula-05.html",
+    "href": "aulas/aula-05.html",
+    "title": "5  Matching",
+    "section": "",
+    "text": "6 Recapitulação da notação de resultados potenciais\nEssa é a primeira aula sobre métodos efetivamente, e não de nomenclatura e conceitos básicos de inferência causal.\nSuponha um tratamento binário \\(D\\). Há dois resultados potenciais para o indivíduo \\(i\\):\nO efeito causal de \\(D\\) sobre o indivíduo \\(i\\) definido por \\(Y^1 - Y^0\\). Mas, evidentemente, não temos como observar ambos para o mesmo indivíduo. O que observamos na prática é \\(Y = D \\cdot Y^1 + (1-D) \\cdot Y^0\\).",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Matching</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-05.html#o-problema-fundamental-da-inferência-causal",
+    "href": "aulas/aula-05.html#o-problema-fundamental-da-inferência-causal",
+    "title": "5  Matching",
+    "section": "6.1 O problema fundamental da inferência causal",
+    "text": "6.1 O problema fundamental da inferência causal\nNão é possível estimar o efeito causal em nível individual, mas podemos estimar efeitos causais agregados se for possível construir contrafactuais válidos:\n\n\\(ATT = \\mathbb{E}[Y^1 - Y^0 | D = 1]\\)\n\\(ATU = \\mathbb{E}[Y^1 - Y^0 | D = 0]\\)\n\nSe você faz experimentos totalmente randomizados, você pode calcular uma diferença de médias simples para estimar o efeito causal. Em dados observacionais, no entanto, isso não é possível, porque a diferença entre tratados e não tratados se decompõe em vários outros elementos que não são apenas a diferença de médias:\n\\[\n\\underbrace{\\frac{1}{N_T} \\sum^n_{i = 1}(y_i | d_i = 1) - \\frac{1}{N_C} \\sum^n_{i = 1}(y_i | d_i = 0)}_{\\text{Diferença observada}} = \\underbrace{\\mathbb{E}[Y^1 - Y^0]}_{\\text{ATE}} + \\underbrace{\\mathbb{E}[Y^0 | D = 1] - \\mathbb{E}[Y^0 | D = 0]}_{\\text{Viés de seleção}} + \\underbrace{(1 - \\pi)(\\text{ATT} - \\text{ATU})}_{\\text{Viés de heterogeneidade}}\n\\]\nO lado esquerdo é simplesmente a diferença observada entre as médias dos grupos tratado e controle — é o que você consegue calcular diretamente dos dados. O lado direito decompõe essa diferença em três partes:\n\nO ATE (\\(\\mathbb{E}[Y^1 - Y^0]\\)) é o efeito causal médio do tratamento na população. É o que gostaríamos de estimar: quanto, em média, o resultado de uma unidade mudaria se ela passasse de não tratada a tratada.\nO viés de seleção (\\(\\mathbb{E}[Y^0 | D = 1] - \\mathbb{E}[Y^0 | D = 0]\\)) captura a diferença entre tratados e controles que existiria mesmo na ausência do tratamento. É uma comparação dos resultados potenciais \\(Y^0\\) — isto é, o que aconteceria sem tratamento — entre quem escolheu se tratar e quem não escolheu. Se, por exemplo, indivíduos que buscam o tratamento já são sistematicamente diferentes (mais ricos, mais motivados, mais doentes), essa diferença aparece aqui.\nO viés de heterogeneidade (\\((1 - \\pi)(\\text{ATT} - \\text{ATU})\\), onde \\(\\pi = \\mathbb{P}(D=1)\\)) aparece quando o efeito do tratamento não é o mesmo para todos. Se o tratamento beneficia mais quem se trata do que quem não se trata (ou vice-versa), a diferença entre ATT e ATU é não nula. Esse termo desaparece em dois casos: quando o efeito é constante (\\(ATT = ATU\\)), ou quando toda a população é tratada (\\(\\pi = 1\\)).\n\nEm um experimento randomizado, \\(D\\) é independente dos resultados potenciais, o que zera os dois termos de viés e faz com que a diferença observada estime diretamente o ATE.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Matching</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-05.html#estratificação-perfeita",
+    "href": "aulas/aula-05.html#estratificação-perfeita",
+    "title": "5  Matching",
+    "section": "8.1 Estratificação perfeita",
+    "text": "8.1 Estratificação perfeita\nSuponha que temos grupos de tratamento e controle que são muito distintos entre si, mas que observamos um conjunto de variáveis \\(\\mathbf{X}\\) que captura todas as diferenças relevantes na probabilidade de tratamento entre os grupos. Essas variáveis \\(\\mathbf{X}\\) permitem então estratificação perfeita dos dados.\nOu seja, dentro dos grupos definidos pelos valores de \\(\\mathbf{X}\\) os indivíduos são “indistiguíveis”, exceto por (i) status de tratamento e (ii) diferenças em resultados potenciais independentes do status do tratamento.\n\n\n\n\n\n\nNoteExemplo hipotético\n\n\n\nPergunta de pesquisa: escolas cívico-militares melhoram o desempenho dos alunos?\nSuponha que todos os alunos de escolas públicas fazem uma prova padronizada, com os seguintes resultados:\n\nEscolas cívico-militares (\\(D = 1\\)): nota média é 78\nEscolas regulares (\\(D = 0\\)): nota média é 65\n\nLogo:\n\n\\(\\mathbb{E}[Y \\mid D = 1] - \\mathbb{E}[Y \\mid D = 0] = 78 - 65 = 13\\)\n\nEssa é minha estimativa ingênua. Mas será que isso é um efeito causal? E se os grupos forem muito diferentes em composição social?\nDe fato, pense na possibilidade de os alunos de colégios cívico-militares serem muito diferentes em termos de renda, mas essa é a única variável que de fato diferencia esses alunos. Se esse for o caso, aí podemos calcular a diferença de médias dentro de cada um desses grupos de renda.\n\nDistribuição dos alunos por estrato de renda e tipo de escola\n\n\nEstrato\nRegular (\\(D=0\\))\nCívico-Militar (\\(D=1\\))\nTotal\n\n\n\n\nBaixa renda\n600\n100\n700\n\n\nClasse média\n300\n300\n600\n\n\nRicos\n100\n600\n700\n\n\nTotal\n1000\n1000\n2000\n\n\n\n\nNota média por estrato e tipo de escola\n\n\n\n\n\n\n\n\nEstrato\nRegular (\\(D=0\\))\nCívico-Militar (\\(D=1\\))\nDiferença (\\(\\delta_k\\))\n\n\n\n\nBaixa renda\n60\n54\n-6\n\n\nClasse média\n69\n72\n+3\n\n\nRicos\n83\n85\n+2\n\n\n\nO ATE é a média ponderada dos efeitos dentro de cada estrato, usando a distribuição da população em cada estrato:\n\\[\nATE = \\sum_k w_k \\delta_k = \\frac{700}{2000} \\cdot (-6) + \\frac{600}{2000} \\cdot (3) + \\frac{700}{2000} \\cdot (2) = 0.35 \\cdot (-6) + 0.30 \\cdot (3) + 0.35 \\cdot (2) = -0.5\n\\]\nO ATT é ponderado pela distribuição dos tratados entre os estratos:\n\\[\nATT = \\sum_k w_k^{T} \\delta_k = \\frac{100}{1000} \\cdot (-6) + \\frac{300}{1000} \\cdot (3) + \\frac{600}{1000} \\cdot (2) = 0.10 \\cdot (-6) + 0.30 \\cdot (3) + 0.60 \\cdot (2) = 1.5\n\\]\nO ATU é ponderado pela distribuição dos controles entre os estratos:\n\\[\nATU = \\sum_k w_k^{C} \\delta_k = \\frac{600}{1000} \\cdot (-6) + \\frac{300}{1000} \\cdot (3) + \\frac{100}{1000} \\cdot (2) = 0.60 \\cdot (-6) + 0.30 \\cdot (3) + 0.10 \\cdot (2) = -2.5\n\\]\nDaí segue que o ATE seria, calculando de outra maneira:\n\\[\n\\mathbb{P}(D = 1) \\cdot ATT + \\mathbb{P}(D = 0) \\cdot ATU = 0.5 \\cdot 1.5 + 0.5 \\cdot (-2.5) = -0.5\n\\]\nNote como a estimativa ingênua de \\(+13\\) está muito longe do ATE de \\(-0.5\\). A diferença se explica pela composição dos grupos: alunos de maior renda — que já teriam notas altas independentemente do tipo de escola — estão sobrerrepresentados nas escolas cívico-militares. O viés de seleção infla a estimativa ingênua, que nesse caso é uma estimativa viesada.\nO problema, é claro, isso tudo parte de um pressuposto bastante forte de que o único backdoor que precisaria ser fechado é o da renda. Mas isso, obviamente, não é verdade para a maioria dos casos. Nesse próprio caso, aliás, poderíamos pensar que o fato de o estudante ser de uma família tradicional de militares poderia ter uma diferença que não está totalmente refletida na renda.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Matching</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-05.html#pressupostos-essênciais",
+    "href": "aulas/aula-05.html#pressupostos-essênciais",
+    "title": "5  Matching",
+    "section": "8.2 Pressupostos essênciais",
+    "text": "8.2 Pressupostos essênciais\n\nConsistência\n\\[\nY = DY^1 + (1-D)Y^0\n\\]\n\n\nSeleção em observáveis ou independência condicional\nTratamento pode ser considerado como se fosse alocado aleatoriamente dentro dos grupos definidos por \\(\\mathbf{X}\\): \\((Y^1, Y^0) \\perp\\!\\!\\!\\perp D \\mid X\\).\n\n\nSuporte comum\nHá tratados e controles em todos os grupos definidos por \\(\\mathbf{X}\\): \\(0 &lt; \\mathbb{P}(D = 1 \\mid \\mathbf{X}) &lt; 1\\)\nNa população, se houver células vazias para um dos dois grupos (tratados e controles), então o ATE é mal definido, e só o ATT ou o ATU podem ser estimados. O mais comum é que só na amostra haja células vazias (maldição da dimensionalidade).\nQuanto mais covariáveis incluímos em \\(\\mathbf{X}\\), e quanto mais categorias em cada covariável, mais difícil é garantir a presença de tratados e controles em cada grupo. Por isso, na prática, estratificação exata em muitas variáveis raramente é viável.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Matching</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-05.html#subclassificação-e-matching",
+    "href": "aulas/aula-05.html#subclassificação-e-matching",
+    "title": "5  Matching",
+    "section": "8.3 Subclassificação e matching",
+    "text": "8.3 Subclassificação e matching\nSubclassificação compara tratados e controles dentro dos estratos definidos por \\(\\mathbf{X}\\), calcula as diferenças dentro de cada estrato e repondera essas diferenças para obter o efeito médio. O problema, naturalmente, é a maldição da dimensionalidade: conforme o número de covariáveis cresce, o número de estratos explode e muitas células ficam vazias ou com pouquíssimas observações.\nJá no caso do matching (exato), em vez de comparar estratos inteiros, comparamos cada unidade tratada com a unidade (ou unidades) do grupo de controle mais parecida(s) em termos de \\(\\mathbf{X}\\). A ideia é construir, para cada tratado, um contrafactual observável — o controle mais próximo — e estimar o efeito individual como a diferença entre os dois. O ATT, por exemplo, é então a média dessas diferenças entre cada tratado e seu par:\n\\[\n\\widehat{ATT} = \\frac{1}{N_T} \\sum_{i: D_i = 1} \\left( Y_i - Y_{j(i)} \\right)\n\\]\nonde \\(j(i)\\) denota o controle pareado à unidade tratada \\(i\\). O matching pode ser feito diretamente sobre \\(\\mathbf{X}\\) (matching exato ou por distância de Mahalanobis, por exemplo).\nEstamos focando no ATT nesse caso, porque, naturalmente quando falamos de políticas públicas focalizadas, é razoável pensarmos que é mais fácil encontrar um matching para um tratado num universo maior de não tratados (isto é, há muito mais não tratados do que tratados).\nIntuição: cada unidade tratada é pareada com seus \\(k\\) vizinhos mais próximos, conforme alguma métrica absoluta de distância entre as unidades. A seleção dos vizinhos para cada unidade depende:\n\nNúmero de vizinhos que escolhemos\nSe a escolha vai ser feita com ou sem reposição\nQual a margem de tolerância (caliper) para a distância\n\nAlgumas métricas de distância incluem:\n\nDistância euclidiana\nDistância euclidiana normalizada\nDistância de Mahalanobis\n\n\n\n\n\n\n\nNoteMatching aproximado\n\n\n\nSe não for possível fazer matching exato, o jeito é fazer algo aproximado.\nPara cada unidade tratada \\(i\\), escolhemos a(s) unidade(s) de controle mais “próximas”. Para isso, precisamos de:\n\nUma métrica de distância entre unidades\nUma regra de seleção dos controles pareados\nUma regra de ponderação dos controles pareados\n\nNão há mágica: a qualidade da inferência depende da proximidade entre os tratados e os controles selecionados. Quanto mais diferentes os grupos em termos de \\(\\mathbb{X}\\), maior o viés.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Matching</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-05.html#matching-com-propensity-scores",
+    "href": "aulas/aula-05.html#matching-com-propensity-scores",
+    "title": "5  Matching",
+    "section": "8.4 Matching com propensity scores",
+    "text": "8.4 Matching com propensity scores\nPor um longo período, isso foi algo muito usado na literatura mas rapidamente caiu em desuso. Por motivos históricos, vejamos.\nO propensity score é a probabilidade de receber o tratamento dadas as covariáveis \\(\\mathbf{X}\\):\n\\[\np(\\mathbf{X}) = \\mathbb{P}(D = 1 \\mid \\mathbf{X})\n\\]\nAo invés de comparar tratados e controles em muitas covariáveis ao mesmo tempo, resumimos \\(\\mathbf{X}\\) em uma única dimensão: \\(p(\\mathbf{X})\\). Depois, pareamos unidades com propensity scores semelhantes. Se o modelo estiver bem especificado e valer seleção em observáveis, unidades com o mesmo \\(p(\\mathbf{X})\\) tendem a ser comparáveis em termos das covariáveis observadas.\nIsso introduz um elemento de simplicidade porque o problema é reduzido a uma única dimensão, dada pela probabilidade de receber o tratamento.\nO teorema do propensity score é razoável, faz sentido e continua valendo. O que caiu em desuso foi a prática de usar o propensity score para parear com o vizinho mais próximo, porque, ao jogar tudo para uma única dimensão, você joga informação fora, e os matchings são objetivamente piores do que se você fizesse em mais dimensões.\nOutro problema, inclusive, tá no fato de que você pode acabar aproximando pessoas que são muito diferentes, mas com probabilidades semelhantes. De fato, se no ajuste do modelo duas variáveis têm efeitos semelhantes, duas pessoas podem ter probabilidades de receber o tratamento muito semelhantes, mesmo quando elas são fundamentalmente diferentes nas covariáveis de interesse.",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Matching</span>"
+    ]
+  },
+  {
+    "objectID": "aulas/aula-05.html#matching-com-cem-coarsened-exact-matching",
+    "href": "aulas/aula-05.html#matching-com-cem-coarsened-exact-matching",
+    "title": "5  Matching",
+    "section": "8.5 Matching com CEM (Coarsened Exact Matching)",
+    "text": "8.5 Matching com CEM (Coarsened Exact Matching)\nA intuição é utilizar conhecimento substantivo sobre o assunto para simplificar temporariamente as covariáveis e realizar matching exato. Em vez de calcular distâncias a partir de variáveis observadas, o CEM:\n\n“Engrossa” ou discretiza temporariamente as covariáveis em \\(\\mathbf{X}\\) em estratos substantivamente relevantes\nFaz matching exato nessas versões discretizadas\nDescarta os estratos que contêm apenas tratados ou apenas controles e estima o efeito causal usando os dados originais nos estratos retidos",
+    "crumbs": [
+      "Aulas",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Matching</span>"
+    ]
   }
 ]

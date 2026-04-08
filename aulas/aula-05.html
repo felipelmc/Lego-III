@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-04-08">
+
+<title>5&nbsp; Matching – Lego III</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../aulas/aula-04.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-0bb0b530e54782cf39a30b39ef8a2d6c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-baedf234fe35f8c8c5c56eccfc9aafcb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../aulas/aula-01.html">Aulas</a></li><li class="breadcrumb-item"><a href="../aulas/aula-05.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matching</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Lego III</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/felipelmc/Lego-III" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <div class="dropdown">
+      <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Share"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Apresentação</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Aulas</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../aulas/aula-01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Aula 1</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../aulas/aula-02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Aula 2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../aulas/aula-03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Aula 3</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../aulas/aula-04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Aula 4</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../aulas/aula-05.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matching</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#recapitulação-da-notação-de-resultados-potenciais" id="toc-recapitulação-da-notação-de-resultados-potenciais" class="nav-link active" data-scroll-target="#recapitulação-da-notação-de-resultados-potenciais"><span class="header-section-number">6</span> Recapitulação da notação de resultados potenciais</a>
+  <ul class="collapse">
+  <li><a href="#o-problema-fundamental-da-inferência-causal" id="toc-o-problema-fundamental-da-inferência-causal" class="nav-link" data-scroll-target="#o-problema-fundamental-da-inferência-causal"><span class="header-section-number">6.1</span> O problema fundamental da inferência causal</a></li>
+  </ul></li>
+  <li><a href="#o-pressuposto-de-seleção-em-observáveis-ou-independência-condicional" id="toc-o-pressuposto-de-seleção-em-observáveis-ou-independência-condicional" class="nav-link" data-scroll-target="#o-pressuposto-de-seleção-em-observáveis-ou-independência-condicional"><span class="header-section-number">7</span> O pressuposto de seleção em observáveis (ou independência condicional)</a></li>
+  <li><a href="#estratificação-ou-subclassificação" id="toc-estratificação-ou-subclassificação" class="nav-link" data-scroll-target="#estratificação-ou-subclassificação"><span class="header-section-number">8</span> Estratificação ou subclassificação</a>
+  <ul class="collapse">
+  <li><a href="#estratificação-perfeita" id="toc-estratificação-perfeita" class="nav-link" data-scroll-target="#estratificação-perfeita"><span class="header-section-number">8.1</span> Estratificação perfeita</a></li>
+  <li><a href="#pressupostos-essênciais" id="toc-pressupostos-essênciais" class="nav-link" data-scroll-target="#pressupostos-essênciais"><span class="header-section-number">8.2</span> Pressupostos essênciais</a>
+  <ul class="collapse">
+  <li><a href="#consistência" id="toc-consistência" class="nav-link" data-scroll-target="#consistência">Consistência</a></li>
+  <li><a href="#seleção-em-observáveis-ou-independência-condicional" id="toc-seleção-em-observáveis-ou-independência-condicional" class="nav-link" data-scroll-target="#seleção-em-observáveis-ou-independência-condicional">Seleção em observáveis ou independência condicional</a></li>
+  <li><a href="#suporte-comum" id="toc-suporte-comum" class="nav-link" data-scroll-target="#suporte-comum">Suporte comum</a></li>
+  </ul></li>
+  <li><a href="#subclassificação-e-matching" id="toc-subclassificação-e-matching" class="nav-link" data-scroll-target="#subclassificação-e-matching"><span class="header-section-number">8.3</span> Subclassificação e matching</a></li>
+  <li><a href="#matching-com-propensity-scores" id="toc-matching-com-propensity-scores" class="nav-link" data-scroll-target="#matching-com-propensity-scores"><span class="header-section-number">8.4</span> Matching com <em>propensity scores</em></a></li>
+  <li><a href="#matching-com-cem-coarsened-exact-matching" id="toc-matching-com-cem-coarsened-exact-matching" class="nav-link" data-scroll-target="#matching-com-cem-coarsened-exact-matching"><span class="header-section-number">8.5</span> Matching com CEM (Coarsened Exact Matching)</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/felipelmc/Lego-III/edit/main/aulas/aula-05.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/felipelmc/Lego-III/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../aulas/aula-01.html">Aulas</a></li><li class="breadcrumb-item"><a href="../aulas/aula-05.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matching</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matching</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Aula 5</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 8, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Essa é a primeira aula sobre métodos efetivamente, e não de nomenclatura e conceitos básicos de inferência causal.</p>
+<section id="recapitulação-da-notação-de-resultados-potenciais" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Recapitulação da notação de resultados potenciais</h1>
+<p>Suponha um tratamento binário <span class="math inline">\(D\)</span>. Há dois resultados potenciais para o indivíduo <span class="math inline">\(i\)</span>:</p>
+<ul>
+<li><span class="math inline">\(Y^1\)</span> é o resultado potencial com tratamento</li>
+<li><span class="math inline">\(Y^0\)</span> é o resultado potencial sem tratamento</li>
+</ul>
+<p>O efeito causal de <span class="math inline">\(D\)</span> sobre o indivíduo <span class="math inline">\(i\)</span> definido por <span class="math inline">\(Y^1 - Y^0\)</span>. Mas, evidentemente, não temos como observar ambos para o mesmo indivíduo. O que observamos na prática é <span class="math inline">\(Y = D \cdot Y^1 + (1-D) \cdot Y^0\)</span>.</p>
+<section id="o-problema-fundamental-da-inferência-causal" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="o-problema-fundamental-da-inferência-causal"><span class="header-section-number">6.1</span> O problema fundamental da inferência causal</h2>
+<p>Não é possível estimar o efeito causal em nível individual, mas podemos estimar efeitos causais agregados se for possível construir contrafactuais válidos:</p>
+<ul>
+<li><span class="math inline">\(ATT = \mathbb{E}[Y^1 - Y^0 | D = 1]\)</span></li>
+<li><span class="math inline">\(ATU = \mathbb{E}[Y^1 - Y^0 | D = 0]\)</span></li>
+</ul>
+<p>Se você faz experimentos totalmente randomizados, você pode calcular uma diferença de médias simples para estimar o efeito causal. Em dados observacionais, no entanto, isso não é possível, porque a diferença entre tratados e não tratados se decompõe em vários outros elementos que não são apenas a diferença de médias:</p>
+<p><span class="math display">\[
+\underbrace{\frac{1}{N_T} \sum^n_{i = 1}(y_i | d_i = 1) - \frac{1}{N_C} \sum^n_{i = 1}(y_i | d_i = 0)}_{\text{Diferença observada}} = \underbrace{\mathbb{E}[Y^1 - Y^0]}_{\text{ATE}} + \underbrace{\mathbb{E}[Y^0 | D = 1] - \mathbb{E}[Y^0 | D = 0]}_{\text{Viés de seleção}} + \underbrace{(1 - \pi)(\text{ATT} - \text{ATU})}_{\text{Viés de heterogeneidade}}
+\]</span></p>
+<p>O lado esquerdo é simplesmente a <strong>diferença observada</strong> entre as médias dos grupos tratado e controle — é o que você consegue calcular diretamente dos dados. O lado direito decompõe essa diferença em três partes:</p>
+<ol type="1">
+<li><p>O <strong>ATE</strong> (<span class="math inline">\(\mathbb{E}[Y^1 - Y^0]\)</span>) é o efeito causal médio do tratamento na população. É o que gostaríamos de estimar: quanto, em média, o resultado de uma unidade mudaria se ela passasse de não tratada a tratada.</p></li>
+<li><p>O <strong>viés de seleção</strong> (<span class="math inline">\(\mathbb{E}[Y^0 | D = 1] - \mathbb{E}[Y^0 | D = 0]\)</span>) captura a diferença entre tratados e controles que existiria <em>mesmo na ausência do tratamento</em>. É uma comparação dos resultados potenciais <span class="math inline">\(Y^0\)</span> — isto é, o que aconteceria <em>sem</em> tratamento — entre quem <em>escolheu</em> se tratar e quem não escolheu. Se, por exemplo, indivíduos que buscam o tratamento já são sistematicamente diferentes (mais ricos, mais motivados, mais doentes), essa diferença aparece aqui.</p></li>
+<li><p>O <strong>viés de heterogeneidade</strong> (<span class="math inline">\((1 - \pi)(\text{ATT} - \text{ATU})\)</span>, onde <span class="math inline">\(\pi = \mathbb{P}(D=1)\)</span>) aparece quando o efeito do tratamento não é o mesmo para todos. Se o tratamento beneficia mais quem se trata do que quem não se trata (ou vice-versa), a diferença entre ATT e ATU é não nula. Esse termo desaparece em dois casos: quando o efeito é constante (<span class="math inline">\(ATT = ATU\)</span>), ou quando toda a população é tratada (<span class="math inline">\(\pi = 1\)</span>).</p></li>
+</ol>
+<p>Em um experimento randomizado, <span class="math inline">\(D\)</span> é independente dos resultados potenciais, o que zera os dois termos de viés e faz com que a diferença observada estime diretamente o ATE.</p>
+</section>
+</section>
+<section id="o-pressuposto-de-seleção-em-observáveis-ou-independência-condicional" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> O pressuposto de seleção em observáveis (ou independência condicional)</h1>
+<p>Suponha que observamos todas as variáveis <span class="math inline">\(X\)</span> necessárias para fechar os backdoors abertos entre <span class="math inline">\(D\)</span> e <span class="math inline">\(Y\)</span>. Nesse caso, podemos identificar os efeito de <span class="math inline">\(D\)</span> sobre <span class="math inline">\(Y\)</span> controlando por essas variáveis: por regressão ou matching, ou pela combinação de ambos.</p>
+<p>Matching costuma ser mais intuitivo: sob o pressuposto de seleção em observáveis, podemos estimar os efeitos causais…</p>
+<ul>
+<li>construindo grupos (quase) idênticos em termos das variáveis <span class="math inline">\(X\)</span> e comparando tratados e não tratados dentro de cada grupo</li>
+<li>combinando as estimativas em uma média ponderada para obter o estimando de interesse</li>
+</ul>
+<p>{.::: {.callout-note} De fato, o argumento aqui é que se eu observo todas as variáveis relevantes (uma hipótese bastante heróica), basta ver quem é igual em termos dessas variáveis e ir comparando tratados e não tratados dentro desses grupos e depois agregar. :::}</p>
+<p>Formalmente, definiríamos:</p>
+<p><span class="math display">\[
+(Y^1, Y^0) \perp\!\!\!\perp D \mid X
+\]</span></p>
+<p>Logo, os resultados potenciais são análogos aos de um experimento bloqueado. Isso significa que, desde que você condicione pelas variáveis que “você usou” (isto é, <span class="math inline">\(X\)</span>) para fazer os blocos, valem as matemáticas do experimento totalmente aleatório.</p>
+</section>
+<section id="estratificação-ou-subclassificação" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Estratificação ou subclassificação</h1>
+<section id="estratificação-perfeita" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="estratificação-perfeita"><span class="header-section-number">8.1</span> Estratificação perfeita</h2>
+<p>Suponha que temos grupos de tratamento e controle que são muito distintos entre si, mas que observamos um conjunto de variáveis <span class="math inline">\(\mathbf{X}\)</span> que captura todas as diferenças relevantes na probabilidade de tratamento entre os grupos. Essas variáveis <span class="math inline">\(\mathbf{X}\)</span> permitem então <strong>estratificação perfeita</strong> dos dados.</p>
+<p>Ou seja, dentro dos grupos definidos pelos valores de <span class="math inline">\(\mathbf{X}\)</span> os indivíduos são “indistiguíveis”, exceto por (i) status de tratamento e (ii) diferenças em resultados potenciais independentes do status do tratamento.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Exemplo hipotético">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exemplo hipotético
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pergunta de pesquisa: escolas cívico-militares melhoram o desempenho dos alunos?</p>
+<p>Suponha que todos os alunos de escolas públicas fazem uma prova padronizada, com os seguintes resultados:</p>
+<ul>
+<li>Escolas cívico-militares (<span class="math inline">\(D = 1\)</span>): nota média é 78</li>
+<li>Escolas regulares (<span class="math inline">\(D = 0\)</span>): nota média é 65</li>
+</ul>
+<p>Logo:</p>
+<ul>
+<li><span class="math inline">\(\mathbb{E}[Y \mid D = 1] - \mathbb{E}[Y \mid D = 0] = 78 - 65 = 13\)</span></li>
+</ul>
+<p>Essa é minha estimativa ingênua. Mas será que isso é um efeito causal? E se os grupos forem muito diferentes em composição social?</p>
+<p>De fato, pense na possibilidade de os alunos de colégios cívico-militares serem muito diferentes em termos de renda, mas essa é a única variável que de fato diferencia esses alunos. Se esse for o caso, aí podemos calcular a diferença de médias dentro de cada um desses grupos de renda.</p>
+<table class="table-striped caption-top table">
+<caption>Distribuição dos alunos por estrato de renda e tipo de escola</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estrato</th>
+<th style="text-align: center;">Regular (<span class="math inline">\(D=0\)</span>)</th>
+<th style="text-align: center;">Cívico-Militar (<span class="math inline">\(D=1\)</span>)</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Baixa renda</td>
+<td style="text-align: center;">600</td>
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">700</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Classe média</td>
+<td style="text-align: center;">300</td>
+<td style="text-align: center;">300</td>
+<td style="text-align: center;">600</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ricos</td>
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">600</td>
+<td style="text-align: center;">700</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Total</strong></td>
+<td style="text-align: center;"><strong>1000</strong></td>
+<td style="text-align: center;"><strong>1000</strong></td>
+<td style="text-align: center;"><strong>2000</strong></td>
+</tr>
+</tbody>
+</table>
+<table class="table-striped caption-top table">
+<caption>Nota média por estrato e tipo de escola</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 21%">
+<col style="width: 25%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estrato</th>
+<th style="text-align: center;">Regular (<span class="math inline">\(D=0\)</span>)</th>
+<th style="text-align: center;">Cívico-Militar (<span class="math inline">\(D=1\)</span>)</th>
+<th style="text-align: center;">Diferença (<span class="math inline">\(\delta_k\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Baixa renda</td>
+<td style="text-align: center;">60</td>
+<td style="text-align: center;">54</td>
+<td style="text-align: center;">-6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Classe média</td>
+<td style="text-align: center;">69</td>
+<td style="text-align: center;">72</td>
+<td style="text-align: center;">+3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ricos</td>
+<td style="text-align: center;">83</td>
+<td style="text-align: center;">85</td>
+<td style="text-align: center;">+2</td>
+</tr>
+</tbody>
+</table>
+<p>O <strong>ATE</strong> é a média ponderada dos efeitos dentro de cada estrato, usando a distribuição da <strong>população</strong> em cada estrato:</p>
+<p><span class="math display">\[
+ATE = \sum_k w_k \delta_k = \frac{700}{2000} \cdot (-6) + \frac{600}{2000} \cdot (3) + \frac{700}{2000} \cdot (2) = 0.35 \cdot (-6) + 0.30 \cdot (3) + 0.35 \cdot (2) = -0.5
+\]</span></p>
+<p>O <strong>ATT</strong> é ponderado pela distribuição dos <strong>tratados</strong> entre os estratos:</p>
+<p><span class="math display">\[
+ATT = \sum_k w_k^{T} \delta_k = \frac{100}{1000} \cdot (-6) + \frac{300}{1000} \cdot (3) + \frac{600}{1000} \cdot (2) = 0.10 \cdot (-6) + 0.30 \cdot (3) + 0.60 \cdot (2) = 1.5
+\]</span></p>
+<p>O <strong>ATU</strong> é ponderado pela distribuição dos <strong>controles</strong> entre os estratos:</p>
+<p><span class="math display">\[
+ATU = \sum_k w_k^{C} \delta_k = \frac{600}{1000} \cdot (-6) + \frac{300}{1000} \cdot (3) + \frac{100}{1000} \cdot (2) = 0.60 \cdot (-6) + 0.30 \cdot (3) + 0.10 \cdot (2) = -2.5
+\]</span></p>
+<p>Daí segue que o ATE seria, calculando de outra maneira:</p>
+<p><span class="math display">\[
+\mathbb{P}(D = 1) \cdot ATT + \mathbb{P}(D = 0) \cdot ATU = 0.5 \cdot 1.5 + 0.5 \cdot (-2.5) = -0.5
+\]</span></p>
+<p>Note como a estimativa ingênua de <span class="math inline">\(+13\)</span> está muito longe do ATE de <span class="math inline">\(-0.5\)</span>. A diferença se explica pela composição dos grupos: alunos de maior renda — que já teriam notas altas independentemente do tipo de escola — estão sobrerrepresentados nas escolas cívico-militares. O viés de seleção infla a estimativa ingênua, que nesse caso é uma estimativa viesada.</p>
+<p>O problema, é claro, isso tudo parte de um pressuposto bastante forte de que o único backdoor que precisaria ser fechado é o da renda. Mas isso, obviamente, não é verdade para a maioria dos casos. Nesse próprio caso, aliás, poderíamos pensar que o fato de o estudante ser de uma família tradicional de militares poderia ter uma diferença que não está totalmente refletida na renda.</p>
+</div>
+</div>
+</section>
+<section id="pressupostos-essênciais" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="pressupostos-essênciais"><span class="header-section-number">8.2</span> Pressupostos essênciais</h2>
+<section id="consistência" class="level3">
+<h3 class="anchored" data-anchor-id="consistência">Consistência</h3>
+<p><span class="math display">\[
+Y = DY^1 + (1-D)Y^0
+\]</span></p>
+</section>
+<section id="seleção-em-observáveis-ou-independência-condicional" class="level3">
+<h3 class="anchored" data-anchor-id="seleção-em-observáveis-ou-independência-condicional">Seleção em observáveis ou independência condicional</h3>
+<p>Tratamento pode ser considerado como se fosse alocado aleatoriamente dentro dos grupos definidos por <span class="math inline">\(\mathbf{X}\)</span>: <span class="math inline">\((Y^1, Y^0) \perp\!\!\!\perp D \mid X\)</span>.</p>
+</section>
+<section id="suporte-comum" class="level3">
+<h3 class="anchored" data-anchor-id="suporte-comum">Suporte comum</h3>
+<p>Há tratados e controles em todos os grupos definidos por <span class="math inline">\(\mathbf{X}\)</span>: <span class="math inline">\(0 &lt; \mathbb{P}(D = 1 \mid \mathbf{X}) &lt; 1\)</span></p>
+<p>Na população, se houver células vazias para um dos dois grupos (tratados e controles), então o ATE é mal definido, e só o ATT ou o ATU podem ser estimados. O mais comum é que só na amostra haja células vazias (maldição da dimensionalidade).</p>
+<p>Quanto mais covariáveis incluímos em <span class="math inline">\(\mathbf{X}\)</span>, e quanto mais categorias em cada covariável, mais difícil é garantir a presença de tratados e controles em cada grupo. Por isso, na prática, estratificação exata em muitas variáveis raramente é viável.</p>
+</section>
+</section>
+<section id="subclassificação-e-matching" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="subclassificação-e-matching"><span class="header-section-number">8.3</span> Subclassificação e matching</h2>
+<p>Subclassificação compara tratados e controles dentro dos estratos definidos por <span class="math inline">\(\mathbf{X}\)</span>, calcula as diferenças dentro de cada estrato e repondera essas diferenças para obter o efeito médio. O problema, naturalmente, é a maldição da dimensionalidade: conforme o número de covariáveis cresce, o número de estratos explode e muitas células ficam vazias ou com pouquíssimas observações.</p>
+<p>Já no caso do matching (exato), em vez de comparar estratos inteiros, comparamos cada unidade tratada com a unidade (ou unidades) do grupo de controle mais parecida(s) em termos de <span class="math inline">\(\mathbf{X}\)</span>. A ideia é construir, para cada tratado, um contrafactual observável — o controle mais próximo — e estimar o efeito individual como a diferença entre os dois. O ATT, por exemplo, é então a média dessas diferenças entre cada tratado e seu par:</p>
+<p><span class="math display">\[
+\widehat{ATT} = \frac{1}{N_T} \sum_{i: D_i = 1} \left( Y_i - Y_{j(i)} \right)
+\]</span></p>
+<p>onde <span class="math inline">\(j(i)\)</span> denota o controle pareado à unidade tratada <span class="math inline">\(i\)</span>. O matching pode ser feito diretamente sobre <span class="math inline">\(\mathbf{X}\)</span> (matching exato ou por distância de Mahalanobis, por exemplo).</p>
+<p>Estamos focando no ATT nesse caso, porque, naturalmente quando falamos de políticas públicas focalizadas, é razoável pensarmos que é mais fácil encontrar um matching para um tratado num universo maior de não tratados (isto é, há muito mais não tratados do que tratados).</p>
+<p>Intuição: cada unidade tratada é pareada com seus <span class="math inline">\(k\)</span> vizinhos mais próximos, conforme alguma métrica absoluta de distância entre as unidades. A seleção dos vizinhos para cada unidade depende:</p>
+<ul>
+<li>Número de vizinhos que escolhemos</li>
+<li>Se a escolha vai ser feita com ou sem reposição</li>
+<li>Qual a margem de tolerância (caliper) para a distância</li>
+</ul>
+<p>Algumas métricas de distância incluem:</p>
+<ul>
+<li>Distância euclidiana</li>
+<li>Distância euclidiana normalizada</li>
+<li>Distância de Mahalanobis</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Matching aproximado">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Matching aproximado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Se não for possível fazer matching exato, o jeito é fazer algo aproximado.</p>
+<p>Para cada unidade tratada <span class="math inline">\(i\)</span>, escolhemos a(s) unidade(s) de controle mais “próximas”. Para isso, precisamos de:</p>
+<ul>
+<li>Uma métrica de distância entre unidades</li>
+<li>Uma regra de seleção dos controles pareados</li>
+<li>Uma regra de ponderação dos controles pareados</li>
+</ul>
+<p>Não há mágica: a qualidade da inferência depende da proximidade entre os tratados e os controles selecionados. Quanto mais diferentes os grupos em termos de <span class="math inline">\(\mathbb{X}\)</span>, maior o viés.</p>
+</div>
+</div>
+</section>
+<section id="matching-com-propensity-scores" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="matching-com-propensity-scores"><span class="header-section-number">8.4</span> Matching com <em>propensity scores</em></h2>
+<p>Por um longo período, isso foi algo muito usado na literatura mas rapidamente caiu em desuso. Por motivos históricos, vejamos.</p>
+<p>O propensity score é a probabilidade de receber o tratamento dadas as covariáveis <span class="math inline">\(\mathbf{X}\)</span>:</p>
+<p><span class="math display">\[
+p(\mathbf{X}) = \mathbb{P}(D = 1 \mid \mathbf{X})
+\]</span></p>
+<p>Ao invés de comparar tratados e controles em muitas covariáveis ao mesmo tempo, resumimos <span class="math inline">\(\mathbf{X}\)</span> em uma única dimensão: <span class="math inline">\(p(\mathbf{X})\)</span>. Depois, pareamos unidades com propensity scores semelhantes. Se o modelo estiver bem especificado e valer seleção em observáveis, unidades com o mesmo <span class="math inline">\(p(\mathbf{X})\)</span> tendem a ser comparáveis em termos das covariáveis observadas.</p>
+<p>Isso introduz um elemento de simplicidade porque o problema é reduzido a uma única dimensão, dada pela probabilidade de receber o tratamento.</p>
+<p>O teorema do propensity score é razoável, faz sentido e continua valendo. O que caiu em desuso foi a prática de usar o propensity score para parear com o vizinho mais próximo, porque, ao jogar tudo para uma única dimensão, você joga informação fora, e os matchings são objetivamente piores do que se você fizesse em mais dimensões.</p>
+<p>Outro problema, inclusive, tá no fato de que você pode acabar aproximando pessoas que são muito diferentes, mas com probabilidades semelhantes. De fato, se no ajuste do modelo duas variáveis têm efeitos semelhantes, duas pessoas podem ter probabilidades de receber o tratamento muito semelhantes, mesmo quando elas são fundamentalmente diferentes nas covariáveis de interesse.</p>
+</section>
+<section id="matching-com-cem-coarsened-exact-matching" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="matching-com-cem-coarsened-exact-matching"><span class="header-section-number">8.5</span> Matching com CEM (Coarsened Exact Matching)</h2>
+<p>A intuição é utilizar conhecimento substantivo sobre o assunto para simplificar temporariamente as covariáveis e realizar matching exato. Em vez de calcular distâncias a partir de variáveis observadas, o CEM:</p>
+<ul>
+<li>“Engrossa” ou discretiza temporariamente as covariáveis em <span class="math inline">\(\mathbf{X}\)</span> em estratos substantivamente relevantes</li>
+<li>Faz matching exato nessas versões discretizadas</li>
+<li>Descarta os estratos que contêm apenas tratados ou apenas controles e estima o efeito causal usando os dados originais nos estratos retidos</li>
+</ul>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../aulas/aula-04.html" class="pagination-link" aria-label="Aula 4">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Aula 4</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Matching"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Aula 5"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-04-08</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Essa é a primeira aula sobre métodos efetivamente, e não de nomenclatura e conceitos básicos de inferência causal.</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu"># Recapitulação da notação de resultados potenciais</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>Suponha um tratamento binário $D$. Há dois resultados potenciais para o indivíduo $i$:</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y^1$ é o resultado potencial com tratamento</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y^0$ é o resultado potencial sem tratamento</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>O efeito causal de $D$ sobre o indivíduo $i$ definido por $Y^1 - Y^0$. Mas, evidentemente, não temos como observar ambos para o mesmo indivíduo. O que observamos na prática é $Y = D \cdot Y^1 + (1-D) \cdot Y^0$.</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## O problema fundamental da inferência causal</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a> Não é possível estimar o efeito causal em nível individual, mas podemos estimar efeitos causais agregados se for possível construir contrafactuais válidos:</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$ATT = \mathbb{E}<span class="co">[</span><span class="ot">Y^1 - Y^0 | D = 1</span><span class="co">]</span>$</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$ATU = \mathbb{E}<span class="co">[</span><span class="ot">Y^1 - Y^0 | D = 0</span><span class="co">]</span>$</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>Se você faz experimentos totalmente randomizados, você pode calcular uma diferença de médias simples para estimar o efeito causal. Em dados observacionais, no entanto, isso não é possível, porque a diferença entre tratados e não tratados se decompõe em vários outros elementos que não são apenas a diferença de médias:</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>\underbrace{\frac{1}{N_T} \sum^n_{i = 1}(y_i | d_i = 1) - \frac{1}{N_C} \sum^n_{i = 1}(y_i | d_i = 0)}_{\text{Diferença observada}} = \underbrace{\mathbb{E}[Y^1 - Y^0]}_{\text{ATE}} + \underbrace{\mathbb{E}[Y^0 | D = 1] - \mathbb{E}[Y^0 | D = 0]}_{\text{Viés de seleção}} + \underbrace{(1 - \pi)(\text{ATT} - \text{ATU})}_{\text{Viés de heterogeneidade}}</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>O lado esquerdo é simplesmente a **diferença observada** entre as médias dos grupos tratado e controle — é o que você consegue calcular diretamente dos dados. O lado direito decompõe essa diferença em três partes:</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>O **ATE** ($\mathbb{E}<span class="co">[</span><span class="ot">Y^1 - Y^0</span><span class="co">]</span>$) é o efeito causal médio do tratamento na população. É o que gostaríamos de estimar: quanto, em média, o resultado de uma unidade mudaria se ela passasse de não tratada a tratada.</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>O **viés de seleção** ($\mathbb{E}<span class="co">[</span><span class="ot">Y^0 | D = 1</span><span class="co">]</span> - \mathbb{E}<span class="co">[</span><span class="ot">Y^0 | D = 0</span><span class="co">]</span>$) captura a diferença entre tratados e controles que existiria *mesmo na ausência do tratamento*. É uma comparação dos resultados potenciais $Y^0$ — isto é, o que aconteceria *sem* tratamento — entre quem *escolheu* se tratar e quem não escolheu. Se, por exemplo, indivíduos que buscam o tratamento já são sistematicamente diferentes (mais ricos, mais motivados, mais doentes), essa diferença aparece aqui. </span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>O **viés de heterogeneidade** ($(1 - \pi)(\text{ATT} - \text{ATU})$, onde $\pi = \mathbb{P}(D=1)$) aparece quando o efeito do tratamento não é o mesmo para todos. Se o tratamento beneficia mais quem se trata do que quem não se trata (ou vice-versa), a diferença entre ATT e ATU é não nula. Esse termo desaparece em dois casos: quando o efeito é constante ($ATT = ATU$), ou quando toda a população é tratada ($\pi = 1$).</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>Em um experimento randomizado, $D$ é independente dos resultados potenciais, o que zera os dois termos de viés e faz com que a diferença observada estime diretamente o ATE.</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="fu"># O pressuposto de seleção em observáveis (ou independência condicional)</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>Suponha que observamos todas as variáveis $X$ necessárias para fechar os backdoors abertos entre $D$ e $Y$. Nesse caso, podemos identificar os efeito de $D$ sobre $Y$ controlando por essas variáveis: por regressão ou matching, ou pela combinação de ambos.</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>Matching costuma ser mais intuitivo: sob o pressuposto de seleção em observáveis, podemos estimar os efeitos causais...</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>construindo grupos (quase) idênticos em termos das variáveis $X$ e comparando tratados e não tratados dentro de cada grupo</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>combinando as estimativas em uma média ponderada para obter o estimando de interesse</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>{.::: {.callout-note}</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>De fato, o argumento aqui é que se eu observo todas as variáveis relevantes (uma hipótese bastante heróica), basta ver quem é igual em termos dessas variáveis e ir comparando tratados e não tratados dentro desses grupos e depois agregar.</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>:::}</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>Formalmente, definiríamos:</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>(Y^1, Y^0) \perp<span class="sc">\!\!\!</span>\perp D \mid X</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>Logo, os resultados potenciais são análogos aos de um experimento bloqueado. Isso significa que, desde que você condicione pelas variáveis que "você usou" (isto é, $X$) para fazer os blocos, valem as matemáticas do experimento totalmente aleatório.</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="fu"># Estratificação ou subclassificação</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## Estratificação perfeita</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>Suponha que temos grupos de tratamento e controle que são muito distintos entre si, mas que observamos um conjunto de variáveis $\mathbf{X}$ que captura todas as diferenças relevantes na probabilidade de tratamento entre os grupos. Essas variáveis $\mathbf{X}$ permitem então **estratificação perfeita** dos dados.</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>Ou seja, dentro dos grupos definidos pelos valores de $\mathbf{X}$ os indivíduos são "indistiguíveis", exceto por (i) status de tratamento e (ii) diferenças em resultados potenciais independentes do status do tratamento.</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>:::: {.callout-note title="Exemplo hipotético"}</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>Pergunta de pesquisa: escolas cívico-militares melhoram o desempenho dos alunos?</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>Suponha que todos os alunos de escolas públicas fazem uma prova padronizada, com os seguintes resultados:</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Escolas cívico-militares ($D = 1$): nota média é 78</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Escolas regulares ($D = 0$): nota média é 65</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>Logo:</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\mathbb{E}<span class="co">[</span><span class="ot">Y \mid D = 1</span><span class="co">]</span> - \mathbb{E}<span class="co">[</span><span class="ot">Y \mid D = 0</span><span class="co">]</span> = 78 - 65 = 13$</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>Essa é minha estimativa ingênua. Mas será que isso é um efeito causal? E se os grupos forem muito diferentes em composição social?</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>De fato, pense na possibilidade de os alunos de colégios cívico-militares serem muito diferentes em termos de renda, mas essa é a única variável que de fato diferencia esses alunos. Se esse for o caso, aí podemos calcular a diferença de médias dentro de cada um desses grupos de renda.</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Estrato <span class="pp">|</span> Regular ($D=0$) <span class="pp">|</span> Cívico-Militar ($D=1$) <span class="pp">|</span> Total <span class="pp">|</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="pp">|:----------------|:---------:|:-----------:|:-----:|</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Baixa renda     <span class="pp">|</span> 600       <span class="pp">|</span> 100         <span class="pp">|</span> 700   <span class="pp">|</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Classe média    <span class="pp">|</span> 300       <span class="pp">|</span> 300         <span class="pp">|</span> 600   <span class="pp">|</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Ricos           <span class="pp">|</span> 100       <span class="pp">|</span> 600         <span class="pp">|</span> 700   <span class="pp">|</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Total**       | **1000**  | **1000**    | **2000** <span class="pp">|</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>: Distribuição dos alunos por estrato de renda e tipo de escola {.striped}</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Estrato <span class="pp">|</span> Regular ($D=0$) <span class="pp">|</span> Cívico-Militar ($D=1$) <span class="pp">|</span> Diferença ($\delta_k$) <span class="pp">|</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|:----------------|:---------:|:-----------:|:--------:|</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Baixa renda     <span class="pp">|</span> 60        <span class="pp">|</span> 54          <span class="pp">|</span> -6       <span class="pp">|</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Classe média    <span class="pp">|</span> 69        <span class="pp">|</span> 72          <span class="pp">|</span> +3       <span class="pp">|</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Ricos           <span class="pp">|</span> 83        <span class="pp">|</span> 85          <span class="pp">|</span> +2       <span class="pp">|</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>: Nota média por estrato e tipo de escola {.striped}</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>O **ATE** é a média ponderada dos efeitos dentro de cada estrato, usando a distribuição da **população** em cada estrato:</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>ATE = \sum_k w_k \delta_k = \frac{700}{2000} \cdot (-6) + \frac{600}{2000} \cdot (3) + \frac{700}{2000} \cdot (2) = 0.35 \cdot (-6) + 0.30 \cdot (3) + 0.35 \cdot (2) = -0.5</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>O **ATT** é ponderado pela distribuição dos **tratados** entre os estratos:</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>ATT = \sum_k w_k^{T} \delta_k = \frac{100}{1000} \cdot (-6) + \frac{300}{1000} \cdot (3) + \frac{600}{1000} \cdot (2) = 0.10 \cdot (-6) + 0.30 \cdot (3) + 0.60 \cdot (2) = 1.5</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>O **ATU** é ponderado pela distribuição dos **controles** entre os estratos:</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>ATU = \sum_k w_k^{C} \delta_k = \frac{600}{1000} \cdot (-6) + \frac{300}{1000} \cdot (3) + \frac{100}{1000} \cdot (2) = 0.60 \cdot (-6) + 0.30 \cdot (3) + 0.10 \cdot (2) = -2.5</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>Daí segue que o ATE seria, calculando de outra maneira:</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>\mathbb{P}(D = 1) \cdot ATT + \mathbb{P}(D = 0) \cdot ATU = 0.5 \cdot 1.5 + 0.5 \cdot (-2.5) = -0.5</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>Note como a estimativa ingênua de $+13$ está muito longe do ATE de $-0.5$. A diferença se explica pela composição dos grupos: alunos de maior renda — que já teriam notas altas independentemente do tipo de escola — estão sobrerrepresentados nas escolas cívico-militares. O viés de seleção infla a estimativa ingênua, que nesse caso é uma estimativa viesada.</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>O problema, é claro, isso tudo parte de um pressuposto bastante forte de que o único backdoor que precisaria ser fechado é o da renda. Mas isso, obviamente, não é verdade para a maioria dos casos. Nesse próprio caso, aliás, poderíamos pensar que o fato de o estudante ser de uma família tradicional de militares poderia ter uma diferença que não está totalmente refletida na renda.</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## Pressupostos essênciais</span></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a><span class="fu">### Consistência</span></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>Y = DY^1 + (1-D)Y^0</span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="fu">### Seleção em observáveis ou independência condicional</span></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>Tratamento pode ser considerado como se fosse alocado aleatoriamente dentro dos grupos definidos por $\mathbf{X}$: $(Y^1, Y^0) \perp<span class="sc">\!\!\!</span>\perp D \mid X$.</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="fu">### Suporte comum</span></span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>Há tratados e controles em todos os grupos definidos por $\mathbf{X}$: $0 &lt; \mathbb{P}(D = 1 \mid \mathbf{X}) &lt; 1$</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>Na população, se houver células vazias para um dos dois grupos (tratados e controles), então o ATE é mal definido, e só o ATT ou o ATU podem ser estimados. O mais comum é que só na amostra haja células vazias (maldição da dimensionalidade).</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>Quanto mais covariáveis incluímos em $\mathbf{X}$, e quanto mais categorias em cada covariável, mais difícil é garantir a presença de tratados e controles em cada grupo. Por isso, na prática, estratificação exata em muitas variáveis raramente é viável.</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a><span class="fu">## Subclassificação e matching</span></span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>Subclassificação compara tratados e controles dentro dos estratos definidos por $\mathbf{X}$, calcula as diferenças dentro de cada estrato e repondera essas diferenças para obter o efeito médio. O problema, naturalmente, é a maldição da dimensionalidade: conforme o número de covariáveis cresce, o número de estratos explode e muitas células ficam vazias ou com pouquíssimas observações.</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>Já no caso do matching (exato), em vez de comparar estratos inteiros, comparamos cada unidade tratada com a unidade (ou unidades) do grupo de controle mais parecida(s) em termos de $\mathbf{X}$. A ideia é construir, para cada tratado, um contrafactual observável — o controle mais próximo — e estimar o efeito individual como a diferença entre os dois. O ATT, por exemplo, é então a média dessas diferenças entre cada tratado e seu par:</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>\widehat{ATT} = \frac{1}{N_T} \sum_{i: D_i = 1} \left( Y_i - Y_{j(i)} \right)</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>onde $j(i)$ denota o controle pareado à unidade tratada $i$. O matching pode ser feito diretamente sobre $\mathbf{X}$ (matching exato ou por distância de Mahalanobis, por exemplo).</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>Estamos focando no ATT nesse caso, porque, naturalmente quando falamos de políticas públicas focalizadas, é razoável pensarmos que é mais fácil encontrar um matching para um tratado num universo maior de não tratados (isto é, há muito mais não tratados do que tratados).</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>Intuição: cada unidade tratada é pareada com seus $k$ vizinhos mais próximos, conforme alguma métrica absoluta de distância entre as unidades. A seleção dos vizinhos para cada unidade depende:</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Número de vizinhos que escolhemos</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Se a escolha vai ser feita com ou sem reposição</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Qual a margem de tolerância (caliper) para a distância</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>Algumas métricas de distância incluem:</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Distância euclidiana</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Distância euclidiana normalizada</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Distância de Mahalanobis</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>:::{.callout-note title="Matching aproximado"}</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>Se não for possível fazer matching exato, o jeito é fazer algo aproximado.</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>Para cada unidade tratada $i$, escolhemos a(s) unidade(s) de controle mais "próximas". Para isso, precisamos de:</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Uma métrica de distância entre unidades</span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Uma regra de seleção dos controles pareados</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Uma regra de ponderação dos controles pareados</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>Não há mágica: a qualidade da inferência depende da proximidade entre os tratados e os controles selecionados. Quanto mais diferentes os grupos em termos de $\mathbb{X}$, maior o viés.</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a><span class="fu">## Matching com _propensity scores_</span></span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>Por um longo período, isso foi algo muito usado na literatura mas rapidamente caiu em desuso. Por motivos históricos, vejamos.</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>O propensity score é a probabilidade de receber o tratamento dadas as covariáveis $\mathbf{X}$:</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>p(\mathbf{X}) = \mathbb{P}(D = 1 \mid \mathbf{X})</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>Ao invés de comparar tratados e controles em muitas covariáveis ao mesmo tempo, resumimos $\mathbf{X}$ em uma única dimensão: $p(\mathbf{X})$. Depois, pareamos unidades com propensity scores semelhantes. Se o modelo estiver bem especificado e valer seleção em observáveis, unidades com o mesmo $p(\mathbf{X})$ tendem a ser comparáveis em termos das covariáveis observadas.</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>Isso introduz um elemento de simplicidade porque o problema é reduzido a uma única dimensão, dada pela probabilidade de receber o tratamento.</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>O teorema do propensity score é razoável, faz sentido e continua valendo. O que caiu em desuso foi a prática de usar o propensity score para parear com o vizinho mais próximo, porque, ao jogar tudo para uma única dimensão, você joga informação fora, e os matchings são objetivamente piores do que se você fizesse em mais dimensões.</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>Outro problema, inclusive, tá no fato de que você pode acabar aproximando pessoas que são muito diferentes, mas com probabilidades semelhantes. De fato, se no ajuste do modelo duas variáveis têm efeitos semelhantes, duas pessoas podem ter probabilidades de receber o tratamento muito semelhantes, mesmo quando elas são fundamentalmente diferentes nas covariáveis de interesse.</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a><span class="fu">## Matching com CEM (Coarsened Exact Matching)</span></span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>A intuição é utilizar conhecimento substantivo sobre o assunto para simplificar temporariamente as covariáveis e realizar matching exato. Em vez de calcular distâncias a partir de variáveis observadas, o CEM:</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>"Engrossa" ou discretiza temporariamente as covariáveis em $\mathbf{X}$ em estratos substantivamente relevantes</span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Faz matching exato nessas versões discretizadas</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Descarta os estratos que contêm apenas tratados ou apenas controles e estima o efeito causal usando os dados originais nos estratos retidos</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/felipelmc/Lego-III/edit/main/aulas/aula-05.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/felipelmc/Lego-III/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
