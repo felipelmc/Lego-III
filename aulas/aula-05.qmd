@@ -1,0 +1,215 @@
+---
+title: "Matching"
+subtitle: "Aula 5"
+date: 2026-04-08
+---
+
+Essa é a primeira aula sobre métodos efetivamente, e não de nomenclatura e conceitos básicos de inferência causal.
+
+# Recapitulação da notação de resultados potenciais
+
+Suponha um tratamento binário $D$. Há dois resultados potenciais para o indivíduo $i$:
+
+- $Y^1$ é o resultado potencial com tratamento
+- $Y^0$ é o resultado potencial sem tratamento
+
+O efeito causal de $D$ sobre o indivíduo $i$ definido por $Y^1 - Y^0$. Mas, evidentemente, não temos como observar ambos para o mesmo indivíduo. O que observamos na prática é $Y = D \cdot Y^1 + (1-D) \cdot Y^0$.
+
+## O problema fundamental da inferência causal
+
+ Não é possível estimar o efeito causal em nível individual, mas podemos estimar efeitos causais agregados se for possível construir contrafactuais válidos:
+
+- $ATT = \mathbb{E}[Y^1 - Y^0 | D = 1]$
+- $ATU = \mathbb{E}[Y^1 - Y^0 | D = 0]$
+
+Se você faz experimentos totalmente randomizados, você pode calcular uma diferença de médias simples para estimar o efeito causal. Em dados observacionais, no entanto, isso não é possível, porque a diferença entre tratados e não tratados se decompõe em vários outros elementos que não são apenas a diferença de médias:
+
+$$
+\underbrace{\frac{1}{N_T} \sum^n_{i = 1}(y_i | d_i = 1) - \frac{1}{N_C} \sum^n_{i = 1}(y_i | d_i = 0)}_{\text{Diferença observada}} = \underbrace{\mathbb{E}[Y^1 - Y^0]}_{\text{ATE}} + \underbrace{\mathbb{E}[Y^0 | D = 1] - \mathbb{E}[Y^0 | D = 0]}_{\text{Viés de seleção}} + \underbrace{(1 - \pi)(\text{ATT} - \text{ATU})}_{\text{Viés de heterogeneidade}}
+$$
+
+O lado esquerdo é simplesmente a **diferença observada** entre as médias dos grupos tratado e controle — é o que você consegue calcular diretamente dos dados. O lado direito decompõe essa diferença em três partes:
+
+1. O **ATE** ($\mathbb{E}[Y^1 - Y^0]$) é o efeito causal médio do tratamento na população. É o que gostaríamos de estimar: quanto, em média, o resultado de uma unidade mudaria se ela passasse de não tratada a tratada.
+
+2. O **viés de seleção** ($\mathbb{E}[Y^0 | D = 1] - \mathbb{E}[Y^0 | D = 0]$) captura a diferença entre tratados e controles que existiria *mesmo na ausência do tratamento*. É uma comparação dos resultados potenciais $Y^0$ — isto é, o que aconteceria *sem* tratamento — entre quem *escolheu* se tratar e quem não escolheu. Se, por exemplo, indivíduos que buscam o tratamento já são sistematicamente diferentes (mais ricos, mais motivados, mais doentes), essa diferença aparece aqui. 
+
+3. O **viés de heterogeneidade** ($(1 - \pi)(\text{ATT} - \text{ATU})$, onde $\pi = \mathbb{P}(D=1)$) aparece quando o efeito do tratamento não é o mesmo para todos. Se o tratamento beneficia mais quem se trata do que quem não se trata (ou vice-versa), a diferença entre ATT e ATU é não nula. Esse termo desaparece em dois casos: quando o efeito é constante ($ATT = ATU$), ou quando toda a população é tratada ($\pi = 1$).
+
+Em um experimento randomizado, $D$ é independente dos resultados potenciais, o que zera os dois termos de viés e faz com que a diferença observada estime diretamente o ATE.
+
+# O pressuposto de seleção em observáveis (ou independência condicional)
+
+Suponha que observamos todas as variáveis $X$ necessárias para fechar os backdoors abertos entre $D$ e $Y$. Nesse caso, podemos identificar os efeito de $D$ sobre $Y$ controlando por essas variáveis: por regressão ou matching, ou pela combinação de ambos.
+
+Matching costuma ser mais intuitivo: sob o pressuposto de seleção em observáveis, podemos estimar os efeitos causais...
+
+- construindo grupos (quase) idênticos em termos das variáveis $X$ e comparando tratados e não tratados dentro de cada grupo
+- combinando as estimativas em uma média ponderada para obter o estimando de interesse
+
+{.::: {.callout-note}
+De fato, o argumento aqui é que se eu observo todas as variáveis relevantes (uma hipótese bastante heróica), basta ver quem é igual em termos dessas variáveis e ir comparando tratados e não tratados dentro desses grupos e depois agregar.
+:::}
+
+Formalmente, definiríamos:
+
+$$
+(Y^1, Y^0) \perp\!\!\!\perp D \mid X
+$$
+
+Logo, os resultados potenciais são análogos aos de um experimento bloqueado. Isso significa que, desde que você condicione pelas variáveis que "você usou" (isto é, $X$) para fazer os blocos, valem as matemáticas do experimento totalmente aleatório.
+
+# Estratificação ou subclassificação
+
+## Estratificação perfeita
+
+Suponha que temos grupos de tratamento e controle que são muito distintos entre si, mas que observamos um conjunto de variáveis $\mathbf{X}$ que captura todas as diferenças relevantes na probabilidade de tratamento entre os grupos. Essas variáveis $\mathbf{X}$ permitem então **estratificação perfeita** dos dados.
+
+Ou seja, dentro dos grupos definidos pelos valores de $\mathbf{X}$ os indivíduos são "indistiguíveis", exceto por (i) status de tratamento e (ii) diferenças em resultados potenciais independentes do status do tratamento.
+
+:::: {.callout-note title="Exemplo hipotético"}
+Pergunta de pesquisa: escolas cívico-militares melhoram o desempenho dos alunos?
+
+Suponha que todos os alunos de escolas públicas fazem uma prova padronizada, com os seguintes resultados:
+
+- Escolas cívico-militares ($D = 1$): nota média é 78
+- Escolas regulares ($D = 0$): nota média é 65
+
+Logo:
+
+- $\mathbb{E}[Y \mid D = 1] - \mathbb{E}[Y \mid D = 0] = 78 - 65 = 13$
+
+Essa é minha estimativa ingênua. Mas será que isso é um efeito causal? E se os grupos forem muito diferentes em composição social?
+
+De fato, pense na possibilidade de os alunos de colégios cívico-militares serem muito diferentes em termos de renda, mas essa é a única variável que de fato diferencia esses alunos. Se esse for o caso, aí podemos calcular a diferença de médias dentro de cada um desses grupos de renda.
+
+| Estrato | Regular ($D=0$) | Cívico-Militar ($D=1$) | Total |
+|:----------------|:---------:|:-----------:|:-----:|
+| Baixa renda     | 600       | 100         | 700   |
+| Classe média    | 300       | 300         | 600   |
+| Ricos           | 100       | 600         | 700   |
+| **Total**       | **1000**  | **1000**    | **2000** |
+
+: Distribuição dos alunos por estrato de renda e tipo de escola {.striped}
+
+| Estrato | Regular ($D=0$) | Cívico-Militar ($D=1$) | Diferença ($\delta_k$) |
+|:----------------|:---------:|:-----------:|:--------:|
+| Baixa renda     | 60        | 54          | -6       |
+| Classe média    | 69        | 72          | +3       |
+| Ricos           | 83        | 85          | +2       |
+
+: Nota média por estrato e tipo de escola {.striped}
+
+O **ATE** é a média ponderada dos efeitos dentro de cada estrato, usando a distribuição da **população** em cada estrato:
+
+$$
+ATE = \sum_k w_k \delta_k = \frac{700}{2000} \cdot (-6) + \frac{600}{2000} \cdot (3) + \frac{700}{2000} \cdot (2) = 0.35 \cdot (-6) + 0.30 \cdot (3) + 0.35 \cdot (2) = -0.5
+$$
+
+O **ATT** é ponderado pela distribuição dos **tratados** entre os estratos:
+
+$$
+ATT = \sum_k w_k^{T} \delta_k = \frac{100}{1000} \cdot (-6) + \frac{300}{1000} \cdot (3) + \frac{600}{1000} \cdot (2) = 0.10 \cdot (-6) + 0.30 \cdot (3) + 0.60 \cdot (2) = 1.5
+$$
+
+O **ATU** é ponderado pela distribuição dos **controles** entre os estratos:
+
+$$
+ATU = \sum_k w_k^{C} \delta_k = \frac{600}{1000} \cdot (-6) + \frac{300}{1000} \cdot (3) + \frac{100}{1000} \cdot (2) = 0.60 \cdot (-6) + 0.30 \cdot (3) + 0.10 \cdot (2) = -2.5
+$$
+
+Daí segue que o ATE seria, calculando de outra maneira:
+
+$$
+\mathbb{P}(D = 1) \cdot ATT + \mathbb{P}(D = 0) \cdot ATU = 0.5 \cdot 1.5 + 0.5 \cdot (-2.5) = -0.5
+$$
+
+Note como a estimativa ingênua de $+13$ está muito longe do ATE de $-0.5$. A diferença se explica pela composição dos grupos: alunos de maior renda — que já teriam notas altas independentemente do tipo de escola — estão sobrerrepresentados nas escolas cívico-militares. O viés de seleção infla a estimativa ingênua, que nesse caso é uma estimativa viesada.
+
+O problema, é claro, isso tudo parte de um pressuposto bastante forte de que o único backdoor que precisaria ser fechado é o da renda. Mas isso, obviamente, não é verdade para a maioria dos casos. Nesse próprio caso, aliás, poderíamos pensar que o fato de o estudante ser de uma família tradicional de militares poderia ter uma diferença que não está totalmente refletida na renda.
+::::
+
+## Pressupostos essênciais
+
+### Consistência
+
+$$
+Y = DY^1 + (1-D)Y^0
+$$
+
+### Seleção em observáveis ou independência condicional
+
+Tratamento pode ser considerado como se fosse alocado aleatoriamente dentro dos grupos definidos por $\mathbf{X}$: $(Y^1, Y^0) \perp\!\!\!\perp D \mid X$.
+
+### Suporte comum
+
+Há tratados e controles em todos os grupos definidos por $\mathbf{X}$: $0 < \mathbb{P}(D = 1 \mid \mathbf{X}) < 1$
+
+Na população, se houver células vazias para um dos dois grupos (tratados e controles), então o ATE é mal definido, e só o ATT ou o ATU podem ser estimados. O mais comum é que só na amostra haja células vazias (maldição da dimensionalidade).
+
+Quanto mais covariáveis incluímos em $\mathbf{X}$, e quanto mais categorias em cada covariável, mais difícil é garantir a presença de tratados e controles em cada grupo. Por isso, na prática, estratificação exata em muitas variáveis raramente é viável.
+
+## Subclassificação e matching
+
+Subclassificação compara tratados e controles dentro dos estratos definidos por $\mathbf{X}$, calcula as diferenças dentro de cada estrato e repondera essas diferenças para obter o efeito médio. O problema, naturalmente, é a maldição da dimensionalidade: conforme o número de covariáveis cresce, o número de estratos explode e muitas células ficam vazias ou com pouquíssimas observações.
+
+Já no caso do matching (exato), em vez de comparar estratos inteiros, comparamos cada unidade tratada com a unidade (ou unidades) do grupo de controle mais parecida(s) em termos de $\mathbf{X}$. A ideia é construir, para cada tratado, um contrafactual observável — o controle mais próximo — e estimar o efeito individual como a diferença entre os dois. O ATT, por exemplo, é então a média dessas diferenças entre cada tratado e seu par:
+
+$$
+\widehat{ATT} = \frac{1}{N_T} \sum_{i: D_i = 1} \left( Y_i - Y_{j(i)} \right)
+$$
+
+onde $j(i)$ denota o controle pareado à unidade tratada $i$. O matching pode ser feito diretamente sobre $\mathbf{X}$ (matching exato ou por distância de Mahalanobis, por exemplo).
+
+Estamos focando no ATT nesse caso, porque, naturalmente quando falamos de políticas públicas focalizadas, é razoável pensarmos que é mais fácil encontrar um matching para um tratado num universo maior de não tratados (isto é, há muito mais não tratados do que tratados).
+
+Intuição: cada unidade tratada é pareada com seus $k$ vizinhos mais próximos, conforme alguma métrica absoluta de distância entre as unidades. A seleção dos vizinhos para cada unidade depende:
+
+- Número de vizinhos que escolhemos
+- Se a escolha vai ser feita com ou sem reposição
+- Qual a margem de tolerância (caliper) para a distância
+
+Algumas métricas de distância incluem:
+
+- Distância euclidiana
+- Distância euclidiana normalizada
+- Distância de Mahalanobis
+
+:::{.callout-note title="Matching aproximado"}
+Se não for possível fazer matching exato, o jeito é fazer algo aproximado.
+
+Para cada unidade tratada $i$, escolhemos a(s) unidade(s) de controle mais "próximas". Para isso, precisamos de:
+
+- Uma métrica de distância entre unidades
+- Uma regra de seleção dos controles pareados
+- Uma regra de ponderação dos controles pareados
+
+Não há mágica: a qualidade da inferência depende da proximidade entre os tratados e os controles selecionados. Quanto mais diferentes os grupos em termos de $\mathbb{X}$, maior o viés.
+:::
+
+## Matching com _propensity scores_
+
+Por um longo período, isso foi algo muito usado na literatura mas rapidamente caiu em desuso. Por motivos históricos, vejamos.
+
+O propensity score é a probabilidade de receber o tratamento dadas as covariáveis $\mathbf{X}$:
+
+$$
+p(\mathbf{X}) = \mathbb{P}(D = 1 \mid \mathbf{X})
+$$
+
+Ao invés de comparar tratados e controles em muitas covariáveis ao mesmo tempo, resumimos $\mathbf{X}$ em uma única dimensão: $p(\mathbf{X})$. Depois, pareamos unidades com propensity scores semelhantes. Se o modelo estiver bem especificado e valer seleção em observáveis, unidades com o mesmo $p(\mathbf{X})$ tendem a ser comparáveis em termos das covariáveis observadas.
+
+Isso introduz um elemento de simplicidade porque o problema é reduzido a uma única dimensão, dada pela probabilidade de receber o tratamento.
+
+O teorema do propensity score é razoável, faz sentido e continua valendo. O que caiu em desuso foi a prática de usar o propensity score para parear com o vizinho mais próximo, porque, ao jogar tudo para uma única dimensão, você joga informação fora, e os matchings são objetivamente piores do que se você fizesse em mais dimensões.
+
+Outro problema, inclusive, tá no fato de que você pode acabar aproximando pessoas que são muito diferentes, mas com probabilidades semelhantes. De fato, se no ajuste do modelo duas variáveis têm efeitos semelhantes, duas pessoas podem ter probabilidades de receber o tratamento muito semelhantes, mesmo quando elas são fundamentalmente diferentes nas covariáveis de interesse.
+
+## Matching com CEM (Coarsened Exact Matching)
+
+A intuição é utilizar conhecimento substantivo sobre o assunto para simplificar temporariamente as covariáveis e realizar matching exato. Em vez de calcular distâncias a partir de variáveis observadas, o CEM:
+
+- "Engrossa" ou discretiza temporariamente as covariáveis em $\mathbf{X}$ em estratos substantivamente relevantes
+- Faz matching exato nessas versões discretizadas
+- Descarta os estratos que contêm apenas tratados ou apenas controles e estima o efeito causal usando os dados originais nos estratos retidos
+
