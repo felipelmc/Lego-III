@@ -1,5 +1,6 @@
 ---
-title: "Aula 4"
+title: "Resultados potenciais e experimentos"
+subtitle: "Aula 4"
 date: 2026-04-01
 ---
 

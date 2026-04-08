@@ -1,5 +1,6 @@
 ---
-title: "Aula 2"
+title: "DAGs pt. 2"
+subtitle: "Aula 2"
 date: 2026-03-18
 ---
 
