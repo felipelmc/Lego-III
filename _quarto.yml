@@ -25,6 +25,7 @@ book:
         - aulas/aula-03.qmd
         - aulas/aula-04.qmd
         - aulas/aula-05.qmd
+        - aulas/aula-06.qmd
 
 bibliography: references.bib
 

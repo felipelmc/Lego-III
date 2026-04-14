@@ -1,0 +1,139 @@
+---
+title: "Regressao e análise causal"
+subtitle: "Aula 6"
+date: 2026-04-15
+---
+
+## @morgan2015counterfactuals, chapter 6 -- Regression Estimators of Causal Effects
+
+> [...] we present least squares regression from three different perspectives: (1) regression as a descriptive modeling tool, (2) regression as a parametric adjustment technique for estimating causal effects, and (3) regression as a matching estimator of causal effects. [@morgan2015counterfactuals, 188]
+
+### Perspective 1 -- regression as a descriptive tool
+
+> Consider the descriptive motivation of regression a bit more formally. If $X$ is a collection of variables that are thought to be associated with $Y$ in some way, then the conditional expectation function of $Y$, viewed as a function in $X$, is denoted $\mathbb{E}[Y \mid X]$. Each particular value of the conditional expectation for a specific realization $x$ of $X$ is then denoted $\mathbb{E}[Y \mid X = x]$.
+>
+> Least squares regression yields a predicted surface $\hat{Y} = X \hat{\beta}$, where $\hat{\beta}$ is a vector of estimated coefficients from the regression of the realized values $y_i$ on $x_i$. The predicted surface, $X \hat{\beta}$, does not necessarily run through the specific points of the conditional expectation function, even for an infinite sample, because (1) the conditional expectation function may be a nonlinear function in one or more of the variables in $X$ and (2) a regression model can be fit without parameterizing all nonlinearities in $X$. An estimated regression surface simply represents a best-fitting linear approximation of $\mathbb{E}[Y \mid X]$ under whatever linearity constraints are entailed by the chosen parametrization of the estimated model. [@morgan2015counterfactuals, 189]
+
+> When the purposes of regression are so narrowly restricted, the outcome variable of interest, $Y$, is not generally thought to be a function of potential outcomes associated with well-defined causal states. Consequently, it would be inappropriate to give a causal interpretation to any of the estimated coefficients in $\hat{\beta}$. [@morgan2015counterfactuals, 192]
+
+### Perspective 2 -- Regression adjustment as a strategy to estimate causal effects
+
+Suppose the following simple model:
+
+$$
+Y = \alpha + \delta D + \epsilon
+$$
+
+Assume this equation is used to represent the causal effect of $D$ on $Y$ without any reference to individual-varying potential outcomes. In this case, the parameter $\delta$ is implicitly cast as an invariant, structural causal effect that applies to all members of the population of interest.
+
+> Consider first a case in which $D$ is randomly assigned, as when individuals are randomly assigned to the treatment and control groups. In this case, $D$ would be uncorrelated with $\epsilon$ [...]. The literature on regression, when presented as a causal effect estimator, maintains that, in this case, (1) the estimator $\hat{\delta}_{\text{OLS, bivariate}}$ is consistent and unbiased for $\delta$ [...], and (2) $\delta$ can be interpreted as the causal effect of $D$ on $Y$. [@morgan2015counterfactuals, 195]
+
+> For many applications in the social sciences, a correlation between $D$ and $\epsilon$ is conceptualized as a problem of omitted variables. [...]
+>
+> This perspective, however, has led to much confusion, especially in cases in which a correlation between $D$ and $\epsilon$ emerges because subjects choose different levels of $D$ based on their expectations about the variability of $Y$, and hence their own expectations of the causal effect itself. For example, those who attend college may be more likely to benefit from college than those who do not, even independent of the unobserved ability factor. Although this latent form of anticipation can be labeled an omitted variable, it is generally not. Instead, the language of research shifts toward notions such as self-selection bias, and this is less comfortable territory for the typical applied researcher. [@morgan2015counterfactuals, 197]
+
+Let's talk about that in other terms. Consider the potential outcomes model:
+
+$$
+Y = \mu^0 + (\mu^1 - \mu^0)D + \{ v^0 + D(v^1 - v^0) \},
+$$
+
+where $\mu^0 \equiv \mathbb{E}[Y^0]$, $\mu^1 \equiv \mathbb{E}[Y^1]$, $v^0 \equiv Y^0 - \mathbb{E}[Y^0]$, and $v^1 \equiv Y^1 - \mathbb{E}[Y^1]$.
+
+> The parameters $\alpha$ and $\delta$ in Equation (6.3) are usually not considered to be equal to $\mathbb{E}[Y^0]$ or $\mathbb{E}[\delta]$ for two reasons: (1) models are usually asserted in the regression tradition without any reference to underlying causal states tied to potential outcomes and (2) the parameters $\alpha$ and $\delta$ are usually implicitly held to be constant structural effects that do not vary over individuals in the population.
+
+> Recall that the basic strategy behind regression analysis as an adjustment technique is to estimate
+> 
+> $$ Y = \alpha + \delta D + X \beta + \epsilon^*, $$
+>
+> where $X$ represents one or more control variables, $\beta$ is a coefficient (or a conformable vector of coefficients if $X$ represents more than one variable), and $\epsilon^*$ is a residualized version of the original error term $\epsilon$ [...]. The literature on regression often states that an estimated coefficient $\hat{\delta}$ from this regression equation is consistent and unbiased for the average causal effect if $\epsilon^*$ is uncorrelated with $D$. But, because the specific definition of $\epsilon^*$ is conditional on the specification of $X$, many researchers find this requirement of a zero correlation difficult to interpret and hence difficult to evaluate. 
+>
+> The crux of the idea, however, cna be understood without reference to the error term $\epsilon^*$ but rather with reference to the simpler and more clearly defined error term $v^0 + D(v^1 - v^0)$ or, equivalently, $Dv^1 + (1-D)v^0$. Regression adjustment by $X$ will yield a consistent and unbiased estimate of the ATE when
+>
+> 1. D is mean independent of (and therefore uncorrelated with) $v^0 + D(v^1 - v^0)$ for each subset of respondents identified by distinct values on the variables in $X$,
+> 
+> 2. the causal effect of $D$ does not vary with $X$, and
+>
+> 3. a fully flexible parametrization of $X$ is used. [@morgan2015counterfactuals, 204-205]
+
+### Perspective 3 -- Regression as conditional-variance-weighted matching
+
+> We first show why least squares regression can yield misleading causal effect estimates in the presence of individual-level heterogeneity of causal effects, even if the only variable that needs to be adjusted for is given a fully flexible coding (i.e., when the adjustment variable is parameterized with a dummy variable for each of its values, save one for the reference category). In these cases, least squares estimators implicitly invoke conditional-variance weighting of individual-level causal effects. This weighting scheme generates a conditional-variance-weighted estimate of the average causal effect, which is not an average causal effect that is often of any inherent interest to a researcher. [@morgan2015counterfactuals, 206]
+
+> In general, regression models do not offer consistent and unbiased estimates of the ATE when causal effect heterogeneity is present, even when a fully flexible coding is given to the only necessary adjustment variable(s). Regression estimators with fully flexible codings of the adjustment variables do provide consistent and unbiased estimates of the ATE if either (1) the true propensity score does not differ by strata or (2) the average stratum-specific causal effect does not vary by strata. The first condition would almost never be true (because, if it were, one would not even think to adjust for $S$ because it is already independent of $D$). And the second condition is probably not true in most applications, because rarely are investigators willing to assert that all consequential heterogeneity of a causal effect has been explicitly modeled. [@morgan2015counterfactuals, 211]
+
+### The challenges of regression specification
+
+> In this section, we discuss the considerable appeal of what can be called the all-cause complete-specification tradition in regression analysis. We argue that this orientation is impractical for most of the social sciences, for which theory is too weak and the disciplines too contentious to furnish perfect specifications that can be agreed on. At the same time, we argue that inductive approaches to discovering flawless regression models that represent all causes are mostly a form of self-deception, even though some software routines now exist that can prevent the worst forms of abuse. [@morgan2015counterfactuals, 219]
+
+> As this example shows, it is often simply unclear how one should go about selecting a sufficient set of conditioning variables to include in a regression equation when adopting the "adjustment for all other causes" approach to causal inference. Coleman and colleagues clearly included some variables that they believed that perhaps they should not have included, and they presumably tossed out some variables that they thought they should perhaps included but that proved to be insufficiently powerful predictors of test scores. Even so, Alexander and Pallas criticized Coleman and his colleagues for too little scouting. [@morgan2015counterfactuals, 222]
+
+> Taken to its extreme, the Sherlock Holmes regression approach may discover relationships between candidate independent variables and the outcome variable that are due to sampling variability and nothing else. [@morgan2015counterfactuals, 223]
+
+### Conclusions
+
+> But, as we have shown in this chapter, regression models have some serious weaknesses. Their ease of estimation tends to suppress attention to features of the data that matching techniques force researchers to consider, such as the potential heterogeneity of the causal eﬀect and the alternative distributions of covariates across those exposed to diﬀerent levels of the cause. Moreover, the traditional exogeneity assumption of regression (e.g., in the case of least squares regression that the independent variables must be uncorrelated with the regression error term) often befuddles applied researchers who can otherwise easily grasp the stratification and conditioning perspective that undergirds matching. As a result, regression practitioners can too easily accept their hope that the specification of plausible control variables generates an as-if randomized experiment. [@morgan2015counterfactuals, 224]
+
+
+## @morgan2015counterfactuals, chapter 7 -- Weighted Regression Estimators of Causal Effects
+
+> In the last chapter, we argued that traditional regression estimators of casual eﬀects have substantial weaknesses, especially when individual-level causal eﬀects are heterogeneousinwaysthatarenotexplicitlyparameterized.In this chapter, we will introduce weighted regression estimators that solve these problems by appropriately averaging individual-level heterogeneity across the treatment and control groups using estimated propensity scores. In part because of this capacity, weighted regression estimators are now at the frontier of causal effect estimation, alongsidethe latest matching estimators that are also designed to properly handle such heterogeneity.
+
+> [...] we show how weighted regression estimators can be used to generate consistent and unbiased estimates of the ATE, as long as conditioning variables that satisfy the back-door criterion have been observed and properly utilized.
+
+> To estimate the ATE with weighted regression, one first must estimate the predicted probability of treatment, $\hat{p}_i$, for units in the sample, which is again the estimated propensity score. All of the methods discussed so far can be used to obtain these estimated values. [@morgan2015counterfactuals, 228]
+
+> To then estimate the ATE, a weighted bivariate regression model is estimated, where $y_i$ are the values for the outcome, $d_i$ are the values for the sole predictor variable, and $w_{i, \text{ ATE}}$ are the weights. No specialized software is required, and the weights are treated exactly as if they are survey weights (even though they are not survey weights, but instead weights based on estimated propensity scores that are relevant only for the estimation of ATE). [@morgan2015counterfactuals, 228]
+
+The weighted regression estimate would be:
+
+$$
+\hat{\delta}_{\text{OLS}, \text{weighted}} \equiv (\mathbf{Q}^\top \mathbf{W} \mathbf{Q})^{-1} \mathbf{Q}^\top \mathbf{W} \mathbf{y},
+$$
+
+where $\mathbf{W}$ is a diagonal matrix with the corresponding values of $w_{i, \text{ ATE}}$.
+
+> Misspecification of the propensity-score-estimating equation will push the point estimate oﬀ of the target ATE parameter. Although the literature has not yet systematically explored how sensitive point estimates are to diﬀerent types and degrees of misspecification, it is clear that a misspecified propensity-score-estimating equation will not generate weights that will balance the underlying determinants of treatment assignment for the same arguments discussed already in Chapter 5. [@morgan2015counterfactuals, 231]
+
+> As for the weighted regression estimates of the ATE, these results only hold over repeated samples from the same population or in the probability limit as a single sample approaches infinity. And the same caveats introduced in Section 7.1 still obtain. If the equation that estimates the propensity scores is misspecified, then the estimates of the ATT and ATC will be inconsistent and biased because the weights will not fully balance the underlying determinants of treatment assignment. In addition, disproportionately small or large weights may still emerge even if the propensity scores are estimated flawlessly, and in these cases the estimates may be imprecise (i.e., still consistent but not necessarily close to the true ATT or ATC in the single finite sample under analysis). [@morgan2015counterfactuals, 234]
+
+### Doubly Robust Weighted Regression Estimators
+
+> We already showed in Regression Demonstration 4 that matching performs well when the complete specification of treatment assignment is used, along with a supplementary regression adjustment. The reason for this result is precisely the double protection argument outlined above. The varying level of imbalance that remains for each matching estimator can be seen as slight misspecification of the matching model, which is produced either because the propensity score model has not been respecified to remove as much imbalance as possible or because the matching algorithm has features that render it suboptimal for the particular application. The supplemental regression adjustments, as shown in Table 6.8, reduce the average bias in the matching estimates because they further adjust for remaining imbalance in the means of the matching variables. As such, the matching and supplementary adjustment are working together to minimize bias in the estimates of the ATT, using the double protection reasoning introduced above. [@morgan2015counterfactuals, 236]
+
+> Weighted regression estimators of the ATE, ATT, and ATC can incorporate these weights [those of complex survey designs] without diﬃculty. In contrast, there is no consensus position on how matching algorithms should be deployed for complex survey data. Most matching routines were designed for the analysis of simple random samples or nonsampled collections of units that can be treated as equally representative pieces of information. For the weights used for regression estimation of the ATE, ATT, and ATC, all one needs to do is (1) weight the propensity-score-estimating equation by the appropriate survey weight suggested by the data distributor and then (2) multiply the constructed weights for the ATE, ATT, and/or ATC by the same survey weight. In so doing, the analyst then passes to the regression routine a model-based weight for the relevant parameter that is modified by the probability of inclusion in the analysis sample that is being utilized. [@morgan2015counterfactuals, 241]
+
+
+Authors also suggest the use of robust standard errors (heteroscedasticity-consistent).
+
+> These advantages notwithstanding, it should also be clear that weighted regression estimators are no panacea, especially if practitioners fall back too casually into standard regression thinking. Instead, analysts must carefully consider the estimation of the propensity scores that generate the weights, checking balance and then examining the consequences oflarge weights. Only thereafter should one calculate point estimates of the average treatment eﬀects of interest. [@morgan2015counterfactuals, 262]
+
+--- 
+
+### Talking to Claude (Opus 4.6)
+
+Os **Doubly Robust Weighted Regression Estimators** são estimadores de inferência causal que combinam duas estratégias de identificação — um modelo para o **mecanismo de tratamento** (propensity score) e um modelo para o **resultado potencial** (outcome regression) — de modo que o estimador é consistente se *pelo menos um* dos dois modelos estiver corretamente especificado.
+
+A ideia central é a seguinte:
+
+**Componentes:**
+
+O estimador envolve dois ingredientes. Primeiro, um modelo de probabilidade de tratamento (o propensity score $e(X) = P(D=1 \mid X)$), que é usado para construir pesos de ponderação inversa (IPW). Segundo, um modelo de regressão para o resultado condicional ao tratamento e às covariáveis, $\mu_d(X) = E[Y \mid D=d, X]$.
+
+**Como funciona a "dupla robustez":**
+
+Na prática, o estimador "aumenta" a regressão ponderada com um termo de correção de viés baseado nos resíduos da outcome regression — ou, de forma equivalente, parte do IPW e corrige o viés residual via regressão. A formulação clássica do estimador doubly robust para o ATE é algo como:
+
+$$\hat{\tau}_{DR} = \frac{1}{n} \sum_{i=1}^{n} \left[ \hat{\mu}_1(X_i) - \hat{\mu}_0(X_i) + \frac{D_i(Y_i - \hat{\mu}_1(X_i))}{\hat{e}(X_i)} - \frac{(1-D_i)(Y_i - \hat{\mu}_0(X_i))}{1 - \hat{e}(X_i)} \right]$$
+
+Note a lógica: se a outcome regression $\hat{\mu}_d$ estiver correta, os resíduos $Y_i - \hat{\mu}_d(X_i)$ têm média zero e o termo IPW some — o estimador converge para o ATE. Se o propensity score $\hat{e}$ estiver correto mas a outcome regression estiver errada, a ponderação inversa corrige o viés. Daí o nome "doubly robust": você tem duas chances de acertar.
+
+**Por que "weighted regression"?**
+
+A variante "weighted regression" especificamente implementa essa ideia via uma regressão de mínimos quadrados ponderados (WLS), onde os pesos são função do propensity score estimado e o modelo de regressão entra na especificação da equação. Isso é computacionalmente conveniente e permite estimar o efeito causal dentro de um framework de regressão familiar, herdando propriedades como facilidade de obter erros-padrão e extensão a múltiplos tratamentos.
+
+**Vantagens práticas:**
+
+A principal é a proteção contra má especificação parcial — algo muito relevante em ciências sociais, onde raramente temos certeza de que um único modelo está correto. Além disso, sob certas condições de regularidade, estimadores doubly robust alcançam a **bound de eficiência semiparamétrica**, ou seja, são tão precisos quanto o melhor estimador possível nessa classe. Isso está ligado à teoria da *efficient influence function* de Robins, Rotnitzky e colaboradores.
+
+---

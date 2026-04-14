@@ -54,3 +54,5 @@ po/*~
 rsconnect/
 
 **/*.quarto_ipynb
+
+pdfs
