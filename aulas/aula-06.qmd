@@ -137,3 +137,83 @@ A variante "weighted regression" especificamente implementa essa ideia via uma r
 A principal é a proteção contra má especificação parcial — algo muito relevante em ciências sociais, onde raramente temos certeza de que um único modelo está correto. Além disso, sob certas condições de regularidade, estimadores doubly robust alcançam a **bound de eficiência semiparamétrica**, ou seja, são tão precisos quanto o melhor estimador possível nessa classe. Isso está ligado à teoria da *efficient influence function* de Robins, Rotnitzky e colaboradores.
 
 ---
+
+## Anotações de aula
+
+Em análises de dados observacionais, queremos reconstruir o processo gerador dos dados. Em geral, há muitos modelos plausíveis, mesmo quando o conjunto de variáveis independentes é fixo.
+
+- **Matching sozinho:** melhora comparabilidade, mas pode deixar desequilíbrio residual
+- **Regressão sozinha:** ajusta muitas covariadas de uma vez, mas pode depender demais de extrapolação e forma funcional
+- **Matching + regressão:** matching melhora o desenho e regressão ajusta o que restou; juntos, podem produzir inferências robustas e menos dependentes do modelo.
+
+### Regressão como estratégia para estimar efeitos causais
+
+Suponha que queremos estimar o efeito de $D$ sobre $Y$:
+
+$$
+Y = \alpha + \delta D + \epsilon
+$$
+
+O coeficiente de interesse $\delta$ pode ser obtido por OLS, mas é um estimador ingênuo para o efeito causal, porque o erro pode estar correlacionado com $D$.
+
+Suponha que existe uma variável $X$ suficiente para fechar todos os backdoors. Daí o modelo correto seria:
+
+$$
+Y = \alpha + \delta D + \beta X + \epsilon^*
+$$
+
+### Reformulando em termos de resultados potenciais
+
+Observamos $Y = Y^1$ se $D = 1$ e $Y = Y^0$ se $D = 0$, ou seja, temos uma switching equation: $Y = DY^1 + (1-D)Y^0$. Rearranjando a equação, temos:
+
+$$
+\begin{align*}
+Y &= DY^1 + (1-D)Y^0 \\
+&= DY^1 + Y^0 - DY^0 \\
+&= Y^0 + (Y^1 - Y^0) D \\
+&= Y^0 + \delta D
+\end{align*}
+$$
+
+Isso aqui diz respeito ao nível individual. O $Y$ observado é uma escolha que foi feita entre duas versões contrafactuais minhas. Existe um switch que seleciona a versão observada $\{ Y^1, Y^0 \}$, e é o tratamento que escolhe qual versão a gente vai ver. Mas isso é para o indivíduo: o efeito causal individual.
+
+No entanto, é difícil calcular o efeito causal no nível individual. Vamos assumir que existe uma média das pessoas tratadas e uma média das pessoas não tratadas, dado que os resultados potenciais e $\delta$ são heterogêneos (isto é, variam por indivíduo). Naturalmente, por conta disso, precisamos calcular algum tipo de erro -- o quanto o seu contrafactual não tratado dista dos demais contrafactuais não tratados também. Ou seja:
+
+$$
+Y = \mu^0 + (\mu^1 - \mu^0)D + (v^0 + (v^1 - v^0)D)
+$$
+
+Em que:
+
+- $\mu^0 = \mathbb{E}[Y^0]$ e $v^0_i = Y^0_i - \mathbb{E}[Y^0]$, logo $Y^0_i = \mu^0 + v^0_i$
+- $\mu^1 = \mathbb{E}[Y^1]$ e $v^1_i = Y^1_i - \mathbb{E}[Y^1]$, logo $Y^1_i = \mu^1 + v^1_i$
+
+Note que $(v^0 + (v^1 - v^0)D)$ é como se fosse a switching equation, mas para os erros.
+
+### Fechando os backdoors com regressão múltipla
+
+A ideia é adicionar um conjunto de variáveis de controle $\mathbf{X}$ que feche os backdoors entre $D$ e $Y$:
+
+$$
+Y = \alpha + \delta D + \beta \mathbf{X} + \epsilon^*
+$$
+
+O coeficiente estimado para o tratamento $D$ é idêntico ao que pode ser obtido com o procedimentos em três etapas:
+
+- regredir $y_i$ sobre as variáveis $\mathbf{X}$ e calcular $y_i^* = y_i - \hat{y}_i$
+- regredir $d_i$ sobre as variáveis em $\mathbf{X}$ e calcular $d_i^* = d_i - \hat{d}_i$
+- regredir $y_i^*$ e $d_i^*$
+
+Sob o pressuposto de que $\delta_i = \delta$, isto é, de que os efeitos do tratamento são homogêneos, então podemos confiar nesse estimador. Mas isso não é necessariamente o caso.
+
+> Sob independência condicional e com parametrização completamente flexível, se os efeitos forem heterogêneos  os coeficientes estimados por OLS para o tratamento $D$ serão consistentes e não viesados para o efeito médio do tratamento calculado com ponderação dos casos pela variância condicional do tratamento.
+
+Por independência condicional, queremos dizer o seguinte: condicional a uma característica específica, tudo passa como se tivesse havido aleatorização. Vamos formando grupos que são combinações de características, até o ponto em que, dentro desses grupos, tudo se passa como se tivesse acontecido de maneira aleatória.
+
+$$
+(Y^1, Y^0) \perp\!\!\!\perp D \mid X
+$$
+
+Se você tiver feito todos os grupos necessários, então todos os demais erros são ignoráveis; se isso não é verdade, você tem tão somente uma correlação. O pressuposto da independência condicional pode ser chamado também de ignorabilidade -- isto é, você pode ignorar todo o resto.
+
+Por parametrização completamente flexível significa dizer que você acertou a forma funcional da regressão.

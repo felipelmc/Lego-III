@@ -6,7 +6,7 @@ date: 2026-04-08
 
 Essa é a primeira aula sobre métodos efetivamente, e não de nomenclatura e conceitos básicos de inferência causal.
 
-# Recapitulação da notação de resultados potenciais
+## Recapitulação da notação de resultados potenciais
 
 Suponha um tratamento binário $D$. Há dois resultados potenciais para o indivíduo $i$:
 
@@ -15,7 +15,7 @@ Suponha um tratamento binário $D$. Há dois resultados potenciais para o indiv�
 
 O efeito causal de $D$ sobre o indivíduo $i$ definido por $Y^1 - Y^0$. Mas, evidentemente, não temos como observar ambos para o mesmo indivíduo. O que observamos na prática é $Y = D \cdot Y^1 + (1-D) \cdot Y^0$.
 
-## O problema fundamental da inferência causal
+### O problema fundamental da inferência causal
 
  Não é possível estimar o efeito causal em nível individual, mas podemos estimar efeitos causais agregados se for possível construir contrafactuais válidos:
 
@@ -38,7 +38,7 @@ O lado esquerdo é simplesmente a **diferença observada** entre as médias dos 
 
 Em um experimento randomizado, $D$ é independente dos resultados potenciais, o que zera os dois termos de viés e faz com que a diferença observada estime diretamente o ATE.
 
-# O pressuposto de seleção em observáveis (ou independência condicional)
+## O pressuposto de seleção em observáveis (ou independência condicional)
 
 Suponha que observamos todas as variáveis $X$ necessárias para fechar os backdoors abertos entre $D$ e $Y$. Nesse caso, podemos identificar os efeito de $D$ sobre $Y$ controlando por essas variáveis: por regressão ou matching, ou pela combinação de ambos.
 
@@ -59,9 +59,9 @@ $$
 
 Logo, os resultados potenciais são análogos aos de um experimento bloqueado. Isso significa que, desde que você condicione pelas variáveis que "você usou" (isto é, $X$) para fazer os blocos, valem as matemáticas do experimento totalmente aleatório.
 
-# Estratificação ou subclassificação
+## Estratificação ou subclassificação
 
-## Estratificação perfeita
+### Estratificação perfeita
 
 Suponha que temos grupos de tratamento e controle que são muito distintos entre si, mas que observamos um conjunto de variáveis $\mathbf{X}$ que captura todas as diferenças relevantes na probabilidade de tratamento entre os grupos. Essas variáveis $\mathbf{X}$ permitem então **estratificação perfeita** dos dados.
 
@@ -129,19 +129,19 @@ Note como a estimativa ingênua de $+13$ está muito longe do ATE de $-0.5$. A d
 O problema, é claro, isso tudo parte de um pressuposto bastante forte de que o único backdoor que precisaria ser fechado é o da renda. Mas isso, obviamente, não é verdade para a maioria dos casos. Nesse próprio caso, aliás, poderíamos pensar que o fato de o estudante ser de uma família tradicional de militares poderia ter uma diferença que não está totalmente refletida na renda.
 ::::
 
-## Pressupostos essênciais
+### Pressupostos essênciais
 
-### Consistência
+#### Consistência
 
 $$
 Y = DY^1 + (1-D)Y^0
 $$
 
-### Seleção em observáveis ou independência condicional
+#### Seleção em observáveis ou independência condicional
 
 Tratamento pode ser considerado como se fosse alocado aleatoriamente dentro dos grupos definidos por $\mathbf{X}$: $(Y^1, Y^0) \perp\!\!\!\perp D \mid X$.
 
-### Suporte comum
+#### Suporte comum
 
 Há tratados e controles em todos os grupos definidos por $\mathbf{X}$: $0 < \mathbb{P}(D = 1 \mid \mathbf{X}) < 1$
 
@@ -149,7 +149,7 @@ Na população, se houver células vazias para um dos dois grupos (tratados e co
 
 Quanto mais covariáveis incluímos em $\mathbf{X}$, e quanto mais categorias em cada covariável, mais difícil é garantir a presença de tratados e controles em cada grupo. Por isso, na prática, estratificação exata em muitas variáveis raramente é viável.
 
-## Subclassificação e matching
+### Subclassificação e matching
 
 Subclassificação compara tratados e controles dentro dos estratos definidos por $\mathbf{X}$, calcula as diferenças dentro de cada estrato e repondera essas diferenças para obter o efeito médio. O problema, naturalmente, é a maldição da dimensionalidade: conforme o número de covariáveis cresce, o número de estratos explode e muitas células ficam vazias ou com pouquíssimas observações.
 
@@ -187,7 +187,7 @@ Para cada unidade tratada $i$, escolhemos a(s) unidade(s) de controle mais "pró
 Não há mágica: a qualidade da inferência depende da proximidade entre os tratados e os controles selecionados. Quanto mais diferentes os grupos em termos de $\mathbb{X}$, maior o viés.
 :::
 
-## Matching com _propensity scores_
+### Matching com _propensity scores_
 
 Por um longo período, isso foi algo muito usado na literatura mas rapidamente caiu em desuso. Por motivos históricos, vejamos.
 
@@ -205,7 +205,7 @@ O teorema do propensity score é razoável, faz sentido e continua valendo. O qu
 
 Outro problema, inclusive, tá no fato de que você pode acabar aproximando pessoas que são muito diferentes, mas com probabilidades semelhantes. De fato, se no ajuste do modelo duas variáveis têm efeitos semelhantes, duas pessoas podem ter probabilidades de receber o tratamento muito semelhantes, mesmo quando elas são fundamentalmente diferentes nas covariáveis de interesse.
 
-## Matching com CEM (Coarsened Exact Matching)
+### Matching com CEM (Coarsened Exact Matching)
 
 A intuição é utilizar conhecimento substantivo sobre o assunto para simplificar temporariamente as covariáveis e realizar matching exato. Em vez de calcular distâncias a partir de variáveis observadas, o CEM:
 
