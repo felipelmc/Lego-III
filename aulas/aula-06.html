@@ -98,7 +98,7 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-1eb2a280a64a1f5f4b84ce19fa1dd180.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9f0b8f05b46c5b34c25a7b73a69d004d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-331949cb824898a72016be7305211a1d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -290,6 +290,12 @@ window.Quarto = {
   <li><a href="#doubly-robust-weighted-regression-estimators" id="toc-doubly-robust-weighted-regression-estimators" class="nav-link" data-scroll-target="#doubly-robust-weighted-regression-estimators">Doubly Robust Weighted Regression Estimators</a></li>
   <li><a href="#talking-to-claude-opus-4.6" id="toc-talking-to-claude-opus-4.6" class="nav-link" data-scroll-target="#talking-to-claude-opus-4.6">Talking to Claude (Opus 4.6)</a></li>
   </ul></li>
+  <li><a href="#anotações-de-aula" id="toc-anotações-de-aula" class="nav-link" data-scroll-target="#anotações-de-aula"><span class="header-section-number">6.3</span> Anotações de aula</a>
+  <ul class="collapse">
+  <li><a href="#regressão-como-estratégia-para-estimar-efeitos-causais" id="toc-regressão-como-estratégia-para-estimar-efeitos-causais" class="nav-link" data-scroll-target="#regressão-como-estratégia-para-estimar-efeitos-causais">Regressão como estratégia para estimar efeitos causais</a></li>
+  <li><a href="#reformulando-em-termos-de-resultados-potenciais" id="toc-reformulando-em-termos-de-resultados-potenciais" class="nav-link" data-scroll-target="#reformulando-em-termos-de-resultados-potenciais">Reformulando em termos de resultados potenciais</a></li>
+  <li><a href="#fechando-os-backdoors-com-regressão-múltipla" id="toc-fechando-os-backdoors-com-regressão-múltipla" class="nav-link" data-scroll-target="#fechando-os-backdoors-com-regressão-múltipla">Fechando os backdoors com regressão múltipla</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/felipelmc/Lego-III/edit/main/aulas/aula-06.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/felipelmc/Lego-III/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -453,6 +459,73 @@ Y = \mu^0 + (\mu^1 - \mu^0)D + \{ v^0 + D(v^1 - v^0) \},
 <p><strong>Vantagens práticas:</strong></p>
 <p>A principal é a proteção contra má especificação parcial — algo muito relevante em ciências sociais, onde raramente temos certeza de que um único modelo está correto. Além disso, sob certas condições de regularidade, estimadores doubly robust alcançam a <strong>bound de eficiência semiparamétrica</strong>, ou seja, são tão precisos quanto o melhor estimador possível nessa classe. Isso está ligado à teoria da <em>efficient influence function</em> de Robins, Rotnitzky e colaboradores.</p>
 <hr>
+</section>
+</section>
+<section id="anotações-de-aula" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="anotações-de-aula"><span class="header-section-number">6.3</span> Anotações de aula</h2>
+<p>Em análises de dados observacionais, queremos reconstruir o processo gerador dos dados. Em geral, há muitos modelos plausíveis, mesmo quando o conjunto de variáveis independentes é fixo.</p>
+<ul>
+<li><strong>Matching sozinho:</strong> melhora comparabilidade, mas pode deixar desequilíbrio residual</li>
+<li><strong>Regressão sozinha:</strong> ajusta muitas covariadas de uma vez, mas pode depender demais de extrapolação e forma funcional</li>
+<li><strong>Matching + regressão:</strong> matching melhora o desenho e regressão ajusta o que restou; juntos, podem produzir inferências robustas e menos dependentes do modelo.</li>
+</ul>
+<section id="regressão-como-estratégia-para-estimar-efeitos-causais" class="level3">
+<h3 class="anchored" data-anchor-id="regressão-como-estratégia-para-estimar-efeitos-causais">Regressão como estratégia para estimar efeitos causais</h3>
+<p>Suponha que queremos estimar o efeito de <span class="math inline">\(D\)</span> sobre <span class="math inline">\(Y\)</span>:</p>
+<p><span class="math display">\[
+Y = \alpha + \delta D + \epsilon
+\]</span></p>
+<p>O coeficiente de interesse <span class="math inline">\(\delta\)</span> pode ser obtido por OLS, mas é um estimador ingênuo para o efeito causal, porque o erro pode estar correlacionado com <span class="math inline">\(D\)</span>.</p>
+<p>Suponha que existe uma variável <span class="math inline">\(X\)</span> suficiente para fechar todos os backdoors. Daí o modelo correto seria:</p>
+<p><span class="math display">\[
+Y = \alpha + \delta D + \beta X + \epsilon^*
+\]</span></p>
+</section>
+<section id="reformulando-em-termos-de-resultados-potenciais" class="level3">
+<h3 class="anchored" data-anchor-id="reformulando-em-termos-de-resultados-potenciais">Reformulando em termos de resultados potenciais</h3>
+<p>Observamos <span class="math inline">\(Y = Y^1\)</span> se <span class="math inline">\(D = 1\)</span> e <span class="math inline">\(Y = Y^0\)</span> se <span class="math inline">\(D = 0\)</span>, ou seja, temos uma switching equation: <span class="math inline">\(Y = DY^1 + (1-D)Y^0\)</span>. Rearranjando a equação, temos:</p>
+<p><span class="math display">\[
+\begin{align*}
+Y &amp;= DY^1 + (1-D)Y^0 \\
+&amp;= DY^1 + Y^0 - DY^0 \\
+&amp;= Y^0 + (Y^1 - Y^0) D \\
+&amp;= Y^0 + \delta D
+\end{align*}
+\]</span></p>
+<p>Isso aqui diz respeito ao nível individual. O <span class="math inline">\(Y\)</span> observado é uma escolha que foi feita entre duas versões contrafactuais minhas. Existe um switch que seleciona a versão observada <span class="math inline">\(\{ Y^1, Y^0 \}\)</span>, e é o tratamento que escolhe qual versão a gente vai ver. Mas isso é para o indivíduo: o efeito causal individual.</p>
+<p>No entanto, é difícil calcular o efeito causal no nível individual. Vamos assumir que existe uma média das pessoas tratadas e uma média das pessoas não tratadas, dado que os resultados potenciais e <span class="math inline">\(\delta\)</span> são heterogêneos (isto é, variam por indivíduo). Naturalmente, por conta disso, precisamos calcular algum tipo de erro – o quanto o seu contrafactual não tratado dista dos demais contrafactuais não tratados também. Ou seja:</p>
+<p><span class="math display">\[
+Y = \mu^0 + (\mu^1 - \mu^0)D + (v^0 + (v^1 - v^0)D)
+\]</span></p>
+<p>Em que:</p>
+<ul>
+<li><span class="math inline">\(\mu^0 = \mathbb{E}[Y^0]\)</span> e <span class="math inline">\(v^0_i = Y^0_i - \mathbb{E}[Y^0]\)</span>, logo <span class="math inline">\(Y^0_i = \mu^0 + v^0_i\)</span></li>
+<li><span class="math inline">\(\mu^1 = \mathbb{E}[Y^1]\)</span> e <span class="math inline">\(v^1_i = Y^1_i - \mathbb{E}[Y^1]\)</span>, logo <span class="math inline">\(Y^1_i = \mu^1 + v^1_i\)</span></li>
+</ul>
+<p>Note que <span class="math inline">\((v^0 + (v^1 - v^0)D)\)</span> é como se fosse a switching equation, mas para os erros.</p>
+</section>
+<section id="fechando-os-backdoors-com-regressão-múltipla" class="level3">
+<h3 class="anchored" data-anchor-id="fechando-os-backdoors-com-regressão-múltipla">Fechando os backdoors com regressão múltipla</h3>
+<p>A ideia é adicionar um conjunto de variáveis de controle <span class="math inline">\(\mathbf{X}\)</span> que feche os backdoors entre <span class="math inline">\(D\)</span> e <span class="math inline">\(Y\)</span>:</p>
+<p><span class="math display">\[
+Y = \alpha + \delta D + \beta \mathbf{X} + \epsilon^*
+\]</span></p>
+<p>O coeficiente estimado para o tratamento <span class="math inline">\(D\)</span> é idêntico ao que pode ser obtido com o procedimentos em três etapas:</p>
+<ul>
+<li>regredir <span class="math inline">\(y_i\)</span> sobre as variáveis <span class="math inline">\(\mathbf{X}\)</span> e calcular <span class="math inline">\(y_i^* = y_i - \hat{y}_i\)</span></li>
+<li>regredir <span class="math inline">\(d_i\)</span> sobre as variáveis em <span class="math inline">\(\mathbf{X}\)</span> e calcular <span class="math inline">\(d_i^* = d_i - \hat{d}_i\)</span></li>
+<li>regredir <span class="math inline">\(y_i^*\)</span> e <span class="math inline">\(d_i^*\)</span></li>
+</ul>
+<p>Sob o pressuposto de que <span class="math inline">\(\delta_i = \delta\)</span>, isto é, de que os efeitos do tratamento são homogêneos, então podemos confiar nesse estimador. Mas isso não é necessariamente o caso.</p>
+<blockquote class="blockquote">
+<p>Sob independência condicional e com parametrização completamente flexível, se os efeitos forem heterogêneos os coeficientes estimados por OLS para o tratamento <span class="math inline">\(D\)</span> serão consistentes e não viesados para o efeito médio do tratamento calculado com ponderação dos casos pela variância condicional do tratamento.</p>
+</blockquote>
+<p>Por independência condicional, queremos dizer o seguinte: condicional a uma característica específica, tudo passa como se tivesse havido aleatorização. Vamos formando grupos que são combinações de características, até o ponto em que, dentro desses grupos, tudo se passa como se tivesse acontecido de maneira aleatória.</p>
+<p><span class="math display">\[
+(Y^1, Y^0) \perp\!\!\!\perp D \mid X
+\]</span></p>
+<p>Se você tiver feito todos os grupos necessários, então todos os demais erros são ignoráveis; se isso não é verdade, você tem tão somente uma correlação. O pressuposto da independência condicional pode ser chamado também de ignorabilidade – isto é, você pode ignorar todo o resto.</p>
+<p>Por parametrização completamente flexível significa dizer que você acertou a forma funcional da regressão.</p>
 
 
 <!-- -->
@@ -1069,7 +1142,87 @@ Morgan, Stephen L., and Christopher Winship. 2015. <em>Counterfactuals and Causa
 <span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>A principal é a proteção contra má especificação parcial — algo muito relevante em ciências sociais, onde raramente temos certeza de que um único modelo está correto. Além disso, sob certas condições de regularidade, estimadores doubly robust alcançam a **bound de eficiência semiparamétrica**, ou seja, são tão precisos quanto o melhor estimador possível nessa classe. Isso está ligado à teoria da *efficient influence function* de Robins, Rotnitzky e colaboradores.</span>
 <span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>---</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="fu">## Anotações de aula</span></span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>Em análises de dados observacionais, queremos reconstruir o processo gerador dos dados. Em geral, há muitos modelos plausíveis, mesmo quando o conjunto de variáveis independentes é fixo.</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Matching sozinho:** melhora comparabilidade, mas pode deixar desequilíbrio residual</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Regressão sozinha:** ajusta muitas covariadas de uma vez, mas pode depender demais de extrapolação e forma funcional</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Matching + regressão:** matching melhora o desenho e regressão ajusta o que restou; juntos, podem produzir inferências robustas e menos dependentes do modelo.</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="fu">### Regressão como estratégia para estimar efeitos causais</span></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>Suponha que queremos estimar o efeito de $D$ sobre $Y$:</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>Y = \alpha + \delta D + \epsilon</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>O coeficiente de interesse $\delta$ pode ser obtido por OLS, mas é um estimador ingênuo para o efeito causal, porque o erro pode estar correlacionado com $D$.</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>Suponha que existe uma variável $X$ suficiente para fechar todos os backdoors. Daí o modelo correto seria:</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>Y = \alpha + \delta D + \beta X + \epsilon^*</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reformulando em termos de resultados potenciais</span></span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>Observamos $Y = Y^1$ se $D = 1$ e $Y = Y^0$ se $D = 0$, ou seja, temos uma switching equation: $Y = DY^1 + (1-D)Y^0$. Rearranjando a equação, temos:</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>\begin{align*}</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>Y &amp;= DY^1 + (1-D)Y^0 <span class="sc">\\</span></span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>&amp;= DY^1 + Y^0 - DY^0 <span class="sc">\\</span></span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>&amp;= Y^0 + (Y^1 - Y^0) D <span class="sc">\\</span></span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>&amp;= Y^0 + \delta D</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>\end{align*}</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>Isso aqui diz respeito ao nível individual. O $Y$ observado é uma escolha que foi feita entre duas versões contrafactuais minhas. Existe um switch que seleciona a versão observada $<span class="sc">\{</span> Y^1, Y^0 <span class="sc">\}</span>$, e é o tratamento que escolhe qual versão a gente vai ver. Mas isso é para o indivíduo: o efeito causal individual.</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>No entanto, é difícil calcular o efeito causal no nível individual. Vamos assumir que existe uma média das pessoas tratadas e uma média das pessoas não tratadas, dado que os resultados potenciais e $\delta$ são heterogêneos (isto é, variam por indivíduo). Naturalmente, por conta disso, precisamos calcular algum tipo de erro -- o quanto o seu contrafactual não tratado dista dos demais contrafactuais não tratados também. Ou seja:</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>Y = \mu^0 + (\mu^1 - \mu^0)D + (v^0 + (v^1 - v^0)D)</span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>Em que:</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\mu^0 = \mathbb{E}<span class="co">[</span><span class="ot">Y^0</span><span class="co">]</span>$ e $v^0_i = Y^0_i - \mathbb{E}<span class="co">[</span><span class="ot">Y^0</span><span class="co">]</span>$, logo $Y^0_i = \mu^0 + v^0_i$</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\mu^1 = \mathbb{E}<span class="co">[</span><span class="ot">Y^1</span><span class="co">]</span>$ e $v^1_i = Y^1_i - \mathbb{E}<span class="co">[</span><span class="ot">Y^1</span><span class="co">]</span>$, logo $Y^1_i = \mu^1 + v^1_i$</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>Note que $(v^0 + (v^1 - v^0)D)$ é como se fosse a switching equation, mas para os erros.</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a><span class="fu">### Fechando os backdoors com regressão múltipla</span></span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>A ideia é adicionar um conjunto de variáveis de controle $\mathbf{X}$ que feche os backdoors entre $D$ e $Y$:</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>Y = \alpha + \delta D + \beta \mathbf{X} + \epsilon^*</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>O coeficiente estimado para o tratamento $D$ é idêntico ao que pode ser obtido com o procedimentos em três etapas:</span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>regredir $y_i$ sobre as variáveis $\mathbf{X}$ e calcular $y_i^* = y_i - \hat{y}_i$</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>regredir $d_i$ sobre as variáveis em $\mathbf{X}$ e calcular $d_i^* = d_i - \hat{d}_i$</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>regredir $y_i^*$ e $d_i^*$</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>Sob o pressuposto de que $\delta_i = \delta$, isto é, de que os efeitos do tratamento são homogêneos, então podemos confiar nesse estimador. Mas isso não é necessariamente o caso.</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Sob independência condicional e com parametrização completamente flexível, se os efeitos forem heterogêneos  os coeficientes estimados por OLS para o tratamento $D$ serão consistentes e não viesados para o efeito médio do tratamento calculado com ponderação dos casos pela variância condicional do tratamento.</span></span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>Por independência condicional, queremos dizer o seguinte: condicional a uma característica específica, tudo passa como se tivesse havido aleatorização. Vamos formando grupos que são combinações de características, até o ponto em que, dentro desses grupos, tudo se passa como se tivesse acontecido de maneira aleatória.</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>(Y^1, Y^0) \perp<span class="sc">\!\!\!</span>\perp D \mid X</span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a>Se você tiver feito todos os grupos necessários, então todos os demais erros são ignoráveis; se isso não é verdade, você tem tão somente uma correlação. O pressuposto da independência condicional pode ser chamado também de ignorabilidade -- isto é, você pode ignorar todo o resto.</span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>Por parametrização completamente flexível significa dizer que você acertou a forma funcional da regressão.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
