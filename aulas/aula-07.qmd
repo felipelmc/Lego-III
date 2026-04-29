@@ -12,7 +12,7 @@ I started by asking the Google's AI what an instrumental variable actually is. T
 
 > And there you see the characteristics of a good instrument [it should feel weird!]. It's weird to lay person because a good instrument (two boys) only changes the outcome by first changing some endogenours treatment variable (family size) thus allowing us to identify the causal effect of family size on some outcome (labor supply). And so without knowledge of the endogenous variable, relationships between the instrument and the outcome don't make much sense. Why? Because the instrument is irrelevant to the determinants of the outcome except for its effect on the endogenous treatment variable. You also see another quality of the instrument that we like, which is that it's quasi-random.
 
-## Talking to NotebookLM about @cunningham2021mixtape
+### Talking to NotebookLM about the paper
 
 The text explores the **Instrumental Variables (IV)** research design, which is used to identify causal effects in the presence of selection on unobservables, omitted variable bias, measurement error, and simultaneity. 
 
@@ -34,7 +34,7 @@ Finally, the text reviews three popular canonical IV designs:
 * **Judge Fixed Effects (Leniency Design)**: Exploits the random assignment of decision-makers (such as bail judges) who possess varying propensities for strictness or leniency. Researchers often use the **Jackknife Instrumental Variables Estimator (JIVE)** to mitigate the finite-sample bias of many instruments. The exclusion restriction and monotonicity are uniquely vulnerable in this design.
 * **Bartik (Shift-Share) Instruments**: Used to instrument for an endogenous variable by interacting initial local **shares** with national **shifts**.
 
-### Key Formulas
+#### Key Formulas
 
 **1. Omitted Variable Bias in OLS:**
 When estimating the effect of schooling ($S_i$) on earnings ($Y_i$), unobserved ability ($A_i$) creates omitted variable bias. The true model and the shorter estimated model are:
@@ -82,13 +82,13 @@ $$
 When treatment effects vary by individual ($\delta_i = Y_{1i} - Y_{0i}$), IV estimates the **Local Average Treatment Effect (LATE)**. This is the average causal effect for the "compliers" — those whose treatment status $D_i$ was changed by the instrument $Z_i$. Using the Angrist-Imbens notation, where $D_{1i}$ and $D_{0i}$ are the potential treatment statuses under $Z_i = 1$ and $Z_i = 0$ respectively:
 
 $$
-\delta_{LATE} = \frac{\mathbb{E}[Y_i(D_{1i}, 1) - Y_i(D_{0i}, 0)]}{\mathbb{E}[D_{1i} - D_{0i}]}
+\delta_{\text{LATE}} = \frac{\mathbb{E}[Y_i(D_{1i}, 1) - Y_i(D_{0i}, 0)]}{\mathbb{E}[D_{1i} - D_{0i}]}
 $$
 
 An equivalent and more intuitive expression is the Wald estimator applied to reduced-form and first-stage moments:
 
 $$
-\delta_{LATE} = \frac{\mathbb{E}[Y_i \mid Z_i = 1] - \mathbb{E}[Y_i \mid Z_i = 0]}{\mathbb{E}[D_i \mid Z_i = 1] - \mathbb{E}[D_i \mid Z_i = 0]}
+\delta_{\text{LATE}} = \frac{\mathbb{E}[Y_i \mid Z_i = 1] - \mathbb{E}[Y_i \mid Z_i = 0]}{\mathbb{E}[D_i \mid Z_i = 1] - \mathbb{E}[D_i \mid Z_i = 0]}
 $$
 
 
@@ -98,3 +98,28 @@ The Bartik instrument ($B_{l,t}$) predicts local endogenous variables (like immi
 $$
 B_{l,t} = \sum_{k=1}^K z_{l,k,t_0} m_{k,t}
 $$
+
+## @acemoglu2001colonial
+
+### Talking to NotebookLM about the paper
+
+**Summary of the Paper**
+
+This paper, "The Colonial Origins of Comparative Development" by Daron Acemoglu, Simon Johnson, and James A. Robinson, investigates the fundamental causes of the massive differences in per capita income across different countries. To explain this divergence, the authors propose a theory linking historical colonial strategies to modern economic development. Their argument relies on three central premises:
+
+1. **Different colonization policies created vastly different institutions:** European powers established different types of regimes depending on the colony. At one extreme, they set up **"extractive states"** (such as the Belgian colonization of the Congo) designed purely to transfer resources from the colony to the colonizer. These states offered very little protection for private property and lacked checks against government expropriation. At the other extreme, Europeans settled in large numbers to create **"Neo-Europes"** (like the United States, Australia, and New Zealand), where they replicated European institutions that strongly emphasized private property and restrained government power.
+2. **Settlement patterns were dictated by the disease environment:** The choice between setting up an extractive state or a settler colony was heavily influenced by how feasible it was for Europeans to live there. In places where European settlers faced high mortality rates due to the disease environment, they were far more likely to set up extractive institutions rather than settle en masse. 
+3. **Institutional persistence:** The institutions established during the colonial era—whether extractive or protective of property rights—persisted long after the countries achieved independence, continuing to shape their economic performance today. 
+
+**Relationship to Instrumental Variables**
+
+This paper is a landmark example of using an **instrumental variable (IV)** to solve an endogeneity problem in economics. The authors want to measure the causal impact of institutions on economic performance, but they cannot simply look at the correlation between the two using standard Ordinary Least Squares (OLS) regressions. Doing so creates several major problems: **reverse causality** (richer countries might simply be able to afford or choose better institutions), **omitted variable bias** (other unmeasured factors might cause both wealth and good institutions), and **measurement error**. 
+
+To isolate the true causal effect, the authors need a source of exogenous variation—a variable that strongly affects a country's institutions but has no direct effect on its modern-day income. They use **historical European settler mortality rates as their instrumental variable**.
+
+Here is how their instrumental variable strategy works:
+
+* **The First Stage (Relevance):** The instrument must be a strong predictor of the endogenous variable (institutions). The authors map out a chain of events: historical settler mortality determined European settlement rates, which determined early institutions, which persisted into current institutions. The data shows a strong first-stage relationship, with historical mortality rates alone explaining over 25% of the variation in the institutions observed in these countries today.
+* **The Exclusion Restriction (Validity):** For the instrument to be valid, settler mortality more than 100 years ago must have *no direct effect* on GDP per capita today, other than through its effect on creating institutions. The authors argue this is highly plausible. The main diseases killing European settlers were malaria and yellow fever. While these diseases were deadly to newly arrived European adults who lacked immunity, they had a limited effect on indigenous adults, who had developed various genetic and acquired immunities since childhood. Because the local populations were not decimated by these diseases in adulthood, the historical European mortality rate is not simply a proxy for a geographic area being inherently sick or economically unproductive.
+
+By using settler mortality as an instrumental variable, the researchers perform two-stage least-squares (2SLS) estimates and find that **institutions have a massively significant and large causal effect on a country's income per capita**. Furthermore, their IV approach proves that once you isolate and control for the effect of institutions, geographic factors like distance from the equator or being located in Africa no longer have an independent negative effect on economic performance.

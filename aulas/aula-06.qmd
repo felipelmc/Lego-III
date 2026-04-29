@@ -1,5 +1,5 @@
 ---
-title: "Regressao e análise causal"
+title: "Regressão e análise causal"
 subtitle: "Aula 6"
 date: 2026-04-15
 ---
