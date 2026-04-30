@@ -1,5 +1,5 @@
 ---
-title: "Variáveis instrumentais"
+title: "Variáveis instrumentais pt. 1"
 subtitle: "Aula 7"
 date: 2026-04-29
 ---
@@ -38,8 +38,9 @@ Finally, the text reviews three popular canonical IV designs:
 
 **1. Omitted Variable Bias in OLS:**
 When estimating the effect of schooling ($S_i$) on earnings ($Y_i$), unobserved ability ($A_i$) creates omitted variable bias. The true model and the shorter estimated model are:
+
 $$
-Y_i = \alpha + \delta S_i + \gamma A_i + \varepsilon_i 
+Y_i = \alpha + \delta S_i + \gamma A_i + \varepsilon_i
 $$
 
 $$
@@ -57,16 +58,19 @@ $$
 
 **3. Two-Stage Least Squares (2SLS):**
 The first stage regresses the endogenous variable on the instrument to obtain exogenous fitted values ($\hat{S}_i$):
+
 $$
 S_i = \gamma + \beta Z_i + \epsilon_i
 $$
 
 The second stage regresses the outcome on the fitted values to estimate the causal effect:
+
 $$
 Y_i = \alpha + \hat{\delta}_{IV} \hat{S}_i + u_i
 $$
 
 which yields the equivalent expression:
+
 $$
 \hat{\delta}_{IV} = \frac{\text{Cov}(\hat{S}_i, Y_i)}{\text{Var}(\hat{S}_i)}
 $$
@@ -123,3 +127,176 @@ Here is how their instrumental variable strategy works:
 * **The Exclusion Restriction (Validity):** For the instrument to be valid, settler mortality more than 100 years ago must have *no direct effect* on GDP per capita today, other than through its effect on creating institutions. The authors argue this is highly plausible. The main diseases killing European settlers were malaria and yellow fever. While these diseases were deadly to newly arrived European adults who lacked immunity, they had a limited effect on indigenous adults, who had developed various genetic and acquired immunities since childhood. Because the local populations were not decimated by these diseases in adulthood, the historical European mortality rate is not simply a proxy for a geographic area being inherently sick or economically unproductive.
 
 By using settler mortality as an instrumental variable, the researchers perform two-stage least-squares (2SLS) estimates and find that **institutions have a massively significant and large causal effect on a country's income per capita**. Furthermore, their IV approach proves that once you isolate and control for the effect of institutions, geographic factors like distance from the equator or being located in Africa no longer have an independent negative effect on economic performance.
+
+## Anotações de aula
+
+```{r}
+#| include: false
+library(ggdag)
+library(ggplot2)
+```
+
+### Motivação: endogeneidade e identificação
+
+Nessa aula, pela primeira vez, não falamos de controlar variáveis. Os DAGs mostram que mais controle não é necessariamente bom:
+
+- **Controle em excesso** pode ser ruim — controlar um *collider* abre caminhos espúrios
+- **Controlar por um mediador** nos dá apenas o efeito direto, não o efeito total de $X$ sobre $Y$
+
+O problema surge quando o modelo não é identificável. Considere o DAG abaixo, em que $\varepsilon$ (não observado) afeta tanto $X$ quanto $Y$:
+
+```{r}
+#| message: false
+#| fig-width: 5
+#| fig-height: 3
+
+dag_endog <- dagify(
+  X ~ W + epsilon,
+  Y ~ X + epsilon,
+  latent = "epsilon",
+  coords = list(
+    x = c(W = 0, X = 1, Y = 2, epsilon = 1.5),
+    y = c(W = 0.5, X = 0, Y = 0, epsilon = -0.8)
+  )
+)
+ggdag(dag_endog) + theme_dag()
+```
+
+Nesse setup, estimar $Y = \hat{b}_0 + \hat{b}_1 X + \hat{\varepsilon}$ produz $\hat{b}_1 \neq \beta_1$, pois $X$ e $\varepsilon$ são correlacionados. Para visualizar o viés:
+
+```{r}
+set.seed(42)
+n   <- 10000
+eps <- rnorm(n, mean = 0, sd = 1.5)
+x   <- 2 * eps + 10 + rnorm(n)
+y   <- -25 + 3 * x + eps   # β1 = 3 (valor verdadeiro)
+
+coef(lm(y ~ x))["x"]
+```
+
+O coeficiente estimado é sistematicamente diferente de 3 — não por variação amostral, mas porque $\hat{b}_1$ captura um **efeito misturado** do erro com o efeito causal real.
+
+### A variável instrumental
+
+A solução é introduzir um instrumento $Z$ que afeta $X$ mas é **exógeno** ao sistema — não correlacionado com $\varepsilon$. No DAG abaixo, $Z$ e $\varepsilon$ são exógenos; $X$ e $Y$ são endógenos:
+
+```{r}
+#| message: false
+#| fig-width: 5
+#| fig-height: 3
+
+dag_iv <- dagify(
+  X ~ Z + epsilon,
+  Y ~ X + epsilon,
+  latent = "epsilon",
+  coords = list(
+    x = c(Z = 0, X = 1, Y = 2, epsilon = 1.5),
+    y = c(Z = 0, X = 0, Y = 0, epsilon = -0.8)
+  )
+)
+ggdag(dag_iv) + theme_dag()
+```
+
+Os caminhos causais de $Z$ para $Y$:
+
+| Caminho | Status |
+|---|---|
+| $Z \rightarrow X \rightarrow Y$ | Aberto (causal) |
+| $Z \rightarrow X \leftarrow \varepsilon \rightarrow Y$ | Fechado ($X$ é *collider* em relação a $\varepsilon$) |
+
+$Z$ **não** é uma variável de controle — é uma variável exógena que resolve o problema de identificação ao isolar a variação em $X$ que é independente de $\varepsilon$.
+
+### O estimador IV: três passos
+
+Como $Z$ afeta $Y$ apenas via $X$, vale a relação:
+
+$$
+\beta_{zy} = \beta_{zx} \cdot \beta_{xy}
+$$
+
+::: {.callout-note collapse="true"}
+#### Prova
+
+Seja o modelo estrutural $Y = \alpha + \beta_{xy} X + \varepsilon$, com $\text{Cov}(Z, \varepsilon) = 0$ (restrição de exclusão). Então:
+
+$$
+\begin{align*}
+\text{Cov}(Z, Y) &= \text{Cov}\!\left(Z,\, \alpha + \beta_{xy} X + \varepsilon\right) \\
+                  &= \beta_{xy}\,\text{Cov}(Z, X) + \text{Cov}(Z, \varepsilon) \\
+                  &= \beta_{xy}\,\text{Cov}(Z, X)
+\end{align*}
+$$
+
+Dividindo por $\text{Var}(Z)$:
+
+$$
+\underbrace{\frac{\text{Cov}(Z,Y)}{\text{Var}(Z)}}_{\beta_{zy}} = \beta_{xy} \cdot \underbrace{\frac{\text{Cov}(Z,X)}{\text{Var}(Z)}}_{\beta_{zx}}
+$$
+
+Portanto $\beta_{zy} = \beta_{zx} \cdot \beta_{xy}$, e isolando o parâmetro de interesse:
+
+$$
+\beta_{xy} = \frac{\beta_{zy}}{\beta_{zx}}
+$$
+:::
+
+Os três passos práticos:
+
+**Passo 1:** $\text{lm}(X \sim Z)$ $\;\Rightarrow\;$ $\hat{b}_{zx} = \dfrac{\text{Cov}(Z, X)}{\text{Var}(Z)}$
+
+**Passo 2:** $\text{lm}(Y \sim Z)$ $\;\Rightarrow\;$ $\hat{b}_{zy} = \dfrac{\text{Cov}(Z, Y)}{\text{Var}(Z)}$
+
+**Passo 3:** O estimador IV é a razão:
+
+$$
+\hat{\beta}_{IV} = \frac{\hat{b}_{zy}}{\hat{b}_{zx}} = \frac{\text{Cov}(Z, Y)}{\text{Cov}(Z, X)}
+$$
+
+::: callout-note
+Se não tivermos uma regressão simples, basta usar as versões "parcializadas" de $X$, $Y$ e $Z$ — isto é, os resíduos após controlar pelas demais covariáveis.
+:::
+
+### Condições para um instrumento válido
+
+1. **Relevância:** $\text{Cov}(X, Z) \neq 0$ — o instrumento deve ser correlacionado com a variável endógena
+
+2. **Restrição de exclusão:** $Z \perp\!\!\!\perp Y \mid X$ — $Z$ afeta $Y$ apenas via $X$; não há caminho direto de $Z$ para $Y$
+
+3. **Estabilidade** (não é condição de identificação, mas de precisão): $|\text{Cov}(X, Z)| \gg 0$ — evita o problema de instabilidade dos instrumentos fracos. Quando $\text{Cov}(X, Z) \approx 0$, variações amostrais na covariância alteram o estimador drasticamente:
+
+$$
+\frac{\text{Cov}(Z,Y)}{\text{Cov}(Z,X)} = \frac{10}{0.001} = 10\,000 \quad \text{vs.} \quad \frac{10}{-0.002} = -5\,000
+$$
+
+### OLS vs. IV em notação matricial
+
+Os pressupostos do OLS são: (1) linearidade, (2) i.i.d., (3) $X^\top X$ inversível, (4) $X^\top\varepsilon = 0$ (exogeneidade — $X$ é independente do erro populacional). No setup de variáveis instrumentais, **sabemos que IV(4) não vale**: $X^\top\varepsilon \neq 0$. Precisamos de pressupostos adicionais:
+
+| | |
+|---|---|
+| IV(3) | $Z^\top X$ é inversível |
+| IV(4) | $X^\top\varepsilon \neq 0$ — endogeneidade (sabida) |
+| IV(5) | $Z^\top\varepsilon = 0$ — restrição de exclusão |
+| IV(6) | $Z^\top X \neq 0$ e $Z^\top Y \neq 0$ — relevância |
+
+A derivação do estimador matricial segue da equação estrutural $Y = X\beta + \varepsilon$:
+
+$$
+\begin{align*}
+Z^\top Y &= Z^\top X\beta + \underbrace{Z^\top\varepsilon}_{=\;0\;\text{por IV(5)}} \\
+         &= Z^\top X\hat{\beta}
+\end{align*}
+$$
+
+$$
+\boxed{\hat{\beta}_{IV} = (Z^\top X)^{-1}Z^\top Y}
+$$
+
+Todos os pressupostos de identificação são necessários para isolar $\hat{\beta}_{IV}$: IV(3) garante que $(Z^\top X)^{-1}$ existe, IV(5) zera o termo de erro, e IV(6) assegura que $Z^\top X \neq 0$.
+
+Em R:
+
+```{r}
+#| eval: false
+beta_iv <- solve(t(z) %*% x) %*% t(z) %*% y
+```
