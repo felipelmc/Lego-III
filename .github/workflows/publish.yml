@@ -28,7 +28,7 @@ jobs:
 
       - name: Install R packages
         run: |
-          Rscript -e "install.packages(c('knitr', 'rmarkdown', 'ggdag', 'ggplot2'))"
+          Rscript -e "install.packages(c('knitr', 'rmarkdown', 'ggdag', 'ggplot2', 'tidyverse', 'ivreg'))"
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
