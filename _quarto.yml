@@ -28,7 +28,6 @@ book:
         - aulas/aula-06.qmd
         - aulas/aula-07.qmd
         - aulas/aula-08.qmd
-
 bibliography: references.bib
 
 format:

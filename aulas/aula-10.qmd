@@ -1,0 +1,128 @@
+---
+title: "Regressão com dados longitudinais"
+subtitle: "Aula 10"
+date: 2026-05-20
+---
+
+## Notação
+
+Em dados em painel, indexamos as observações por dois subscritos: $i = 1, \ldots, N$ identifica a unidade (indivíduo, município, país etc.) e $t = 1, \ldots, T$ identifica o período (ano, trimestre, rodada de survey etc.). Uma variável genérica é escrita $Y_{it}$. O painel completo tem $NT$ observações.
+
+Um painel é balanceado quando todas as $N$ unidades são observadas em todos os $T$ períodos. Em um formato long, temos $NT$ linhas. Ele é desbalanceado, no entanto, quando algumas combinações unidade-período estão faltando -- o que pode ocorrer, sobretudo, quando você não consegue entrevistar a unidade em algum período $t$. Isso também pode ocorrer por atrito, entrada tardia, saída da amostra, mudanças administrativas etc.
+
+> O desbalanceamento não é necessariamente um problema, mas exige atenção ao mecanismo da ausência. A estimação usual é mais plausível quando a ausência/entrada/saída é aleatória, independente do erro idiossincrático depois de condicionar nos controles e efeitos fixos relevantes.
+
+## Setup
+
+Considere um painel balanceado com unidades $i = 1, \ldots, N$ e períodos $t = 1, \ldots, T$, em que $N \gg T$. O modelo estatístico geral é:
+
+$$
+y_{it} = \delta d_{it} + \mathbf{x}^\prime_{it} \beta + \alpha_i + \lambda_t + \epsilon_{it},
+$$
+
+onde:
+
+- $y_{it}$ é o resultado de interesse
+- $\delta d_{it}$ é o tratamento ou regressor de interesse
+- $\mathbf{x}^\prime_{it}$ contém covariadas observadas
+- $\alpha_i$ captura características das unidades fixas no tempo
+- $\lambda_t$ captura choques comuns a todas as unidades no período $t$
+- $\epsilon_{it}$ contém choques não observados que variam entre unidades e períodos
+
+Chamaremos o painel de estático quando não há defasagem em $y$ do lado direito.
+
+## Modelo de MQO empilhado
+
+Uma abordagem intuitiva é tratar os dados como _cross-sections_ empilhados:
+
+$$
+y_{it} = \delta d_{it} + \mathbf{x}^\prime_{it} \beta + e_{it}
+$$
+
+sendo que o erro nesse caso absorve tudo que é efeito fixo de indivíduo e efeito fixo de tempo:
+
+$$
+e_{it} = \alpha_i + \lambda_t + \epsilon_{it}
+$$
+
+Nesse caso, estamos afirmando categoricamente que estamos controlando por tudo que era necessário controlar, isto é, os componentes $\alpha_i$ e $\lambda_t$ são zero, e tudo de importante que era necessário controlar está em $\mathbf{x}^\prime_{it}$. 
+
+Há pressupostos fundamentais para isso aqui funcionar. Para que o POLS estime os coeficientes de modo consistente (aqui consistência em termos matemáticos, isto é, em amostras muito grandes, o estimador não tem viés), o pressuposto crucial é ortogonalidade assistótica entre os regressores e o erro composto. Matematicamente:
+
+Seja $\mathbf{z}_{it} = \begin{bmatrix} d_{it} \\ \mathbf{x}_{it} \end{bmatrix}$$. Para que $\beta$ e $\delta$ sejam estimados de forma consistente, o erro não pode estar correlacionado com os regressores. Ou seja:
+
+$$
+\begin{align*}
+\mathbb{E}[\mathbf{z}_{it} e_{it}] &= \mathbb{E}(\mathbf{z}_{it} (\alpha_i + \lambda_t + \epsilon_{it})) = 0 \\
+\mathbb{E}[\mathbf{z}_{it} e^\lambda_{it}] &= \mathbb{E}(\mathbf{z}_{it} (\alpha_i + \epsilon_{it})) = 0
+\end{align*}
+$$
+
+Veja, são os mesmos pressupostos do MQO. São, naturalmente, pressupostos muito fortes. Para que o POLS seja consistentes, os pressupostos de seleção em observáveis precisam ser plausíveis:
+
+- as covariadas em $\mathbf{x}_{it}$ fecham os back-doors relevantes
+- $\alpha_i$ não está correlacionada com $d_{it}$ depois dos controles
+- choques de período relevantes são controlados por $\lambda_t$, quando necessário
+
+Se isso for verdade, POLS é simples e usa toda a variação observada. O problema é que esses pressupostos costumam ser pouco convincentes para inferência cusal -- a maior motivação para usar dados em painel é justamente lidar com confundidores fixos não observados em $\alpha_i$.
+
+> Na prática, isso tudo basicamente pressupõe que aquilo se trata de uma regressão como qualquer outra.
+
+## Fixed effects (FE)
+
+Por ora, vamos ignorar o termo $\lambda_t$ para destacar o papel de $\alpha_i$:
+
+$$
+y_{it} = \delta d_{it} + \mathbf{x}^\prime_{it} \beta + \alpha_i + \epsilon_{it},
+$$
+
+Como $\alpha_i$ é fixo no tempo, podemos subtrair a média temporal **de cada unidade** (ou seja, _within_):
+
+$$
+y_{it} - \bar{y}_i = \delta(d_{it} - \bar{d}_i) + (\mathbf{x}_{it} - \bar{\mathbf{x}}_i)^\prime\beta + (\alpha_i - \bar{\alpha}_i) + (\epsilon_{it} - \bar{\epsilon}_i)
+$$
+
+O efeito fixo se cancela pois $\alpha_i - \bar{\alpha}_i = 0$ (naturalmente, porque essa coisa não varia no tempo), restando:
+
+$$
+y_{it} - \bar{y}_i = \delta(d_{it} - \bar{d}_i) + (\mathbf{x}_{it} - \bar{\mathbf{x}}_i)^\prime\beta + (\epsilon_{it} - \bar{\epsilon}_i)
+$$
+
+Definindo $v^*_{it} = v_{it} - \bar{v}_i$ para qualquer variável $v$:
+
+$$
+y^*_{it} = \delta\, d^*_{it} + \mathbf{x}^{*\prime}_{it}\,\beta + \epsilon^*_{it}
+$$
+
+Ao centralizar as variáveis que variam no tempo, estamos representando elas em termos de desvios em relação à própria média. E veja: isso vale para as variáveis que você não está observando também (como é o caso de $\alpha_i$). Nesse modelo, você tem certeza de que você se livrou de tudo que é time-invariant. O custo disso é que você perde também as variáveis que você observa mas que não variam ao longo do tempo, e elas precisam ser removidas das covariadas.
+
+Subtraindo a média das variáveis por unidade, podemos estimar por MQO. A transformação _within_:
+
+- Elimina o termo problemático não observado $\alpha_i$
+- Elimina toda a variação entre unidades
+- Mantém a variação intra unidades
+
+Em MQO com incertecpto, subtrair a média global de um regressor altera o intercepto, mas não altera o coeficiente do regressor. Fixed Effects não é POLS com variáveis centradas globalmente: ela usa transformação within, isto é, subtrai a média temporal dentro de cada unidade. A fonte de variação usada para estimar os coeficientes muda: FE usa apenas variação intra-unidades.
+
+A estimação por _Least Squares Dummy Variables_ é algebricamente equivalente ao estimador within para os coeficientes das variáveis que variam no tempo. Ou seja, basta estimar por MQO o modelo com os dados originais incluindo dummies para cada unidade:
+
+$$
+y_{it} = \delta d_{it} + \mathbf{x}^\prime_{it} \beta + \gamma_2 \mathbb{I}(i=2) + \cdots + \gamma_N \mathbb{I}(i=N) + \epsilon_{it}
+$$
+
+Isso funciona, naturalmente, porque as dummies de cada unidade absorvem todas as diferenças fixas entre as unidades!
+
+## Two-Way Fixed Effects (TWFE)
+
+E se incluirmos também os efeitos de período em $\lambda_t$?
+
+$$
+y_{it} = \delta d_{it} + \mathbf{x}^\prime_{it} \beta + \alpha_i + \lambda_t + \epsilon_{it}
+$$
+
+Nesse caso, temos o estimador TWFE. Na formulação com dummies, TWFE equivale a uma regressão dummies de unidade e dummies de período. Em um painel balanceado, a formulação em desvios é:
+
+$$
+y_{it} - \bar{y_i} - \bar{y_t} + \bar{y} = \delta(d_{it} - \bar{d_i} - \bar{d_t} + \bar{d}) + (\mathbf{x}^\prime_{it} - \bar{\mathbf{x}^\prime_i} - \bar{\mathbf{x}^\prime_t} + \bar{\mathbf{x}^\prime}) + (\epsilon_{it} - \bar{\epsilon_i} - \bar{\epsilon_t} + \bar{\epsilon})
+$$
+

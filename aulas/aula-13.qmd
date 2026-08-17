@@ -1,0 +1,97 @@
+---
+title: "Diff-in-Diff pt. 3"
+subtitle: "Aula 13"
+date: 2026-06-10
+---
+
+## Dif-in-dif com controle de variáveis com IPW
+
+Qual é a razão para fazermos isso? Diff-in-diff é um modelo de diferenças, e sendo assim, ele poderia ser estimado de uma forma bem mais direta. Escreveríamos uma variável que é, ela mesma, a subtração no momento 2 e no momento 1. 
+
+$$
+y = \alpha_i + \tau_t + \delta \mathbb{I} [(G = 1) \times \mathbb{I} (T=2)] + \epsilon_{it}
+$$
+
+O que a gente modela aqui é a *parallel trends assumption*, que nos diz que a tendência temporal desse contrafactual é a mesma que a do grupo controle.
+
+Podemos, é claro, transformar o banco de dados para o formato wide. 
+
+| ID | Y₁ | Y₂ | ΔY | Grupo |
+|----|----|----|-----|-------|
+| 1  | 10 | 15 | +5  | Trat  |
+| 2  | 5  | −3 | −8  | Trat  |
+
+$$
+\begin{align*}
+&Y_{i2} = \alpha_i + \beta_1 \text{sexo}_i + \delta D_{i2} \\
+-\; &Y_{i1} = \alpha_i + \beta_1 \text{sexo}_i \\
+\hline
+&\Delta Y_i = \delta D_{i2}
+\end{align*}
+$$
+
+No entanto, pode haver um desbalanceamento entre grupo de controle e tratamento ao longo do tempo. Isso viola o diff-in-diff, em particular porque a noção de _parallel trends_ é violada. Então precisamos discutir a ideia de conditional parallel trends, quando o balanceamento só é respeitado dentro dos grupos.
+
+### Conditional parallel trends
+
+$$
+\mathbb{E}[ \Delta Y_{i}(0) \mid X_i, D_i = 1 ] = \mathbb{E}[ \Delta Y_{i}(0) \mid X_i, D_i = 0 ]
+$$
+
+Em palavras: na ausência do tratamento, a variação média de $Y$ para os tratados teria sido igual à variação média observada nos controles, condicional em covariadas $X_i$.
+
+O lado esquerdo é um contrafactual -- nunca observado para $D_i = 1$. O lado direito é observável. Essa igualdade é o que autoriza usar o grupo controle como estimador da tendência que o grupo tratado teria seguido, permitindo identificar o ATT:
+
+$$
+\hat{\delta}^{DiD} = \mathbb{E}[\Delta Y_i \mid D_i = 1] - \mathbb{E}[\Delta Y_i \mid D_i = 0]
+$$
+
+Na fórmula (9) do artigo, temos o seguinte:
+
+$$
+\mathbb{E}_\omega \ [ \ \Delta Y_{i, t=2} \ | \ D_i = 1 \ ] - \mathbb{E}_\omega \ [ \ \mathbb{E}_\omega \ [ \ \Delta Y_{i, t = 2} \ | \ X_i, D_i = 0 \ ] \ | \ D_i = 1 \ ]
+$$
+
+O primeiro termo, $\mathbb{E}_\omega[\Delta Y_{i,t=2} \mid D_i = 1]$, é simplesmente a variação média observada de $Y$ entre os períodos para o grupo tratado.
+
+O segundo termo é um valor esperado duplo que estima o contrafactual — ou seja, qual teria sido a variação média dos tratados na ausência do tratamento. Ele opera em dois passos:
+
+1. O valor esperado **interno**, $\mathbb{E}_\omega[\Delta Y_{i,t=2} \mid X_i, D_i = 0]$, modela a relação entre as covariadas $X_i$ e a variação de $Y$ usando apenas os controles. Isso produz uma função que, dado um perfil $X_i$, prediz qual seria a tendência esperada sem tratamento.
+2. O valor esperado **externo**, $\mathbb{E}_\omega[\cdots \mid D_i = 1]$, toma a média dessas predições avaliadas nos $X_i$ dos tratados. Ou seja, projeta a tendência contrafactual sobre o perfil de covariadas do grupo tratado.
+
+A diferença entre os dois termos é o ATT (*Average Treatment Effect on the Treated*) sob a hipótese de tendências paralelas condicionais em $X_i$.
+
+```{r, eval=F}
+
+# Passo 1: estimar E[ΔY(0) | X_i, D_i = 0] nos controles
+contr = df %>%
+    filter(treat == 0) %>%
+    arrange(id, tempo) %>%
+    group_by(id) %>%
+    summarise(
+        d_y = y[tempo == 2] - y[tempo == 1],
+        sexo = unique(sexo),
+        raca = first(raca)
+    )
+
+out_reg = lm(d_y ~ sexo + raca, data = contr)
+
+# Passo 2: projetar o contrafactual nos tratados
+# ou seja, E[E[ΔY(0) | X_i, D_i = 0] | D_i = 1]
+treat = df %>%
+    filter(treat == 1) %>%
+    arrange(id, tempo) %>%
+    group_by(id) %>%
+    summarise(
+        d_y = y[tempo == 2] - y[tempo == 1],
+        sexo = unique(sexo),
+        raca = first(raca)
+    )
+
+# predict aplica os coeficientes dos controles aos X dos tratados
+treat$d_y0_hat = predict(out_reg, newdata = treat)
+
+# Passo 3: ATT = E[ΔY | D=1] - E[E[ΔY(0) | X, D=0] | D=1]
+mean(treat$d_y) - mean(treat$d_y0_hat)
+
+```

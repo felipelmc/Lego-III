@@ -1,0 +1,6 @@
+---
+title: "Diff-in-Diff pt. 1"
+subtitle: "Aula 11"
+date: 2026-05-27
+---
+

@@ -22,7 +22,9 @@ O resultado observado é $Y_i = A_i \cdot Y_i(1) + (1 - A_i) \cdot Y_i(0)$.
 O pressuposto SUTVA (*Stable Unit Treatment Value Assumption*) tem duas partes:
 
 1. **Sem interferência:** o resultado potencial de $i$ não depende do tratamento atribuído a $j \neq i$
-$$Y_i(a) \perp\!\!\!\perp A_j \quad \forall\, i \neq j$$
+$$
+Y_i(a) \perp\!\!\!\perp A_j \quad \forall\, i \neq j
+$$
 
 2. **Versão única do tratamento:** não há versões ocultas de $A$ — cada nível de tratamento é bem definido e consistente entre unidades
 

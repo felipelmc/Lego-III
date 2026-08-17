@@ -1,0 +1,44 @@
+---
+title: "Diff-in-Diff pt. 2"
+subtitle: "Aula 12"
+date: 2026-06-03
+---
+
+## Assumptions
+
+Das coisas mais importantes que vimos até agora, está a suposição de independência dos resultados potenciais em relação ao tratamento, isto é, _mean independence_: 
+
+$$
+Y(0), Y(1) \perp\!\!\!\perp D
+$$
+
+A gente sabe que isso nem sempre é possível, então podemos aplicar o conceito de ignorability controlando pelos demais fatores de confusão (depois de controlado por variáveis, o tratamento ocorreu de forma _as good as random_):
+
+$$
+Y(0), Y(1) \perp\!\!\!\perp D, X
+$$
+
+$$
+ATT = \mathbb{E}[Y_t(1) | D = 1] - \mathbb{E}[Y_t(0) | D = 1]
+$$
+
+Vamos partir desse caso aqui:
+
+| Y(0) | Y(1) | D | t | Y  |
+|------|------|---|---|----|
+| 25   | 25   | 1 | 1 | 25 |
+| 26   | 29   | 1 | 2 | 29 |
+
+Assumption (1): Não antecipação. Para todos os períodos $t$ pré-tratamento, $Y_t(0) = Y_t(1)$.
+
+Assumption (2): Parallel trends. $\mathbb{E}[Y_{t=2}(0) | D = 1] - \mathbb{E}[Y_{t=1}(0) | D = 1] = \mathbb{E}[Y_{t=2}(0) | D = 0] - \mathbb{E}[Y_{t=1}(0) | D = 0]$.
+
+O lance é o seguinte: essas são as nossas assumptions, e elas misturam dados "que existem" com dados que "não existem". Obtemos o estimador ao reescrever essas igualdades matemáticas apenas com coisas que existem.
+
+O que é observado não precisa de indexação em termos de $(1)$ ou $(0)$. Então eventualmente chegamos ao seguinte: a versão contrafactual não tratada dos que de fato foram tratados é o estado inicial dos tratados mais a variação dos não tratados.
+
+$$
+\underbrace{\mathbb{E}[Y_{t=2}(0) \mid D=1]}_{\text{contrafactual não observado}} = \underbrace{\mathbb{E}[Y_{t=1} \mid D=1]}_{\text{estado inicial dos tratados}} + \Bigl(\underbrace{\mathbb{E}[Y_{t=2} \mid D=0] - \mathbb{E}[Y_{t=1} \mid D=0]}_{\text{variação observada no grupo controle}}\Bigr)
+$$
+
+O lado esquerdo é o que nunca vemos: o resultado que os tratados teriam tido em $t=2$ caso não tivessem sido tratados. A *parallel trends assumption* nos diz que a tendência temporal desse contrafactual é a mesma que a do grupo controle. Então podemos imputá-lo: pegamos o ponto de partida dos próprios tratados em $t=1$ e somamos a variação que o grupo controle de fato apresentou entre os dois períodos.
