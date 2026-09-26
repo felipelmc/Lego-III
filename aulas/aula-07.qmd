@@ -143,7 +143,7 @@ library(ggplot2)
 
 Nessa aula, pela primeira vez, não falamos de controlar variáveis. Os DAGs mostram que mais controle não é necessariamente bom:
 
-- **Controle em excesso** pode ser ruim — controlar um *collider* abre caminhos espúrios
+- **Controle em excesso** pode ser ruim: controlar um *collider* abre caminhos espúrios
 - **Controlar por um mediador** nos dá apenas o efeito direto, não o efeito total de $X$ sobre $Y$
 
 O problema surge quando o modelo não é identificável. Considere o DAG abaixo, em que $\varepsilon$ (não observado) afeta tanto $X$ quanto $Y$:
@@ -177,11 +177,11 @@ y   <- -25 + 3 * x + eps   # β1 = 3 (valor verdadeiro)
 coef(lm(y ~ x))["x"]
 ```
 
-O coeficiente estimado é sistematicamente diferente de 3 — não por variação amostral, mas porque $\hat{b}_1$ captura um **efeito misturado** do erro com o efeito causal real.
+O coeficiente estimado é sistematicamente diferente de 3, não por variação amostral, mas porque $\hat{b}_1$ captura um **efeito misturado** do erro com o efeito causal real.
 
 ### A variável instrumental
 
-A solução é introduzir um instrumento $Z$ que afeta $X$ mas é **exógeno** ao sistema — não correlacionado com $\varepsilon$. No DAG abaixo, $Z$ e $\varepsilon$ são exógenos; $X$ e $Y$ são endógenos:
+A solução é introduzir um instrumento $Z$ que afeta $X$ mas é **exógeno** ao sistema (não correlacionado com $\varepsilon$). No DAG abaixo, $Z$ e $\varepsilon$ são exógenos; $X$ e $Y$ são endógenos:
 
 ```{r}
 #| message: false
@@ -207,7 +207,7 @@ Os caminhos causais de $Z$ para $Y$:
 | $Z \rightarrow X \rightarrow Y$ | Aberto (causal) |
 | $Z \rightarrow X \leftarrow \varepsilon \rightarrow Y$ | Fechado ($X$ é *collider* em relação a $\varepsilon$) |
 
-$Z$ **não** é uma variável de controle — é uma variável exógena que resolve o problema de identificação ao isolar a variação em $X$ que é independente de $\varepsilon$.
+$Z$ **não** é uma variável de controle: é uma variável exógena que resolve o problema de identificação ao isolar a variação em $X$ que é independente de $\varepsilon$.
 
 ### O estimador IV: três passos
 
@@ -256,16 +256,16 @@ $$
 $$
 
 ::: callout-note
-Se não tivermos uma regressão simples, basta usar as versões "parcializadas" de $X$, $Y$ e $Z$ — isto é, os resíduos após controlar pelas demais covariáveis.
+Se não tivermos uma regressão simples, basta usar as versões "parcializadas" de $X$, $Y$ e $Z$, isto é, os resíduos após controlar pelas demais covariáveis.
 :::
 
 ### Condições para um instrumento válido
 
-1. **Relevância:** $\text{Cov}(X, Z) \neq 0$ — o instrumento deve ser correlacionado com a variável endógena
+1. **Relevância:** $\text{Cov}(X, Z) \neq 0$ (o instrumento deve ser correlacionado com a variável endógena)
 
-2. **Restrição de exclusão:** $Z \perp\!\!\!\perp Y \mid X$ — $Z$ afeta $Y$ apenas via $X$; não há caminho direto de $Z$ para $Y$
+2. **Restrição de exclusão:** $Z \perp\!\!\!\perp Y \mid X$ ($Z$ afeta $Y$ apenas via $X$; não há caminho direto de $Z$ para $Y$)
 
-3. **Estabilidade** (não é condição de identificação, mas de precisão): $|\text{Cov}(X, Z)| \gg 0$ — evita o problema de instabilidade dos instrumentos fracos. Quando $\text{Cov}(X, Z) \approx 0$, variações amostrais na covariância alteram o estimador drasticamente:
+3. **Estabilidade** (não é condição de identificação, mas de precisão): $|\text{Cov}(X, Z)| \gg 0$ (evita o problema de instabilidade dos instrumentos fracos). Quando $\text{Cov}(X, Z) \approx 0$, variações amostrais na covariância alteram o estimador drasticamente:
 
 $$
 \frac{\text{Cov}(Z,Y)}{\text{Cov}(Z,X)} = \frac{10}{0.001} = 10\,000 \quad \text{vs.} \quad \frac{10}{-0.002} = -5\,000
@@ -273,14 +273,14 @@ $$
 
 ### OLS vs. IV em notação matricial
 
-Os pressupostos do OLS são: (1) linearidade, (2) i.i.d., (3) $X^\top X$ inversível, (4) $X^\top\varepsilon = 0$ (exogeneidade — $X$ é independente do erro populacional). No setup de variáveis instrumentais, **sabemos que IV(4) não vale**: $X^\top\varepsilon \neq 0$. Precisamos de pressupostos adicionais:
+Os pressupostos do OLS são: (1) linearidade, (2) i.i.d., (3) $X^\top X$ inversível, (4) $X^\top\varepsilon = 0$ (exogeneidade: $X$ é independente do erro populacional). No setup de variáveis instrumentais, **sabemos que IV(4) não vale**: $X^\top\varepsilon \neq 0$. Precisamos de pressupostos adicionais:
 
 | | |
 |---|---|
 | IV(3) | $Z^\top X$ é inversível |
-| IV(4) | $X^\top\varepsilon \neq 0$ — endogeneidade (sabida) |
-| IV(5) | $Z^\top\varepsilon = 0$ — restrição de exclusão |
-| IV(6) | $Z^\top X \neq 0$ e $Z^\top Y \neq 0$ — relevância |
+| IV(4) | $X^\top\varepsilon \neq 0$: endogeneidade (sabida) |
+| IV(5) | $Z^\top\varepsilon = 0$: restrição de exclusão |
+| IV(6) | $Z^\top X \neq 0$ e $Z^\top Y \neq 0$: relevância |
 
 A derivação do estimador matricial segue da equação estrutural $Y = X\beta + \varepsilon$:
 

@@ -27,9 +27,9 @@ $$
 | IV1 | Linearidade |
 | IV2 | i.i.d. |
 | IV3 | $Z^\top X$ é quadrada e inversível |
-| IV4 | $X^\top\varepsilon \neq 0$ — modelo é endógeno |
-| IV5 | $Z^\top\varepsilon = 0$ — instrumento é exógeno; restrição de exclusão |
-| IV6 | $Z^\top X \neq 0$ — relevância |
+| IV4 | $X^\top\varepsilon \neq 0$: modelo é endógeno |
+| IV5 | $Z^\top\varepsilon = 0$: instrumento é exógeno; restrição de exclusão |
+| IV6 | $Z^\top X \neq 0$: relevância |
 
 Considere um modelo com múltiplas variáveis onde apenas $X_1$ é endógena e $X_2$ é exógena, com instrumento $Z$ para $X_1$:
 
@@ -60,7 +60,7 @@ Isso não é apenas um requisito matemático, mas um requisito substantivo de in
 
 ### Sub-identificação ($L < K$)
 
-Menos instrumentos do que variáveis endógenas — não é possível inverter $Z^\top X$. Exemplo: $X_1$ e $X_2$ ambas endógenas, mas há apenas um instrumento $Z_1$.
+Menos instrumentos do que variáveis endógenas: não é possível inverter $Z^\top X$. Exemplo: $X_1$ e $X_2$ ambas endógenas, mas há apenas um instrumento $Z_1$.
 
 ```{r}
 #| message: false
@@ -86,11 +86,11 @@ Z = \begin{bmatrix} 1 & z_1 \end{bmatrix}_{n \times 2}
 X = \begin{bmatrix} 1 & X_1 & X_2 \end{bmatrix}_{n \times 3}
 $$
 
-$Z^\top X$ tem dimensão $2 \times 3$ — não é quadrada, portanto não é inversível.
+$Z^\top X$ tem dimensão $2 \times 3$: não é quadrada, portanto não é inversível.
 
 ### Justa-identificação ($L = K$)
 
-Exatamente tantos instrumentos quanto variáveis endógenas. $Z^\top X$ é quadrada e inversível — o estimador IV pode ser aplicado diretamente.
+Exatamente tantos instrumentos quanto variáveis endógenas. $Z^\top X$ é quadrada e inversível: o estimador IV pode ser aplicado diretamente.
 
 ```{r}
 #| message: false
@@ -147,13 +147,13 @@ Z = \begin{bmatrix} 1 & Z_1 & Z_2 & X_2 \end{bmatrix}_{n \times 4}
 X = \begin{bmatrix} 1 & X_1 & X_2 \end{bmatrix}_{n \times 3}
 $$
 
-$Z^\top X$ tem dimensão $4 \times 3$ — não é quadrada.
+$Z^\top X$ tem dimensão $4 \times 3$: não é quadrada.
 
 ## Two-Stage Least Squares (2SLS)
 
 Quando há mais de um instrumento (sobre-identificação), generalizamos a ideia de "usar apenas a variação exógena de $X$" via dois estágios:
 
-**Passo 1 — Primeiro estágio:** regredir $X_1$ em todos os instrumentos e variáveis exógenas e calcular os valores preditos:
+**Passo 1 (primeiro estágio):** regredir $X_1$ em todos os instrumentos e variáveis exógenas e calcular os valores preditos:
 
 $$
 X_1 = \alpha_0 + \alpha_1 Z_1 + \alpha_2 Z_2 + w
@@ -161,7 +161,7 @@ X_1 = \alpha_0 + \alpha_1 Z_1 + \alpha_2 Z_2 + w
 \hat{X}_1 = \hat{\alpha}_0 + \hat{\alpha}_1 Z_1 + \hat{\alpha}_2 Z_2
 $$
 
-**Passo 2 — Segundo estágio:** usar $\hat{X}_1$ no lugar de $X_1$:
+**Passo 2 (segundo estágio):** usar $\hat{X}_1$ no lugar de $X_1$:
 
 $$
 Y = \beta_0 + \beta_1 \hat{X}_1 + \beta_2 X_2 + \beta_3 X_3 + \varepsilon
@@ -259,15 +259,15 @@ Existem quatro tipos de pessoas no mundo:
 
 | Tipo | Descrição |
 |---|---|
-| *Always takers* | Contrafactuais "fixos" — sempre fazem a mesma coisa em qualquer situação |
-| *Never takers* | Idem — nunca mudariam de comportamento independente do instrumento |
+| *Always takers* | Contrafactuais "fixos": sempre fazem a mesma coisa em qualquer situação |
+| *Never takers* | Idem: nunca mudariam de comportamento independente do instrumento |
 | **Compliers** | Pessoas cujas vidas são efetivamente mudadas pela variável instrumental |
 | *Defiers* | Fazem o oposto do instrumento (o pressuposto IV7 é exatamente "no defiers") |
 
-O problema é que a VI estima o efeito causal **apenas para os compliers**. A variável instrumental não captura o efeito causal no abstrato — há pessoas que têm versões idênticas em qualquer contrafactual e que, portanto, não sofrem o efeito causal.
+O problema é que a VI estima o efeito causal **apenas para os compliers**. A variável instrumental não captura o efeito causal no abstrato: há pessoas que têm versões idênticas em qualquer contrafactual e que, portanto, não sofrem o efeito causal.
 
 ::: callout-note
 Essa discussão é um dos usos mais interessantes da notação de inferência causal, pois torna explícita a heterogeneidade de efeitos que a VI é capaz de identificar.
 :::
 
-**Problema adicional:** a distribuição da população em cada um desses grupos depende do instrumento utilizado. Isso limita o **Teste de Sargan** — um teste de sobre-identificação que avalia a validade conjunta dos instrumentos.
+**Problema adicional:** a distribuição da população em cada um desses grupos depende do instrumento utilizado. Isso limita o **Teste de Sargan**, um teste de sobre-identificação que avalia a validade conjunta dos instrumentos.

@@ -28,11 +28,11 @@ $$
 \underbrace{\frac{1}{N_T} \sum^n_{i = 1}(y_i | d_i = 1) - \frac{1}{N_C} \sum^n_{i = 1}(y_i | d_i = 0)}_{\text{Diferença observada}} = \underbrace{\mathbb{E}[Y^1 - Y^0]}_{\text{ATE}} + \underbrace{\mathbb{E}[Y^0 | D = 1] - \mathbb{E}[Y^0 | D = 0]}_{\text{Viés de seleção}} + \underbrace{(1 - \pi)(\text{ATT} - \text{ATU})}_{\text{Viés de heterogeneidade}}
 $$
 
-O lado esquerdo é simplesmente a **diferença observada** entre as médias dos grupos tratado e controle — é o que você consegue calcular diretamente dos dados. O lado direito decompõe essa diferença em três partes:
+O lado esquerdo é simplesmente a **diferença observada** entre as médias dos grupos tratado e controle: é o que você consegue calcular diretamente dos dados. O lado direito decompõe essa diferença em três partes:
 
 1. O **ATE** ($\mathbb{E}[Y^1 - Y^0]$) é o efeito causal médio do tratamento na população. É o que gostaríamos de estimar: quanto, em média, o resultado de uma unidade mudaria se ela passasse de não tratada a tratada.
 
-2. O **viés de seleção** ($\mathbb{E}[Y^0 | D = 1] - \mathbb{E}[Y^0 | D = 0]$) captura a diferença entre tratados e controles que existiria *mesmo na ausência do tratamento*. É uma comparação dos resultados potenciais $Y^0$ — isto é, o que aconteceria *sem* tratamento — entre quem *escolheu* se tratar e quem não escolheu. Se, por exemplo, indivíduos que buscam o tratamento já são sistematicamente diferentes (mais ricos, mais motivados, mais doentes), essa diferença aparece aqui. 
+2. O **viés de seleção** ($\mathbb{E}[Y^0 | D = 1] - \mathbb{E}[Y^0 | D = 0]$) captura a diferença entre tratados e controles que existiria *mesmo na ausência do tratamento*. É uma comparação dos resultados potenciais $Y^0$ (isto é, o que aconteceria *sem* tratamento) entre quem *escolheu* se tratar e quem não escolheu. Se, por exemplo, indivíduos que buscam o tratamento já são sistematicamente diferentes (mais ricos, mais motivados, mais doentes), essa diferença aparece aqui. 
 
 3. O **viés de heterogeneidade** ($(1 - \pi)(\text{ATT} - \text{ATU})$, onde $\pi = \mathbb{P}(D=1)$) aparece quando o efeito do tratamento não é o mesmo para todos. Se o tratamento beneficia mais quem se trata do que quem não se trata (ou vice-versa), a diferença entre ATT e ATU é não nula. Esse termo desaparece em dois casos: quando o efeito é constante ($ATT = ATU$), ou quando toda a população é tratada ($\pi = 1$).
 
@@ -124,7 +124,7 @@ $$
 \mathbb{P}(D = 1) \cdot ATT + \mathbb{P}(D = 0) \cdot ATU = 0.5 \cdot 1.5 + 0.5 \cdot (-2.5) = -0.5
 $$
 
-Note como a estimativa ingênua de $+13$ está muito longe do ATE de $-0.5$. A diferença se explica pela composição dos grupos: alunos de maior renda — que já teriam notas altas independentemente do tipo de escola — estão sobrerrepresentados nas escolas cívico-militares. O viés de seleção infla a estimativa ingênua, que nesse caso é uma estimativa viesada.
+Note como a estimativa ingênua de $+13$ está muito longe do ATE de $-0.5$. A diferença se explica pela composição dos grupos: alunos de maior renda, que já teriam notas altas independentemente do tipo de escola, estão sobrerrepresentados nas escolas cívico-militares. O viés de seleção infla a estimativa ingênua, que nesse caso é uma estimativa viesada.
 
 O problema, é claro, é que isso tudo parte de um pressuposto bastante forte de que o único backdoor que precisaria ser fechado é o da renda. Mas isso, obviamente, não é verdade para a maioria dos casos. Nesse próprio caso, aliás, poderíamos pensar que o fato de o estudante ser de uma família tradicional de militares poderia ter uma diferença que não está totalmente refletida na renda.
 ::::
@@ -153,7 +153,7 @@ Quanto mais covariáveis incluímos em $\mathbf{X}$, e quanto mais categorias em
 
 Subclassificação compara tratados e controles dentro dos estratos definidos por $\mathbf{X}$, calcula as diferenças dentro de cada estrato e repondera essas diferenças para obter o efeito médio. O problema, naturalmente, é a maldição da dimensionalidade: conforme o número de covariáveis cresce, o número de estratos explode e muitas células ficam vazias ou com pouquíssimas observações.
 
-Já no caso do matching (exato), em vez de comparar estratos inteiros, comparamos cada unidade tratada com a unidade (ou unidades) do grupo de controle mais parecida(s) em termos de $\mathbf{X}$. A ideia é construir, para cada tratado, um contrafactual observável — o controle mais próximo — e estimar o efeito individual como a diferença entre os dois. O ATT, por exemplo, é então a média dessas diferenças entre cada tratado e seu par:
+Já no caso do matching (exato), em vez de comparar estratos inteiros, comparamos cada unidade tratada com a unidade (ou unidades) do grupo de controle mais parecida(s) em termos de $\mathbf{X}$. A ideia é construir, para cada tratado, um contrafactual observável (o controle mais próximo) e estimar o efeito individual como a diferença entre os dois. O ATT, por exemplo, é então a média dessas diferenças entre cada tratado e seu par:
 
 $$
 \widehat{ATT} = \frac{1}{N_T} \sum_{i: D_i = 1} \left( Y_i - Y_{j(i)} \right)

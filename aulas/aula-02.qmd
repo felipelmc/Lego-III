@@ -59,9 +59,9 @@ $$
 \hat{\epsilon}_y = b_0 + b_1 \hat{\epsilon}_x
 $$
 
-Essa regressão acima, sem controles, na verdade já está controlada, porque de saída removemos de $y$ a parte explicada de $w$ — e fizemos o mesmo com $x$. Isso significa, em essência, que $\beta_1 = b_1$.
+Essa regressão acima, sem controles, na verdade já está controlada, porque de saída removemos de $y$ a parte explicada de $w$, e fizemos o mesmo com $x$. Isso significa, em essência, que $\beta_1 = b_1$.
 
-## Caminhos causais — Exemplo 1
+## Caminhos causais: Exemplo 1
 
 Considere o seguinte DAG:
 
@@ -93,7 +93,7 @@ Os **caminhos causais de $D$ até $Y$** são:
 
 ### Backdoors
 
-**Pergunta:** como tirar a parte de $D$ que é explicada por $A$ e $B$? Ou seja, como remover a relação de $D$ com $A$ e $B$ — os *backdoors*?
+**Pergunta:** como tirar a parte de $D$ que é explicada por $A$ e $B$? Ou seja, como remover a relação de $D$ com $A$ e $B$ (os *backdoors*)?
 
 $$
 Y = \beta_0 + \beta_1 D + \beta_2 A + \beta_3 B
@@ -113,7 +113,7 @@ $$
 
 ### Regressões equivalentes
 
-Nesse caso, temos algumas regressões equivalentes — todas deveriam revelar o mesmo efeito de $D$:
+Nesse caso, temos algumas regressões equivalentes. Todas deveriam revelar o mesmo efeito de $D$:
 
 $$
 Y \sim D + A \qquad Y \sim D + A + F \qquad Y \sim D + F + B
@@ -210,8 +210,8 @@ ggdag(dag_ex2) + theme_dag()
 **Caminhos causais ($D \rightarrow Y$):**
 
 1. $D \rightarrow Y$ (causal)
-2. $D \rightarrow \boxed{B} \leftarrow A \rightarrow Y$ — $B$ é collider; caminho não-causal (seta pra trás)
-3. $D \rightarrow \boxed{C} \leftarrow B \leftarrow A \rightarrow Y$ — $C$ é collider
+2. $D \rightarrow \boxed{B} \leftarrow A \rightarrow Y$: $B$ é collider; caminho não-causal (seta pra trás)
+3. $D \rightarrow \boxed{C} \leftarrow B \leftarrow A \rightarrow Y$: $C$ é collider
 
 **Mínimos controles necessários:** $Y \sim D + A$, ou mesmo nenhum.
 
@@ -256,14 +256,14 @@ ggdag(dag_ex3, use_labels = "label", text = FALSE) + theme_dag()
 
 **Caminhos causais ($G \rightarrow S$):**
 
-1. $G \rightarrow D \rightarrow S$ — aberto (causal)
-2. $G \rightarrow D \rightarrow O \rightarrow S$ — aberto (causal)
-3. $G \rightarrow D \rightarrow \boxed{O} \leftarrow H \rightarrow S$ — **fechado** ($O$ é collider)
+1. $G \rightarrow D \rightarrow S$: aberto (causal)
+2. $G \rightarrow D \rightarrow O \rightarrow S$: aberto (causal)
+3. $G \rightarrow D \rightarrow \boxed{O} \leftarrow H \rightarrow S$: **fechado** ($O$ é collider)
 
 **Mínimos controles necessários:** nenhum. $S \sim D$.
 
 - $S \sim G + D$ elimina todos os efeitos, porque $D$ é o único mediador existente.
-- $S \sim G + O$ introduz viés — não podemos controlar por Ocupação, pois ela é o collider.
+- $S \sim G + O$ introduz viés: não podemos controlar por Ocupação, pois ela é o collider.
 
 ::: callout-warning
 Se controlo pelo collider, abro o caminho. Mas se controlo por uma variável que vem **depois** do collider (por exemplo, $H$, se fosse observável), o caminho fecha novamente.
@@ -271,7 +271,7 @@ Se controlo pelo collider, abro o caminho. Mas se controlo por uma variável que
 Em (1), se controlo por $D$, corto todas as setas.
 :::
 
-### Exemplo 5 — Descendentes de collider
+### Exemplo 5: descendentes de collider
 
 ```{r}
 #| message: false
@@ -294,7 +294,7 @@ ggdag(dag_ex5) + theme_dag()
 **Caminhos causais ($X \rightarrow Y$):**
 
 1. $X \rightarrow Y$ (causal)
-2. $X \rightarrow \boxed{B} \leftarrow A \rightarrow Y$ — $B$ é collider; caminho não-causal
+2. $X \rightarrow \boxed{B} \leftarrow A \rightarrow Y$: $B$ é collider; caminho não-causal
 
 **Mínimos controles:** nenhum.
 
@@ -344,9 +344,9 @@ ggdag(dag_ex6) + theme_dag()
 
 **Caminhos causais ($D \rightarrow Y$):**
 
-1. $D \rightarrow Y$ — causal; **aberto**
-2. $D \leftarrow U \rightarrow X \rightarrow Y$ — não-causal; **fechado** ao controlar por $X$
-3. $D \leftarrow U \rightarrow \boxed{X} \leftarrow E \rightarrow Y$ — $X$ é collider; **abre** ao controlar por $X$
+1. $D \rightarrow Y$: causal; **aberto**
+2. $D \leftarrow U \rightarrow X \rightarrow Y$: não-causal; **fechado** ao controlar por $X$
+3. $D \leftarrow U \rightarrow \boxed{X} \leftarrow E \rightarrow Y$: $X$ é collider; **abre** ao controlar por $X$
 
 **Colliders:** $X$ (filho de $U$ e $E$). **Filhos de collider:** $\emptyset$ ($Y$ é nossa variável de interesse).
 
@@ -376,15 +376,15 @@ ggdag(dag_ex7) + theme_dag()
 
 1. $D \rightarrow Y$ (efeito direto)
 2. $D \rightarrow B \rightarrow C \rightarrow Y$ (causal)
-3. $D \rightarrow \boxed{B} \leftarrow A \rightarrow Y$ — $B$ é collider; não-causal
-4. $D \rightarrow \boxed{C} \leftarrow B \leftarrow A \rightarrow Y$ — $C$ é collider; não-causal
+3. $D \rightarrow \boxed{B} \leftarrow A \rightarrow Y$: $B$ é collider; não-causal
+4. $D \rightarrow \boxed{C} \leftarrow B \leftarrow A \rightarrow Y$: $C$ é collider; não-causal
 
 **Mínimos controles:**
 
 - **Efeito total:** nenhum.
 - **Efeito direto:** não estimável diretamente, pois controlar por $B$ ou $C$ (os mediadores) abriria os caminhos de collider.
 
-**Colliders e seus filhos:** $\{B, C\}$ — filhos estão desconectados dos caminhos causais. Mas, na verdade, é possível controlar por $A$ e fechar o caminho que se abriu:
+**Colliders e seus filhos:** $\{B, C\}$ (filhos estão desconectados dos caminhos causais). Mas, na verdade, é possível controlar por $A$ e fechar o caminho que se abriu:
 
 $$
 Y \sim \boxed{D} + C + A \quad \rightarrow \quad \text{efeito causal direto}
@@ -394,7 +394,7 @@ $$
 
 Considere $E \rightarrow O \rightarrow S$ (com $E \rightarrow S$ também):
 
-- Educação afeta ocupação, que afeta salário — mas educação também afeta salário diretamente.
+- Educação afeta ocupação, que afeta salário, mas educação também afeta salário diretamente.
 - **Controlar por ocupação** nos dá o efeito dessa parte da educação que afeta salário mas *não* afeta ocupação (efeito direto).
 - **Não controlar** nos dá o efeito total.
 
@@ -422,9 +422,9 @@ ggdag(dag_ex1) + theme_dag()
 
 **Caminhos causais ($D \rightarrow Y$):**
 
-1. $D \rightarrow Y$ — efeito direto
-2. $D \leftarrow B \leftarrow U \rightarrow A \rightarrow F \rightarrow Y$ — viés
-3. $D \leftarrow A \rightarrow F \rightarrow Y$ — viés
+1. $D \rightarrow Y$: efeito direto
+2. $D \leftarrow B \leftarrow U \rightarrow A \rightarrow F \rightarrow Y$: viés
+3. $D \leftarrow A \rightarrow F \rightarrow Y$: viés
 
 **Colliders:** $\emptyset$. **Ajustes mínimos:** $\{F, A\}$.
 
@@ -435,5 +435,5 @@ B \perp\!\!\!\perp Y \mid D, A \qquad Y \perp\!\!\!\perp B \mid D, F \qquad F \p
 $$
 
 ::: callout-note
-Quando eu desenho um DAG, ele me dá o significado das relações e as implicações observáveis. As independências condicionais são *testáveis* nos dados — e é isso que nos permite validar ou invalidar um modelo causal.
+Quando eu desenho um DAG, ele me dá o significado das relações e as implicações observáveis. As independências condicionais são *testáveis* nos dados, e é isso que nos permite validar ou invalidar um modelo causal.
 :::

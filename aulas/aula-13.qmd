@@ -54,7 +54,7 @@ $$
 
 O primeiro termo, $\mathbb{E}_\omega[\Delta Y_{i,t=2} \mid D_i = 1]$, é simplesmente a variação média observada de $Y$ entre os períodos para o grupo tratado.
 
-O segundo termo é um valor esperado duplo que estima o contrafactual — ou seja, qual teria sido a variação média dos tratados na ausência do tratamento. Ele opera em dois passos:
+O segundo termo é um valor esperado duplo que estima o contrafactual, ou seja, qual teria sido a variação média dos tratados na ausência do tratamento. Ele opera em dois passos:
 
 1. O valor esperado **interno**, $\mathbb{E}_\omega[\Delta Y_{i,t=2} \mid X_i, D_i = 0]$, modela a relação entre as covariadas $X_i$ e a variação de $Y$ usando apenas os controles. Isso produz uma função que, dado um perfil $X_i$, prediz qual seria a tendência esperada sem tratamento.
 2. O valor esperado **externo**, $\mathbb{E}_\omega[\cdots \mid D_i = 1]$, toma a média dessas predições avaliadas nos $X_i$ dos tratados. Ou seja, projeta a tendência contrafactual sobre o perfil de covariadas do grupo tratado.

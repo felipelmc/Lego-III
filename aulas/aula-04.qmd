@@ -14,7 +14,7 @@ Para cada unidade $i$, definimos dois **resultados potenciais**:
 O resultado observado é $Y_i = A_i \cdot Y_i(1) + (1 - A_i) \cdot Y_i(0)$.
 
 ::: callout-important
-**Problema fundamental da inferência causal:** para qualquer indivíduo, observamos apenas *um* resultado potencial — nunca observamos o contrafactual. O efeito causal individual $Y_i(1) - Y_i(0)$ é, portanto, fundamentalmente não identificável.
+**Problema fundamental da inferência causal:** para qualquer indivíduo, observamos apenas *um* resultado potencial. Nunca observamos o contrafactual. O efeito causal individual $Y_i(1) - Y_i(0)$ é, portanto, fundamentalmente não identificável.
 :::
 
 ### SUTVA
@@ -26,7 +26,7 @@ $$
 Y_i(a) \perp\!\!\!\perp A_j \quad \forall\, i \neq j
 $$
 
-2. **Versão única do tratamento:** não há versões ocultas de $A$ — cada nível de tratamento é bem definido e consistente entre unidades
+2. **Versão única do tratamento:** não há versões ocultas de $A$ (cada nível de tratamento é bem definido e consistente entre unidades)
 
 SUTVA é necessário para que a notação $Y_i(a)$ seja bem definida e para que a consistency valha.
 
@@ -34,13 +34,13 @@ SUTVA é necessário para que a notação $Y_i(a)$ seja bem definida e para que 
 
 Dado que o efeito individual não é identificável, trabalhamos com efeitos médios populacionais:
 
-**ATE** (*Average Treatment Effect*) — efeito médio na população:
+**ATE** (*Average Treatment Effect*), efeito médio na população:
 $$\tau_{\text{ATE}} = \mathbb{E}[Y(1) - Y(0)]$$
 
-**ATT** (*Average Treatment Effect on the Treated*) — efeito médio entre os tratados:
+**ATT** (*Average Treatment Effect on the Treated*), efeito médio entre os tratados:
 $$\tau_{\text{ATT}} = \mathbb{E}[Y(1) - Y(0) \mid A = 1]$$
 
-**ATU** (*Average Treatment Effect on the Untreated*) — efeito médio entre os não tratados:
+**ATU** (*Average Treatment Effect on the Untreated*), efeito médio entre os não tratados:
 $$\tau_{\text{ATU}} = \mathbb{E}[Y(1) - Y(0) \mid A = 0]$$
 
 Os três estimandos se relacionam pela lei da expectativa total:
@@ -48,7 +48,7 @@ Os três estimandos se relacionam pela lei da expectativa total:
 $$\tau_{\text{ATE}} = P(A=1)\cdot\tau_{\text{ATT}} + P(A=0)\cdot\tau_{\text{ATU}}$$
 
 ::: callout-note
-ATE, ATT e ATU só coincidem quando o efeito do tratamento é homogêneo entre tratados e não tratados — o que raramente é garantido em estudos observacionais.
+ATE, ATT e ATU só coincidem quando o efeito do tratamento é homogêneo entre tratados e não tratados, o que raramente é garantido em estudos observacionais.
 :::
 
 ## Experimento randomizado
@@ -69,7 +69,7 @@ $$
 Y^a \perp\!\!\!\perp A, \quad a \in \{0, 1\}
 $$
 
-Também chamada de **independência contrafactual**. Significa que os resultados potenciais são independentes do tratamento recebido — o que só é plausível quando a alocação é genuinamente aleatória.
+Também chamada de **independência contrafactual**. Significa que os resultados potenciais são independentes do tratamento recebido, o que só é plausível quando a alocação é genuinamente aleatória.
 
 ### Identificação em experimento
 
@@ -93,7 +93,7 @@ $$
 \underbrace{\mathbb{E}[Y \mid A=1] - \mathbb{E}[Y \mid A=0]}_{\text{diferença observada}} = \underbrace{\mathbb{E}[Y(1) - Y(0) \mid A=1]}_{\text{ATT}} + \underbrace{\mathbb{E}[Y(0) \mid A=1] - \mathbb{E}[Y(0) \mid A=0]}_{\text{viés de seleção}}
 $$
 
-O viés de seleção mede a diferença nos resultados potenciais de controle entre tratados e não tratados — isto é, o quanto os grupos diferiam *antes* do tratamento. Em experimentos, a randomização garante que esse termo seja zero em esperança.
+O viés de seleção mede a diferença nos resultados potenciais de controle entre tratados e não tratados, isto é, o quanto os grupos diferiam *antes* do tratamento. Em experimentos, a randomização garante que esse termo seja zero em esperança.
 
 ## Randomização condicional
 
@@ -121,18 +121,18 @@ Em estudos observacionais:
 
 ### Três condições para inferência causal em estudos observacionais
 
-**1. Consistency** — A intervenção precisa estar bem definida e o resultado observado deve corresponder ao resultado potencial sob o tratamento recebido:
+**1. Consistency.** A intervenção precisa estar bem definida e o resultado observado deve corresponder ao resultado potencial sob o tratamento recebido:
 
 $$Y_i = Y_i(a) \quad \text{se } A_i = a$$
 
-**2. Exchangeability** — Após condicionar em $L$, tratados e não tratados devem ser comparáveis em termos de resultados potenciais:
+**2. Exchangeability.** Após condicionar em $L$, tratados e não tratados devem ser comparáveis em termos de resultados potenciais:
 
 $$Y^a \perp\!\!\!\perp A \mid L$$
 
-**3. Positivity** — Em cada estrato relevante de $L$, deve haver chance positiva de observar **ambos** os tratamentos:
+**3. Positivity.** Em cada estrato relevante de $L$, deve haver chance positiva de observar **ambos** os tratamentos:
 
 $$P(A = a \mid L = l) > 0 \quad \forall\, a,\, l$$
 
 ::: callout-important
-As três condições — consistency, exchangeability e positivity — são pressupostos não testáveis diretamente. Em estudos observacionais, sua plausibilidade depende do conhecimento substantivo sobre o fenômeno estudado.
+As três condições (consistency, exchangeability e positivity) são pressupostos não testáveis diretamente. Em estudos observacionais, sua plausibilidade depende do conhecimento substantivo sobre o fenômeno estudado.
 :::

@@ -10,7 +10,7 @@ library(ggdag)
 library(ggplot2)
 ```
 
-## Retomando o Exemplo 1 — Independências condicionais implicadas
+## Retomando o Exemplo 1: independências condicionais implicadas
 
 Voltamos ao DAG da aula anterior:
 
@@ -67,7 +67,7 @@ onde $\hat{\gamma}_0 + \hat{\gamma}_1 A$ é o valor predito de $F$ na regressão
 
 | Independência | Implicação empírica |
 |---|---|
-| $Y \perp\!\!\!\perp B \mid D, F$ | $\text{corr}(\tilde{Y}_1, \tilde{B}_1) = 0$ — equivale a $Y \sim D + A$ e $B \sim D + A$ |
+| $Y \perp\!\!\!\perp B \mid D, F$ | $\text{corr}(\tilde{Y}_1, \tilde{B}_1) = 0$ (equivale a $Y \sim D + A$ e $B \sim D + A$) |
 | $Y \perp\!\!\!\perp B \mid D, A$ | $\text{corr}(\tilde{Y}_2, \tilde{B}_2) = 0$ |
 | $Y \perp\!\!\!\perp A \mid D, F$ | $\text{corr}(\tilde{Y}_3, \tilde{A}) = 0$ |
 | $F \perp\!\!\!\perp B \mid A$ | — |
@@ -78,7 +78,7 @@ As implicações observáveis servem para **testar a validade do DAG**. Se uma i
 
 ## Front Door Adjustments
 
-Até aqui estávamos pensando em controlar os *backdoors* — os caminhos com seta para trás. Mas é possível, estrategicamente, controlar os caminhos com seta para frente. Isso equivale a prestar atenção ao **mediador**.
+Até aqui estávamos pensando em controlar os *backdoors* (os caminhos com seta para trás). Mas é possível, estrategicamente, controlar os caminhos com seta para frente. Isso equivale a prestar atenção ao **mediador**.
 
 ```{r}
 #| message: false
@@ -96,9 +96,9 @@ dag_fd <- dagify(
 ggdag(dag_fd) + theme_dag()
 ```
 
-Controlar pelo mediador $M$ em $X \rightarrow M \rightarrow Y$ dá o **efeito direto** de $X$ sobre $Y$ — a parte do efeito que não passa pelo mediador.
+Controlar pelo mediador $M$ em $X \rightarrow M \rightarrow Y$ dá o **efeito direto** de $X$ sobre $Y$, a parte do efeito que não passa pelo mediador.
 
-### Exemplo 8 — Experimento aleatório (vacina)
+### Exemplo 8: experimento aleatório (vacina)
 
 ```{r}
 #| message: false
@@ -116,9 +116,9 @@ dag_vacina <- dagify(
 ggdag(dag_vacina) + theme_dag()
 ```
 
-O resultado do sorteio (0 ou 1) determina se o indivíduo recebe ou não a vacina, que por sua vez afeta o resultado imunológico. A correlação entre sorteio e imunidade expressa **tão somente o efeito da vacina** — o sorteio não tem outro caminho até o resultado.
+O resultado do sorteio (0 ou 1) determina se o indivíduo recebe ou não a vacina, que por sua vez afeta o resultado imunológico. A correlação entre sorteio e imunidade expressa **tão somente o efeito da vacina**: o sorteio não tem outro caminho até o resultado.
 
-## Exemplo 9 — Cigarro, alcatrão e câncer
+## Exemplo 9: cigarro, alcatrão e câncer
 
 Queremos estimar o efeito do cigarro sobre o câncer, sabendo que genética é um confounder.
 
@@ -141,8 +141,8 @@ ggdag(dag_cigarro) + theme_dag()
 
 Caminhos causais (Cigarro → Câncer):
 
-1. $\text{Ci} \rightarrow A \rightarrow \text{Ca}$ — causal
-2. $\text{Ci} \leftarrow G \rightarrow \text{Ca}$ — não causal (backdoor por genética)
+1. $\text{Ci} \rightarrow A \rightarrow \text{Ca}$: causal
+2. $\text{Ci} \leftarrow G \rightarrow \text{Ca}$: não causal (backdoor por genética)
 
 O efeito do cigarro sobre o alcatrão é isolável porque:
 
@@ -160,7 +160,7 @@ $$\widehat{\text{Câncer}} = \hat{\beta}_0 + \hat{\beta}_1 \cdot \text{Cigarro} 
 **Passo 3:** O efeito causal do cigarro sobre o câncer (via alcatrão) é:
 $$\text{Efeito} = \hat{\alpha}_1 \times \hat{\beta}_2$$
 
-## Exemplo 10 — Passe livre e comparecimento eleitoral
+## Exemplo 10: passe livre e comparecimento eleitoral
 
 ```{r}
 #| message: false
