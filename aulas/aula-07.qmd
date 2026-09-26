@@ -265,7 +265,7 @@ Se não tivermos uma regressão simples, basta usar as versões "parcializadas" 
 
 1. *Relevância:* $\text{Cov}(X, Z) \neq 0$ (o instrumento deve ser correlacionado com a variável endógena)
 
-2. *Restrição de exclusão:* $Z \perp\!\!\!\perp Y \mid X$ ($Z$ afeta $Y$ apenas via $X$; não há caminho direto de $Z$ para $Y$)
+2. *Restrição de exclusão:* $Z \perp\!\!\!\perp \varepsilon$ ($Z$ afeta $Y$ apenas via $X$; não há caminho direto de $Z$ para $Y$)
 
 3. *Estabilidade* (não é condição de identificação, mas de precisão): $|\text{Cov}(X, Z)| \gg 0$ (evita o problema de instabilidade dos instrumentos fracos). Quando $\text{Cov}(X, Z) \approx 0$, variações amostrais na covariância alteram o estimador drasticamente:
 
@@ -275,7 +275,7 @@ $$
 
 ### OLS vs. IV em notação matricial
 
-Os pressupostos do OLS são: (1) linearidade, (2) i.i.d., (3) $X^\top X$ inversível, (4) $X^\top\varepsilon = 0$ (exogeneidade: $X$ é independente do erro populacional). No setup de variáveis instrumentais, sabemos que IV(4) não vale: $X^\top\varepsilon \neq 0$. Precisamos de pressupostos adicionais:
+Os pressupostos do OLS são: (1) linearidade, (2) i.i.d., (3) $X^\top X$ inversível, (4) $X^\top\varepsilon = 0$ (exogeneidade: $X$ é independente do erro populacional). No setup de variáveis instrumentais, sabemos que OLS(4) não vale: $X^\top\varepsilon \neq 0$. Precisamos de pressupostos adicionais:
 
 | | |
 |---|---|

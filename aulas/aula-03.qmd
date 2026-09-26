@@ -67,7 +67,7 @@ onde $\hat{\gamma}_0 + \hat{\gamma}_1 A$ é o valor predito de $F$ na regressão
 
 | Independência | Implicação empírica |
 |---|---|
-| $Y \perp\!\!\!\perp B \mid D, F$ | $\text{corr}(\tilde{Y}_1, \tilde{B}_1) = 0$ (equivale a $Y \sim D + A$ e $B \sim D + A$) |
+| $Y \perp\!\!\!\perp B \mid D, F$ | $\text{corr}(\tilde{Y}_1, \tilde{B}_1) = 0$ (equivale a $Y \sim D + F$ e $B \sim D + F$) |
 | $Y \perp\!\!\!\perp B \mid D, A$ | $\text{corr}(\tilde{Y}_2, \tilde{B}_2) = 0$ |
 | $Y \perp\!\!\!\perp A \mid D, F$ | $\text{corr}(\tilde{Y}_3, \tilde{A}) = 0$ |
 | $F \perp\!\!\!\perp B \mid A$ | — |
@@ -186,4 +186,4 @@ $$\Delta \text{mobilidade} \sim \text{passe livre} \quad (\hat{\alpha})$$
 *Passo 2:* Estimar o efeito da variação de mobilidade sobre o comparecimento, controlando pelo passe livre:
 $$\text{comparecimento} \sim \Delta m + \text{passe} \quad (\hat{\beta}_1)$$
 
-*Passo 3:* Efeito causal = $\hat{\alpha} \times \hat{\beta}$
+*Passo 3:* Efeito causal = $\hat{\alpha} \times \hat{\beta}_1$

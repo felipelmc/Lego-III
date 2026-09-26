@@ -260,9 +260,9 @@ ggdag(dag_ex3, use_labels = "label", text = FALSE) + theme_dag()
 2. $G \rightarrow D \rightarrow O \rightarrow S$: aberto (causal)
 3. $G \rightarrow D \rightarrow \boxed{O} \leftarrow H \rightarrow S$: fechado ($O$ é collider)
 
-*Mínimos controles necessários:* nenhum. $S \sim D$.
+*Mínimos controles necessários:* nenhum. $S \sim G$.
 
-- $S \sim G + D$ elimina todos os efeitos, porque $D$ é o único mediador existente.
+- $S \sim G + D$ elimina todos os efeitos, porque todos os caminhos causais de $G$ até $S$ passam por $D$.
 - $S \sim G + O$ introduz viés: não podemos controlar por Ocupação, pois ela é o collider.
 
 ::: callout-warning
@@ -331,11 +331,11 @@ O viés introduzido ao controlar pelo descendente $C$ é análogo ao viés de co
 
 dag_ex6 <- dagify(
   X ~ U + E,
-  Y ~ X + D,
+  Y ~ X + D + E,
   D ~ U,
   coords = list(
     x = c(U = 0, E = 2, X = 1, D = 0, Y = 2),
-    y = c(U = 0, E = 0, X = 0, D = -1, Y = 0)
+    y = c(U = 0, E = 1, X = 0, D = -1, Y = 0)
   )
 )
 
@@ -375,9 +375,10 @@ ggdag(dag_ex7) + theme_dag()
 *Caminhos causais ($D \rightarrow Y$):*
 
 1. $D \rightarrow Y$ (efeito direto)
-2. $D \rightarrow B \rightarrow C \rightarrow Y$ (causal)
-3. $D \rightarrow \boxed{B} \leftarrow A \rightarrow Y$: $B$ é collider; não-causal
-4. $D \rightarrow \boxed{C} \leftarrow B \leftarrow A \rightarrow Y$: $C$ é collider; não-causal
+2. $D \rightarrow C \rightarrow Y$ (causal)
+3. $D \rightarrow B \rightarrow C \rightarrow Y$ (causal)
+4. $D \rightarrow \boxed{B} \leftarrow A \rightarrow Y$: $B$ é collider; não-causal
+5. $D \rightarrow \boxed{C} \leftarrow B \leftarrow A \rightarrow Y$: $C$ é collider; não-causal
 
 *Mínimos controles:*
 
@@ -426,7 +427,7 @@ ggdag(dag_ex1) + theme_dag()
 2. $D \leftarrow B \leftarrow U \rightarrow A \rightarrow F \rightarrow Y$: viés
 3. $D \leftarrow A \rightarrow F \rightarrow Y$: viés
 
-*Colliders:* $\emptyset$. *Ajustes mínimos:* $\{F, A\}$.
+*Colliders:* $\emptyset$. *Ajustes mínimos:* $\{F\}$ ou $\{A\}$.
 
 *Independências condicionais implicadas:*
 
