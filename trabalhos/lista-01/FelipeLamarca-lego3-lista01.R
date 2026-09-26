@@ -33,7 +33,7 @@
 # este script. Use barras, e nao contra-barras (por ex: 'c:/iesp/lego3/')
 
 # Pasta local
-pasta_local <- '/Users/felipelmc/Desktop/Lego-III/listas/lista01/'
+pasta_local <- here::here('trabalhos/lista-01')
 
 # Comando para o R usar como referencia a pasta local
 setwd(pasta_local)

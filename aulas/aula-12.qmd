@@ -1,6 +1,6 @@
 ---
 title: "Diff-in-Diff pt. 2"
-subtitle: "Aula 12"
+aula: 12
 date: 2026-06-03
 ---
 

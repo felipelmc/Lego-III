@@ -1,6 +1,6 @@
 ---
 title: "Resultados potenciais e experimentos"
-subtitle: "Aula 4"
+aula: 4
 date: 2026-04-01
 ---
 
@@ -30,8 +30,6 @@ $$
 
 SUTVA é necessário para que a notação $Y_i(a)$ seja bem definida e para que a consistency valha.
 
----
-
 ## Estimandos causais
 
 Dado que o efeito individual não é identificável, trabalhamos com efeitos médios populacionais:
@@ -53,8 +51,6 @@ $$\tau_{\text{ATE}} = P(A=1)\cdot\tau_{\text{ATT}} + P(A=0)\cdot\tau_{\text{ATU}
 ATE, ATT e ATU só coincidem quando o efeito do tratamento é homogêneo entre tratados e não tratados — o que raramente é garantido em estudos observacionais.
 :::
 
----
-
 ## Experimento randomizado
 
 Em um experimento randomizado, a atribuição do tratamento $A$ obedece a um mecanismo aleatório. A principal consequência é:
@@ -64,8 +60,6 @@ $$
 $$
 
 Isso torna o dado "faltante ao acaso" (*missing at random*): a atribuição do tratamento é independente do que se esperaria desse tratamento para cada indivíduo particular. Em um experimento randomizado, o resultado potencial não observado surge ao acaso, por design.
-
----
 
 ## Exchangeability
 
@@ -101,8 +95,6 @@ $$
 
 O viés de seleção mede a diferença nos resultados potenciais de controle entre tratados e não tratados — isto é, o quanto os grupos diferiam *antes* do tratamento. Em experimentos, a randomização garante que esse termo seja zero em esperança.
 
----
-
 ## Randomização condicional
 
 Ocorre quando a probabilidade de receber o tratamento varia por um fator prognóstico $L$. Nesse caso, a exchangeability só vale dentro dos estratos de $L$:
@@ -118,8 +110,6 @@ Sob exchangeability condicional, o ATE é identificado pela **fórmula de padron
 $$
 \tau_{\text{ATE}} = \mathbb{E}_L\!\left[\mathbb{E}[Y \mid A = 1, L] - \mathbb{E}[Y \mid A = 0, L]\right]
 $$
-
----
 
 ## Estudos observacionais
 

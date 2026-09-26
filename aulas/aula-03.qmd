@@ -1,6 +1,6 @@
 ---
 title: "DAGs pt. 3"
-subtitle: "Aula 3"
+aula: 3
 date: 2026-03-25
 ---
 
@@ -76,8 +76,6 @@ onde $\hat{\gamma}_0 + \hat{\gamma}_1 A$ é o valor predito de $F$ na regressão
 As implicações observáveis servem para **testar a validade do DAG**. Se uma independência condicional implicada pelo DAG for refutada nos dados, o diagrama precisa ser revisado.
 :::
 
----
-
 ## Front Door Adjustments
 
 Até aqui estávamos pensando em controlar os *backdoors* — os caminhos com seta para trás. Mas é possível, estrategicamente, controlar os caminhos com seta para frente. Isso equivale a prestar atenção ao **mediador**.
@@ -120,8 +118,6 @@ ggdag(dag_vacina) + theme_dag()
 
 O resultado do sorteio (0 ou 1) determina se o indivíduo recebe ou não a vacina, que por sua vez afeta o resultado imunológico. A correlação entre sorteio e imunidade expressa **tão somente o efeito da vacina** — o sorteio não tem outro caminho até o resultado.
 
----
-
 ## Exemplo 9 — Cigarro, alcatrão e câncer
 
 Queremos estimar o efeito do cigarro sobre o câncer, sabendo que genética é um confounder.
@@ -163,8 +159,6 @@ $$\widehat{\text{Câncer}} = \hat{\beta}_0 + \hat{\beta}_1 \cdot \text{Cigarro} 
 
 **Passo 3:** O efeito causal do cigarro sobre o câncer (via alcatrão) é:
 $$\text{Efeito} = \hat{\alpha}_1 \times \hat{\beta}_2$$
-
----
 
 ## Exemplo 10 — Passe livre e comparecimento eleitoral
 

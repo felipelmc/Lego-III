@@ -1,6 +1,6 @@
 ---
 title: "Variáveis instrumentais pt. 2"
-subtitle: "Aula 8"
+aula: 8
 date: 2026-05-06
 ---
 
@@ -12,9 +12,7 @@ library(ggdag)
 library(ggplot2)
 ```
 
-## Anotações de aula
-
-### Contexto: IV como estratégia auxiliar
+## Contexto: IV como estratégia auxiliar
 
 Há contextos em que, mesmo fazendo experimentos, temos problemas como *spillover*. Nesse caso, podemos usar variáveis instrumentais de forma auxiliar. A variável instrumental por si só caiu em desuso, mas não caiu em desuso a inclusão das VI para melhorar a estimação dos efeitos causais de forma auxiliar.
 
@@ -54,13 +52,13 @@ ggdag(dag_multi) + theme_dag()
 
 O PGD de $Y$ é $\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$, mas a regressão OLS não produz o $\beta_1$ correto porque o modelo é endógeno ($X_1 \leftarrow \varepsilon$). Podemos resolver isso por VI.
 
-### IV3 revisitado: regimes de identificação
+## IV3 revisitado: regimes de identificação
 
 Seja $L$ o número de colunas de $Z$ (instrumentos + variáveis exógenas) e $K$ o número de colunas de $X$ (variáveis que afetam $Y$). Como $Z_{n \times L}$ e $X_{n \times K}$, o produto $Z^\top X$ tem dimensão $L \times K$. A matriz só admite inversa quando $L = K$.
 
 Isso não é apenas um requisito matemático, mas um requisito substantivo de inferência causal.
 
-#### Sub-identificação ($L < K$)
+### Sub-identificação ($L < K$)
 
 Menos instrumentos do que variáveis endógenas — não é possível inverter $Z^\top X$. Exemplo: $X_1$ e $X_2$ ambas endógenas, mas há apenas um instrumento $Z_1$.
 
@@ -90,7 +88,7 @@ $$
 
 $Z^\top X$ tem dimensão $2 \times 3$ — não é quadrada, portanto não é inversível.
 
-#### Justa-identificação ($L = K$)
+### Justa-identificação ($L = K$)
 
 Exatamente tantos instrumentos quanto variáveis endógenas. $Z^\top X$ é quadrada e inversível — o estimador IV pode ser aplicado diretamente.
 
@@ -120,7 +118,7 @@ $$
 
 onde $Z$ contém o intercepto, os instrumentos e as variáveis exógenas; $X$ contém o intercepto, as variáveis endógenas e as variáveis exógenas.
 
-#### Sobre-identificação ($L > K$)
+### Sobre-identificação ($L > K$)
 
 Mais instrumentos do que variáveis endógenas. Do ponto de vista informacional isso é melhor, mas as matemáticas não permitem usar o estimador IV diretamente ($Z^\top X$ não é quadrada). Precisamos do **2SLS**.
 
@@ -151,7 +149,7 @@ $$
 
 $Z^\top X$ tem dimensão $4 \times 3$ — não é quadrada.
 
-### Two-Stage Least Squares (2SLS)
+## Two-Stage Least Squares (2SLS)
 
 Quando há mais de um instrumento (sobre-identificação), generalizamos a ideia de "usar apenas a variação exógena de $X$" via dois estágios:
 
@@ -173,7 +171,7 @@ $$
 
 onde $\hat{X}$ é a matriz com $\hat{X}_1$ no lugar de $X_1$ (as variáveis exógenas permanecem inalteradas).
 
-#### Derivação do estimador 2SLS
+### Derivação do estimador 2SLS
 
 Em notação matricial:
 
@@ -205,7 +203,7 @@ O estimador 2SLS pode ser visto como uma **OLS ponderada**, onde $Z(Z^\top Z)^{-
 Ao usar a fórmula fechada (ao invés de dois estágios manuais), evitamos a subestimação dos erros-padrão que ocorreria porque o segundo estágio manual usaria $\hat{X}$, não $X$, para calcular os resíduos.
 :::
 
-#### Demonstração em R
+### Demonstração em R
 
 ```{r}
 set.seed(42)
@@ -253,7 +251,7 @@ summary(modelo_iv)
 
 O OLS, que ignora a endogeneidade, produz um coeficiente viesado. O estimador IV recupera o valor verdadeiro $\beta_1 = -4$.
 
-### LATE: Local Average Treatment Effect
+## LATE: Local Average Treatment Effect
 
 Variáveis instrumentais renderam vários Prêmios Nobel. Uma das contribuições mais belas é a de Angrist: a formalização do **LATE** (*Local Average Treatment Effect*).
 

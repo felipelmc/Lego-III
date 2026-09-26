@@ -1,6 +1,6 @@
 ---
 title: "DAGs pt. 2"
-subtitle: "Aula 2"
+aula: 2
 date: 2026-03-18
 ---
 
@@ -45,8 +45,6 @@ Controlando por variáveis, conseguimos uma versão parcializada. Mas o fato de 
 
 Uma coisa é $P(Y|X)$ e outra é $P(Y|\text{do}(X))$. A primeira pode ser endógena, enquanto a segunda é necessariamente causal. $\text{do}(X)$ significa que algo foi forçado.
 
----
-
 ## Recap de regressão parcial
 
 Usualmente, queremos explicar $Y$ como função de mais de uma variável, por exemplo $Y = \beta_0 + \beta_1 x + \beta_2 w + \epsilon$. $\beta_1$ é o efeito parcial de $x$ controlado por $w$.
@@ -62,8 +60,6 @@ $$
 $$
 
 Essa regressão acima, sem controles, na verdade já está controlada, porque de saída removemos de $y$ a parte explicada de $w$ — e fizemos o mesmo com $x$. Isso significa, em essência, que $\beta_1 = b_1$.
-
----
 
 ## Caminhos causais — Exemplo 1
 
@@ -130,8 +126,6 @@ $$
 Em essência, todas essas funções deveriam revelar o mesmo efeito de $D$. Se um efeito é diferente dos demais, o diagrama foi invalidado.
 :::
 
----
-
 ## Colliders
 
 Vamos lembrar das **relações triádicas**:
@@ -191,8 +185,6 @@ $$
 Estamos olhando para relações lineares, mas isso vale para quaisquer especificações funcionais.
 :::
 
----
-
 ## Exemplos
 
 ### Exemplo 2
@@ -236,8 +228,6 @@ C <- D + B + rnorm(n)
 Y <- D + A + rnorm(n)
 ```
 
----
-
 ### Exemplo 3
 
 ```{r}
@@ -280,8 +270,6 @@ Se controlo pelo collider, abro o caminho. Mas se controlo por uma variável que
 
 Em (1), se controlo por $D$, corto todas as setas.
 :::
-
----
 
 ### Exemplo 5 — Descendentes de collider
 
@@ -334,8 +322,6 @@ $$
 
 O viés introduzido ao controlar pelo descendente $C$ é análogo ao viés de controlar pelo próprio collider $B$.
 
----
-
 ### Exemplo 6
 
 ```{r}
@@ -365,8 +351,6 @@ ggdag(dag_ex6) + theme_dag()
 **Colliders:** $X$ (filho de $U$ e $E$). **Filhos de collider:** $\emptyset$ ($Y$ é nossa variável de interesse).
 
 **Mínimos controles:** não é possível identificar o efeito causal.
-
----
 
 ### Exemplo 7
 
@@ -406,8 +390,6 @@ $$
 Y \sim \boxed{D} + C + A \quad \rightarrow \quad \text{efeito causal direto}
 $$
 
----
-
 ## Sobre efeito total e efeito direto
 
 Considere $E \rightarrow O \rightarrow S$ (com $E \rightarrow S$ também):
@@ -415,8 +397,6 @@ Considere $E \rightarrow O \rightarrow S$ (com $E \rightarrow S$ também):
 - Educação afeta ocupação, que afeta salário — mas educação também afeta salário diretamente.
 - **Controlar por ocupação** nos dá o efeito dessa parte da educação que afeta salário mas *não* afeta ocupação (efeito direto).
 - **Não controlar** nos dá o efeito total.
-
----
 
 ## D-Separação
 

@@ -1,29 +1,39 @@
-# Apresentação {.unnumbered}
+---
+title: "Lego III"
+subtitle: "Inferência causal"
+eyebrow: "IESP-UERJ · 2026.1"
+byline: "Anotações de Felipe Lamarca"
+---
 
-Este site reúne minhas anotações das aulas de **Lego III: Inferência Causal**, disciplina do programa de pós-graduação do [IESP-UERJ](https://iesp.uerj.br). As anotações são produzidas em [Quarto](https://quarto.org) e publicadas automaticamente via GitHub Pages.
+Este site reúne minhas anotações das aulas de Lego III: Inferência Causal, disciplina do programa de pós-graduação do [IESP-UERJ](https://iesp.uerj.br).
 
 ## Sobre a disciplina
 
-O objetivo do curso é fornecer conhecimentos teóricos e aplicados sobre métodos para responder a questões causais usando dados observacionais, quase-experimentais e experimentais. Responder a questões causais exige pensar contrafactualmente — uma habilidade essencial para cientistas sociais.
+O objetivo do curso é fornecer conhecimentos teóricos e aplicados sobre métodos para responder a questões causais usando dados observacionais, quase-experimentais e experimentais. Responder a questões causais exige pensar contrafactualmente, uma habilidade essencial para cientistas sociais.
 
-**Professores:** Pedro H. G. Ferreira de Souza, Carlos Antonio Costa Ribeiro e Rogério J. Barbosa
+Professores
+: Pedro H. G. Ferreira de Souza, Carlos Antonio Costa Ribeiro e Rogério J. Barbosa
 
-**Período:** 1º semestre de 2026 — quartas-feiras, 9h–12h
+Período
+: 1º semestre de 2026, às quartas-feiras, das 9h às 12h
 
-## Plano de aulas
+## Aulas
 
-| Aulas | Tópico |
-|---|---|
-| 1–2 | Grafos Acíclicos Dirigidos (DAGs) |
-| 3 | O ideal experimental |
-| 4 | Resultados potenciais |
-| 5 | *Matching* |
-| 6 | Regressão e análise causal |
-| 7 | Variáveis instrumentais |
-| 8 | *Regression Discontinuity* |
-| 9–10 | Regressão com dados longitudinais |
-| 11–14 | Diferenças em diferenças |
-| 15 | Prova final |
+| Aula | Data | Tema | |
+|:--|:--|:--|:--|
+| 01 | 11/03 | DAGs pt. 1 | [notas](aulas/aula-01.qmd) |
+| 02 | 18/03 | DAGs pt. 2 | [notas](aulas/aula-02.qmd) |
+| 03 | 25/03 | DAGs pt. 3 | [notas](aulas/aula-03.qmd) |
+| 04 | 01/04 | Resultados potenciais e experimentos | [notas](aulas/aula-04.qmd) |
+| 05 | 08/04 | Matching | [notas](aulas/aula-05.qmd) |
+| 06 | 15/04 | Regressão e análise causal | [notas](aulas/aula-06.qmd) |
+| 07 | 29/04 | Variáveis instrumentais pt. 1 | [notas](aulas/aula-07.qmd) |
+| 08 | 06/05 | Variáveis instrumentais pt. 2 | [notas](aulas/aula-08.qmd) |
+| 09 | 13/05 | Regression discontinuity | sem anotações |
+| 10 | 20/05 | Regressão com dados longitudinais | [notas](aulas/aula-10.qmd) |
+| 11 | 27/05 | Diff-in-Diff pt. 1 | sem anotações |
+| 12 | 03/06 | Diff-in-Diff pt. 2 | [notas](aulas/aula-12.qmd) |
+| 13 | 10/06 | Diff-in-Diff pt. 3 | [notas](aulas/aula-13.qmd) |
 
 ## Leituras principais
 
@@ -35,8 +45,9 @@ O objetivo do curso é fornecer conhecimentos teóricos e aplicados sobre métod
 
 ## Como usar estas notas
 
-As anotações estão organizadas por aula na barra lateral à esquerda. Cada página corresponde a uma aula e cobre os principais tópicos discutidos.
+As anotações estão organizadas por aula na barra lateral à esquerda, agrupadas por tema. Cada página corresponde a uma aula e cobre os principais tópicos discutidos. Algumas aulas têm simulações interativas no fim da página, e a parte [Trabalhos](trabalhos/index.qmd) reúne as listas entregues.
 
-::: callout-note
-Estas são anotações pessoais e podem conter imprecisões. Use-as como complemento, não como substituto do material oficial da disciplina.
+::: {.callout-note}
+## Anotações pessoais
+Estas são anotações pessoais e podem conter imprecisões. Use-as como complemento, não como substituto do material oficial da disciplina. Citações literais ficam como no original, com a página, e explicações escritas com auxílio de IA aparecem em caixas identificadas.
 :::

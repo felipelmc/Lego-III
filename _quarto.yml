@@ -1,54 +1,63 @@
+# Lego III · anotações de aula.
+# Tema, fontes, navbar, idioma e congelamento vêm da extensão Course Notes
+# (_extensions/felipelmc/course-notes). Aqui ficam só os dados da disciplina.
 project:
-  type: book
-  output-dir: docs
+  type: course-notes
+  render:
+    - index.qmd
+    - aulas/*.qmd
+    - trabalhos/index.qmd
+    - trabalhos/*/index.qmd
+    - referencias.qmd
 
 book:
   title: "Lego III"
-  subtitle: "Anotações de Aula"
+  subtitle: "Inferência causal"
   author: "Felipe Lamarca"
-  date: today
-  date-format: "DD/MM/YYYY"
-  search: true
+  date: last-modified
+  site-url: https://felipelamarca.com/Lego-III/
   repo-url: https://github.com/felipelmc/Lego-III
-  repo-actions: [edit, issue]
-  sharing: [twitter, linkedin]
-  sidebar:
-    style: docked
-    background: light
-
+  repo-actions: [source, issue]
+  navbar:
+    left:
+      - text: "Lego III"
+        href: index.qmd
   chapters:
     - index.qmd
-    - part: "Aulas"
+    - part: "Grafos causais"
       chapters:
-        - aulas/aula-01.qmd
-        - aulas/aula-02.qmd
-        - aulas/aula-03.qmd
-        - aulas/aula-04.qmd
-        - aulas/aula-05.qmd
-        - aulas/aula-06.qmd
-        - aulas/aula-07.qmd
-        - aulas/aula-08.qmd
-bibliography: references.bib
+        - href: aulas/aula-01.qmd
+          text: "01 · DAGs pt. 1"
+        - href: aulas/aula-02.qmd
+          text: "02 · DAGs pt. 2"
+        - href: aulas/aula-03.qmd
+          text: "03 · DAGs pt. 3"
+    - part: "Resultados potenciais e seleção em observáveis"
+      chapters:
+        - href: aulas/aula-04.qmd
+          text: "04 · Resultados potenciais e experimentos"
+        - href: aulas/aula-05.qmd
+          text: "05 · Matching"
+        - href: aulas/aula-06.qmd
+          text: "06 · Regressão e análise causal"
+    - part: "Variáveis instrumentais"
+      chapters:
+        - href: aulas/aula-07.qmd
+          text: "07 · Variáveis instrumentais pt. 1"
+        - href: aulas/aula-08.qmd
+          text: "08 · Variáveis instrumentais pt. 2"
+    - part: "Dados longitudinais e diferenças em diferenças"
+      chapters:
+        - href: aulas/aula-10.qmd
+          text: "10 · Regressão com dados longitudinais"
+        - href: aulas/aula-12.qmd
+          text: "12 · Diff-in-Diff pt. 2"
+        - href: aulas/aula-13.qmd
+          text: "13 · Diff-in-Diff pt. 3"
+    - part: "Trabalhos"
+      chapters:
+        - trabalhos/index.qmd
+        - trabalhos/lista-01/index.qmd
+    - referencias.qmd
 
-format:
-  html:
-    theme:
-      light: [cosmo, custom.scss]
-    toc: true
-    toc-depth: 3
-    number-sections: true
-    number-depth: 2
-    code-fold: true
-    code-tools: true
-    code-overflow: wrap
-    highlight-style: github
-    mainfont: "EB Garamond"
-    monofont: "JetBrains Mono"
-    fontsize: 1.15em
-    linestretch: 1.7
-    link-external-newwindow: true
-    html-math-method: mathjax
-    fig-align: center
-    fig-responsive: true
-    smooth-scroll: true
-    anchor-sections: true
+bibliography: [references.bib]

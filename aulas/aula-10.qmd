@@ -1,6 +1,6 @@
 ---
 title: "Regressão com dados longitudinais"
-subtitle: "Aula 10"
+aula: 10
 date: 2026-05-20
 ---
 

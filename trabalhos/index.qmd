@@ -1,0 +1,19 @@
+---
+title: "Trabalhos"
+description: "Listas entregues na disciplina."
+listing:
+  id: trabalhos
+  contents:
+    - "*/index.qmd"
+    - "!*/slides/*"
+  template: ../_extensions/felipelmc/course-notes/listings/trabalhos.ejs
+  template-params:
+    base: trabalhos
+  sort: "date desc"
+  max-description-length: 280
+---
+
+As listas entregues na disciplina. Cada uma tem uma página para leitura online, com o código usado, e os arquivos originais da entrega.
+
+::: {#trabalhos .column-page-right}
+:::
