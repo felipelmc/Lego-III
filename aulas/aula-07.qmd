@@ -24,6 +24,7 @@ Under the assumption of **homogeneous treatment effects** (where the causal effe
 The most intuitive method for applying IV is the **Two-Stage Least Squares (2SLS)** estimator. 2SLS works by regressing the endogenous variable onto the instrument to obtain exogenous **fitted values**. By substituting the endogenous variable with these fitted values, 2SLS identifies the causal effect, though it sacrifices a significant amount of data variation. The text warns of the **weak instrument** problem: if the correlation between the instrument and the endogenous variable is weak (indicated by a low $F$-statistic), the finite-sample bias of the 2SLS estimator will gravitate heavily toward the OLS bias. Loading a model with too many instruments drives the $F$-statistic down and exacerbates this bias.
 
 When shifting to **heterogeneous treatment effects** (where the treatment effect differs by individual), the text introduces potential outcomes notation and notes that valid identification requires five strict assumptions: 
+
 1. **SUTVA**: No spillovers between units.
 2. **Independence**: The instrument is "as good as random".
 3. **Exclusion Restriction**: The instrument only affects the outcome through the treatment.
@@ -33,6 +34,7 @@ When shifting to **heterogeneous treatment effects** (where the treatment effect
 Under these assumptions, the population is partitioned into **compliers**, **defiers**, **never-takers**, and **always-takers**. The IV strategy estimates the **Local Average Treatment Effect (LATE)**, which is the average causal effect specifically for the *compliers*—the subpopulation whose treatment status was directly altered by the instrument.
 
 Finally, the text reviews three popular canonical IV designs:
+
 * **Lottery Designs**: Uses randomized experimental lotteries (like the Oregon Medicaid Experiment) as instruments for actual program take-up to cure selection bias.
 * **Judge Fixed Effects (Leniency Design)**: Exploits the random assignment of decision-makers (such as bail judges) who possess varying propensities for strictness or leniency. Researchers often use the **Jackknife Instrumental Variables Estimator (JIVE)** to mitigate the finite-sample bias of many instruments. The exclusion restriction and monotonicity are uniquely vulnerable in this design.
 * **Bartik (Shift-Share) Instruments**: Used to instrument for an endogenous variable by interacting initial local **shares** with national **shifts**.
@@ -303,3 +305,99 @@ Em R:
 #| eval: false
 beta_iv <- solve(t(z) %*% x) %*% t(z) %*% y
 ```
+
+## Simulação
+
+::: {.nota-ia collapse="false" title="Simulação e texto preparados com auxílio do Claude"}
+Cada réplica sorteia uma amostra com um confundidor não observado $U$ que afeta $X$ e $Y$, e um instrumento $Z$. O efeito verdadeiro de $X$ sobre $Y$ é $\beta = 1$. Compare as distribuições do estimador de MQO e do estimador de VI (a razão de covariâncias $\widehat{\text{Cov}}(Z, Y)/\widehat{\text{Cov}}(Z, X)$) ao mudar a força do instrumento, o grau de confusão e uma possível violação da restrição de exclusão.
+
+Com confusão, o MQO erra sempre para o mesmo lado, e a amostra maior só deixa o erro mais preciso. O estimador de VI fica centrado no valor verdadeiro quando o instrumento é forte e a exclusão vale; com instrumento fraco (F abaixo de 10), a distribuição se espalha e se aproxima do viés do MQO. Uma violação da exclusão, mesmo pequena, desloca o estimador de VI na proporção do efeito direto dividido pela força do instrumento.
+:::
+
+::: {.panel-tabset}
+
+### Interativo
+
+```{ojs}
+//| echo: false
+import {scheme, palette, plotStyle, rng, fmt} from "/_extensions/felipelmc/course-notes/ojs/notes.js"
+mode = scheme()
+pal = palette(mode)
+```
+
+::: cn-sim
+
+```{ojs}
+//| echo: false
+viewof forca = Inputs.range([0, 1.5], {value: 0.8, step: 0.05, label: "Força do instrumento (Z → X)"})
+viewof conf = Inputs.range([0, 2], {value: 1, step: 0.1, label: "Confusão (U → X e U → Y)"})
+viewof excl = Inputs.range([0, 0.5], {value: 0, step: 0.05, label: "Efeito direto Z → Y"})
+viewof n = Inputs.range([50, 2000], {value: 300, step: 50, label: "Tamanho da amostra"})
+viewof sorteio = Inputs.button("Novo sorteio", {value: 1, reduce: (v) => v + 1})
+```
+
+```{ojs}
+//| echo: false
+sim = {
+  const r = rng(2026 * sorteio), R = 400, beta = 1;
+  const est = [];
+  let fs = 0;
+  for (let k = 0; k < R; k++) {
+    let sz = 0, sx = 0, sy = 0, szz = 0, szx = 0, szy = 0, sxx = 0, sxy = 0;
+    for (let i = 0; i < n; i++) {
+      const z = r.normal(), u = r.normal();
+      const x = forca * z + conf * u + r.normal();
+      const y = beta * x + excl * z + conf * u + r.normal();
+      sz += z; sx += x; sy += y; szz += z * z; szx += z * x; szy += z * y; sxx += x * x; sxy += x * y;
+    }
+    const cov = (a, b, sab) => sab / n - (a / n) * (b / n);
+    const vx = cov(sx, sx, sxx), czx = cov(sz, sx, szx), czy = cov(sz, sy, szy), cxy = cov(sx, sy, sxy), vz = cov(sz, sz, szz);
+    const r2 = (czx * czx) / (vz * vx);
+    fs += (r2 / (1 - r2)) * (n - 2);
+    est.push({estimador: "MQO", b: cxy / vx}, {estimador: "VI", b: czy / czx});
+  }
+  const med = (e) => { const v = est.filter((d) => d.estimador === e).map((d) => d.b).sort((a, b) => a - b); return v[Math.floor(v.length / 2)]; };
+  return {est, F: fs / R, mqo: med("MQO"), vi: med("VI")};
+}
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width, height: 260, style: plotStyle, marginLeft: 40,
+  x: {label: "Estimativa de β →", domain: [-0.5, 3]}, y: {label: "↑ Réplicas", grid: true},
+  color: {domain: ["MQO", "VI"], range: [pal.award, pal.accent], legend: true},
+  marks: [
+    ...["MQO", "VI"].map((e) => Plot.rectY(sim.est.filter((d) => d.estimador === e && d.b > -0.5 && d.b < 3),
+      Plot.binX({y: "count"}, {x: "b", fill: "estimador", fillOpacity: 0.5, thresholds: d3.range(-0.5, 3.01, 0.05)}))),
+    Plot.ruleX([1], {stroke: pal.ink, strokeDasharray: "4,3"}),
+    Plot.ruleY([0], {stroke: pal.lineStrong})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+html`<p class="cn-readout">Mediana de β̂: MQO <b>${fmt(sim.mqo)}</b> · VI <b>${fmt(sim.vi)}</b> · β verdadeiro 1<br>
+Estatística F média do primeiro estágio: <b>${fmt(sim.F, 1)}</b>${sim.F < 10 ? " (instrumento fraco)" : ""}</p>`
+```
+
+:::
+
+### Em R
+
+```{r}
+#| eval: false
+set.seed(2026)
+n <- 300; forca <- 0.8; conf <- 1; excl <- 0; beta <- 1
+replica <- function() {
+  z <- rnorm(n); u <- rnorm(n)
+  x <- forca * z + conf * u + rnorm(n)
+  y <- beta * x + excl * z + conf * u + rnorm(n)
+  c(mqo = cov(x, y) / var(x), vi = cov(z, y) / cov(z, x))
+}
+est <- t(replicate(400, replica()))
+apply(est, 2, median)
+```
+
+:::

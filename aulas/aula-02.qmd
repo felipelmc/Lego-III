@@ -437,3 +437,85 @@ $$
 ::: callout-note
 Quando eu desenho um DAG, ele me dá o significado das relações e as implicações observáveis. As independências condicionais são *testáveis* nos dados, e é isso que nos permite validar ou invalidar um modelo causal.
 :::
+
+## Simulação
+
+::: {.nota-ia collapse="false" title="Simulação e texto preparados com auxílio do Claude"}
+Talento ($X$) e beleza ($Y$) são independentes na população, e ambos aumentam a chance de chegar a Hollywood ($C$). Compare três coisas: a regressão de $Y$ em $X$ na população inteira, a mesma regressão só entre os selecionados ($C$ acima do corte) e a regressão em toda a população controlando por $C$.
+
+Selecionar a amostra pelo colisor e controlar por ele produzem o mesmo tipo de viés: nos dois casos, a regressão compara pessoas com o mesmo valor (ou valores parecidos) de $C$, e entre elas quem tem mais $X$ precisa ter menos $Y$.
+:::
+
+::: {.panel-tabset}
+
+### Interativo
+
+```{ojs}
+//| echo: false
+import {scheme, palette, plotStyle, rng, ols, fmt} from "/_extensions/felipelmc/course-notes/ojs/notes.js"
+mode = scheme()
+pal = palette(mode)
+```
+
+::: cn-sim
+
+```{ojs}
+//| echo: false
+viewof pesoX = Inputs.range([0, 3], {value: 2, step: 0.1, label: "Peso de X em C"})
+viewof pesoY = Inputs.range([0, 3], {value: 1.5, step: 0.1, label: "Peso de Y em C"})
+viewof corte = Inputs.range([-3, 5], {value: 2, step: 0.1, label: "Corte de seleção (C >)"})
+```
+
+```{ojs}
+//| echo: false
+base = {
+  const r = rng(42);
+  return Array.from({length: 3000}, () => ({x: r.normal(), y: r.normal(), e: r.normal()}));
+}
+dados = base.map((d) => {
+  const c = pesoX * d.x + pesoY * d.y + d.e;
+  return {...d, c, sel: c > corte};
+})
+sel = dados.filter((d) => d.sel)
+b_pop = ols(dados.map((d) => [d.x]), dados.map((d) => d.y))[1]
+b_sel = sel.length > 10 ? ols(sel.map((d) => [d.x]), sel.map((d) => d.y))[1] : NaN
+b_ctrl = ols(dados.map((d) => [d.x, d.c]), dados.map((d) => d.y))[1]
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width, height: 330, style: plotStyle, marginLeft: 40,
+  x: {label: "X (talento) →", domain: [-3.5, 3.5]}, y: {label: "↑ Y (beleza)", domain: [-3.5, 3.5]},
+  color: {domain: ["Demais", "Selecionados"], range: [pal.lineStrong, pal.accent], legend: true},
+  marks: [
+    Plot.dot(dados, {x: "x", y: "y", r: 1.8, fill: (d) => d.sel ? "Selecionados" : "Demais", fillOpacity: 0.65}),
+    Plot.linearRegressionY(dados, {x: "x", y: "y", stroke: pal.ink3, strokeDasharray: "4,3", ci: 0}),
+    Plot.linearRegressionY(sel, {x: "x", y: "y", stroke: pal.accent, strokeWidth: 2, ci: 0})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+html`<p class="cn-readout">Coeficiente de X em <code>y ~ x</code>: população <b>${fmt(b_pop)}</b> · selecionados (${sel.length}) <b>${fmt(b_sel)}</b><br>
+Coeficiente de X em <code>y ~ x + c</code> (população inteira, controlando pelo colisor): <b>${fmt(b_ctrl)}</b></p>`
+```
+
+:::
+
+### Em R
+
+```{r}
+#| eval: false
+set.seed(42)
+n <- 3000
+x <- rnorm(n); y <- rnorm(n)
+c <- 2 * x + 1.5 * y + rnorm(n)
+
+coef(lm(y ~ x))["x"]                       # ~0: sem relação na população
+coef(lm(y ~ x, subset = c > 2))["x"]       # negativo: seleção pelo colisor
+coef(lm(y ~ x + c))["x"]                   # negativo: controle pelo colisor
+```
+
+:::
