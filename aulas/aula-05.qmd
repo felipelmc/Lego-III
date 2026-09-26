@@ -13,11 +13,11 @@ Suponha um tratamento binário $D$. Há dois resultados potenciais para o indiv�
 - $Y^1$ é o resultado potencial com tratamento
 - $Y^0$ é o resultado potencial sem tratamento
 
-O efeito causal de $D$ sobre o indivíduo $i$ definido por $Y^1 - Y^0$. Mas, evidentemente, não temos como observar ambos para o mesmo indivíduo. O que observamos na prática é $Y = D \cdot Y^1 + (1-D) \cdot Y^0$.
+O efeito causal de $D$ sobre o indivíduo $i$ é definido por $Y^1 - Y^0$. Mas, evidentemente, não temos como observar ambos para o mesmo indivíduo. O que observamos na prática é $Y = D \cdot Y^1 + (1-D) \cdot Y^0$.
 
 ### O problema fundamental da inferência causal
 
- Não é possível estimar o efeito causal em nível individual, mas podemos estimar efeitos causais agregados se for possível construir contrafactuais válidos:
+Não é possível estimar o efeito causal em nível individual, mas podemos estimar efeitos causais agregados se for possível construir contrafactuais válidos:
 
 - $ATT = \mathbb{E}[Y^1 - Y^0 | D = 1]$
 - $ATU = \mathbb{E}[Y^1 - Y^0 | D = 0]$
@@ -40,16 +40,16 @@ Em um experimento randomizado, $D$ é independente dos resultados potenciais, o 
 
 ## O pressuposto de seleção em observáveis (ou independência condicional)
 
-Suponha que observamos todas as variáveis $X$ necessárias para fechar os backdoors abertos entre $D$ e $Y$. Nesse caso, podemos identificar os efeito de $D$ sobre $Y$ controlando por essas variáveis: por regressão ou matching, ou pela combinação de ambos.
+Suponha que observamos todas as variáveis $X$ necessárias para fechar os backdoors abertos entre $D$ e $Y$. Nesse caso, podemos identificar o efeito de $D$ sobre $Y$ controlando por essas variáveis: por regressão ou matching, ou pela combinação de ambos.
 
 Matching costuma ser mais intuitivo: sob o pressuposto de seleção em observáveis, podemos estimar os efeitos causais...
 
 - construindo grupos (quase) idênticos em termos das variáveis $X$ e comparando tratados e não tratados dentro de cada grupo
 - combinando as estimativas em uma média ponderada para obter o estimando de interesse
 
-{.::: {.callout-note}
+::: {.callout-note}
 De fato, o argumento aqui é que se eu observo todas as variáveis relevantes (uma hipótese bastante heróica), basta ver quem é igual em termos dessas variáveis e ir comparando tratados e não tratados dentro desses grupos e depois agregar.
-:::}
+:::
 
 Formalmente, definiríamos:
 
@@ -65,7 +65,7 @@ Logo, os resultados potenciais são análogos aos de um experimento bloqueado. I
 
 Suponha que temos grupos de tratamento e controle que são muito distintos entre si, mas que observamos um conjunto de variáveis $\mathbf{X}$ que captura todas as diferenças relevantes na probabilidade de tratamento entre os grupos. Essas variáveis $\mathbf{X}$ permitem então **estratificação perfeita** dos dados.
 
-Ou seja, dentro dos grupos definidos pelos valores de $\mathbf{X}$ os indivíduos são "indistiguíveis", exceto por (i) status de tratamento e (ii) diferenças em resultados potenciais independentes do status do tratamento.
+Ou seja, dentro dos grupos definidos pelos valores de $\mathbf{X}$ os indivíduos são "indistinguíveis", exceto por (i) status de tratamento e (ii) diferenças em resultados potenciais independentes do status do tratamento.
 
 :::: {.callout-note title="Exemplo hipotético"}
 Pergunta de pesquisa: escolas cívico-militares melhoram o desempenho dos alunos?
@@ -126,10 +126,10 @@ $$
 
 Note como a estimativa ingênua de $+13$ está muito longe do ATE de $-0.5$. A diferença se explica pela composição dos grupos: alunos de maior renda — que já teriam notas altas independentemente do tipo de escola — estão sobrerrepresentados nas escolas cívico-militares. O viés de seleção infla a estimativa ingênua, que nesse caso é uma estimativa viesada.
 
-O problema, é claro, isso tudo parte de um pressuposto bastante forte de que o único backdoor que precisaria ser fechado é o da renda. Mas isso, obviamente, não é verdade para a maioria dos casos. Nesse próprio caso, aliás, poderíamos pensar que o fato de o estudante ser de uma família tradicional de militares poderia ter uma diferença que não está totalmente refletida na renda.
+O problema, é claro, é que isso tudo parte de um pressuposto bastante forte de que o único backdoor que precisaria ser fechado é o da renda. Mas isso, obviamente, não é verdade para a maioria dos casos. Nesse próprio caso, aliás, poderíamos pensar que o fato de o estudante ser de uma família tradicional de militares poderia ter uma diferença que não está totalmente refletida na renda.
 ::::
 
-### Pressupostos essênciais
+### Pressupostos essenciais
 
 #### Consistência
 
@@ -184,7 +184,7 @@ Para cada unidade tratada $i$, escolhemos a(s) unidade(s) de controle mais "pró
 - Uma regra de seleção dos controles pareados
 - Uma regra de ponderação dos controles pareados
 
-Não há mágica: a qualidade da inferência depende da proximidade entre os tratados e os controles selecionados. Quanto mais diferentes os grupos em termos de $\mathbb{X}$, maior o viés.
+Não há mágica: a qualidade da inferência depende da proximidade entre os tratados e os controles selecionados. Quanto mais diferentes os grupos em termos de $\mathbf{X}$, maior o viés.
 :::
 
 ### Matching com _propensity scores_

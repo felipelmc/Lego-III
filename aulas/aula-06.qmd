@@ -194,7 +194,7 @@ $$
 Y = \alpha + \delta D + \beta \mathbf{X} + \epsilon^*
 $$
 
-O coeficiente estimado para o tratamento $D$ é idêntico ao que pode ser obtido com o procedimentos em três etapas:
+O coeficiente estimado para o tratamento $D$ é idêntico ao que pode ser obtido com o procedimento em três etapas:
 
 - regredir $y_i$ sobre as variáveis $\mathbf{X}$ e calcular $y_i^* = y_i - \hat{y}_i$
 - regredir $d_i$ sobre as variáveis em $\mathbf{X}$ e calcular $d_i^* = d_i - \hat{d}_i$

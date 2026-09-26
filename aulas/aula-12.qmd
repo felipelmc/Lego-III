@@ -15,7 +15,7 @@ $$
 A gente sabe que isso nem sempre é possível, então podemos aplicar o conceito de ignorability controlando pelos demais fatores de confusão (depois de controlado por variáveis, o tratamento ocorreu de forma _as good as random_):
 
 $$
-Y(0), Y(1) \perp\!\!\!\perp D, X
+Y(0), Y(1) \perp\!\!\!\perp D \mid X
 $$
 
 $$

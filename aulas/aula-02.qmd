@@ -176,7 +176,7 @@ $$
 $$
 
 $$
-= -\gamma_1\,\text{cov}(x, c) - \delta_1\,\text{cov}(c, y) + \alpha_1 \delta_1\,\text{var}(c) \neq 0
+= -\delta_1\,\text{cov}(x, c) - \alpha_1\,\text{cov}(c, y) + \alpha_1 \delta_1\,\text{var}(c) \neq 0
 $$
 
 É nesse sentido que **controlar por um collider cria um caminho antes inexistente**: em princípio parecia que estávamos removendo $c$, mas como $c$ não estava lá desde o início, acabamos incluindo-o.

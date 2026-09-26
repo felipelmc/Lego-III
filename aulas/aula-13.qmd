@@ -9,7 +9,7 @@ date: 2026-06-10
 Qual é a razão para fazermos isso? Diff-in-diff é um modelo de diferenças, e sendo assim, ele poderia ser estimado de uma forma bem mais direta. Escreveríamos uma variável que é, ela mesma, a subtração no momento 2 e no momento 1. 
 
 $$
-y = \alpha_i + \tau_t + \delta \mathbb{I} [(G = 1) \times \mathbb{I} (T=2)] + \epsilon_{it}
+y = \alpha_i + \tau_t + \delta\, \mathbb{I}(G = 1) \times \mathbb{I}(T = 2) + \epsilon_{it}
 $$
 
 O que a gente modela aqui é a *parallel trends assumption*, que nos diz que a tendência temporal desse contrafactual é a mesma que a do grupo controle.
@@ -61,7 +61,8 @@ O segundo termo é um valor esperado duplo que estima o contrafactual — ou sej
 
 A diferença entre os dois termos é o ATT (*Average Treatment Effect on the Treated*) sob a hipótese de tendências paralelas condicionais em $X_i$.
 
-```{r, eval=F}
+```{r}
+#| eval: false
 
 # Passo 1: estimar E[ΔY(0) | X_i, D_i = 0] nos controles
 contr = df %>%
