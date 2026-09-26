@@ -270,7 +270,7 @@ res = {
 ```{ojs}
 //| echo: false
 Plot.plot({
-  width, height: 230, style: plotStyle, marginLeft: 130,
+  width, height: 230, style: plotStyle, marginLeft: 130, marginRight: 48,
   x: {label: "Estimativa →", grid: true}, y: {label: null},
   marks: [
     Plot.ruleX([0], {stroke: pal.lineStrong}),
