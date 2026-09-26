@@ -56,3 +56,9 @@ rsconnect/
 **/*.quarto_ipynb
 
 pdfs
+
+# Course Notes
+/_book/
+**/.quarto/
+render.log
+/.claude/

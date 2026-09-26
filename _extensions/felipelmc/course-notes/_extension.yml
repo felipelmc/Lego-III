@@ -79,6 +79,7 @@ contributes:
       toc: true
       toc-depth: 3
       toc-title: "Nesta página"
+      code-fold: true
       code-overflow: wrap
       code-summary: "Código"
       code-copy: hover

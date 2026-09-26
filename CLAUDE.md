@@ -1,59 +1,71 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Orientações para o Claude Code neste repositório de anotações de disciplina.
 
-## What this repo is
+## O que é
 
-A Quarto book of personal class notes for **Lego III: Causal Inference** (IESP-UERJ, 2026/1). Each `aulas/aula-XX.qmd` corresponds to one class session. The book is rendered to `docs/` and published to GitHub Pages via a GitHub Actions workflow on every push to `main`.
+Um livro Quarto com as anotações de uma disciplina, publicado em `felipelamarca.com/<repo>/`. O visual e os componentes vêm da extensão `_extensions/felipelmc/course-notes/`, mantida em [felipelmc/Course-Notes-Template](https://github.com/felipelmc/Course-Notes-Template). O `_quarto.yml` do repositório só tem os dados da disciplina e a ordem dos capítulos.
 
-## Build and preview
+## Comandos
 
 ```bash
-# Render the whole book
-quarto render
-
-# Preview locally with live reload
-quarto preview
+quarto preview                                              # servidor local com reload
+quarto render                                               # renderiza tudo e atualiza _freeze/
+python3 _extensions/felipelmc/course-notes/tools/check.py pre        # checagens do CI
+python3 _extensions/felipelmc/course-notes/tools/check.py post _book
+_extensions/felipelmc/course-notes/tools/nova-aula.sh 4 "Título" 2026-04-01
+_extensions/felipelmc/course-notes/tools/pdf.sh trabalhos/tarefa-1  # PDF de um trabalho
+quarto update extension felipelmc/Course-Notes-Template     # atualizar o template
 ```
 
-Output lands in `docs/` (gitignored). Never commit `docs/` manually — CI handles it.
+## Publicação e `_freeze/`
 
-## CI/CD
+- O CI (`.github/workflows/publish.yml`) **não executa R**. Ele renderiza com os resultados em `_freeze/`, que vai para o git, e publica no GitHub Pages (modo "GitHub Actions").
+- Depois de editar qualquer página com blocos `{r}`, rode `quarto render` localmente e faça o commit de `_freeze/` junto. Se não fizer, `check.py pre` falha no CI.
+- Pacotes de R usados nas páginas ficam listados no `DESCRIPTION`.
+- Nunca faça o commit de `_book/` e nunca use `output-dir: docs`.
 
-`.github/workflows/publish.yml` runs on push to `main`:
-1. Installs R 4.4 and the packages listed in the workflow's `install.packages()` call.
-2. Runs `quarto render`.
-3. Deploys `docs/` to the `gh-pages` branch via `peaceiris/actions-gh-pages`.
+## Estrutura e convenções
 
-**When adding a new R package**, add it to both the `.qmd` `library()` call and the `install.packages()` list in the workflow.
+- Aulas em `aulas/aula-NN.qmd` (dois dígitos). Cabeçalho: `title`, `aula` (número), `date` (opcional), `description`. Toda aula nova precisa entrar em `book.chapters` no `_quarto.yml`, com `text: "NN · Título"`.
+- Esqueleto da aula com leituras: `## Leituras` (com `### @chave, cap. N` por texto lido), `## Anotações de aula`, `## Simulação` (opcional). Aula sem leituras: os tópicos ficam direto em `##`, e a simulação vem no fim.
+- Citações literais: `> texto [@chave, p. N]`. Uma única bibliografia, `references.bib`, com chaves `sobrenomeANOpalavra`.
+- **Nunca use `::: {#refs}`**: num livro, ele junta a bibliografia inteira numa página e esconde as referências das outras. As referências saem sozinhas no fim de cada página.
+- Nunca declare `format: html` no `_quarto.yml` nem nas páginas; o formato vem da extensão.
+- Trabalhos em `trabalhos/<slug>/index.qmd`, com os campos `tipo`, `date`, `description`, `image`, `metodos`, `dados`, `materiais` e `abstract` (ver `guia/trabalhos.qmd` no template). O PDF entregue fica na pasta e é a versão oficial. A vitrine **não mostra notas**.
+- Slides ficam em `trabalhos/<slug>/slides/`, com `_quarto.yml` próprio (`type: default`) e `embed-resources: true`. Renderize com `quarto render trabalhos/<slug>/slides` e faça o commit do `index.html`.
+- Simulações em OJS ficam no próprio arquivo da aula, numa seção `## Simulação` no fim (nunca em arquivo incluído: o `_freeze` só enxerga o texto do arquivo da aula); o texto que as apresenta, se escrito com IA, vai em `::: {.nota-ia collapse="false" ...}`. Importe de `/_extensions/felipelmc/course-notes/ojs/notes.js`, use `rng(semente)` e `palette(scheme())`, envolva em `::: cn-sim` dentro de `::: panel-tabset` com as abas "Interativo" e "Em R" (esta com `#| eval: false`).
+- Figuras em R: `source(here::here("_extensions/felipelmc/course-notes/r/notes.R"))` e `theme_notes()`. Caminhos de dados sempre com `here::here()`, nunca absolutos.
 
-## Adding a new class file
+## Matemática
 
-1. Create `aulas/aula-XX.qmd` with frontmatter:
-   ```yaml
-   ---
-   title: "Título"
-   subtitle: "Aula XX"
-   date: YYYY-MM-DD
-   ---
-   ```
-2. Register it in `_quarto.yml` under `book.chapters`.
+- Linha em branco antes e depois de `$$`; `aligned` para alinhar.
+- `^\top` para transposta, `\mathbb{E}`, `\mathbb{V}`, `\text{Cov}`, `\perp\!\!\!\perp`.
+- Ambientes: `::: {#def-...}`, `::: {#thm-...}`, `::: prova` (recolhível).
+- Resultado central: `$\boxed{...}$`.
+- Opções de bloco em `#| chave: valor`, nunca `{r, eval=F}`.
 
-## Math and formatting conventions
+## Política de conteúdo
 
-- Display math blocks (`$$...$$`) must have a **blank line above and below**.
-- Use `^\top` for matrix transpose, never `'`.
-- Use `\begin{align*}...\end{align*}` for multi-step equation chains.
-- Use `\mathbb{E}`, `\text{Cov}`, `\text{Var}` (with `\text{}`) for operators.
-- Box key results with `$\boxed{...}$`.
+- **Citações são literais.** Não corrija nada dentro de `>`, a não ser trocar `(p. N)` por `[@chave, p. N]` ou consertar LaTeX quebrado. Citação em outra língua fica na língua original.
+- **Os comentários e as anotações de aula são do autor.** Polimento leve é permitido (ortografia, concordância, palavra faltando, travessão, títulos em *sentence case*). Não mude afirmações, números, ordem dos argumentos nem a língua, e não apague coloquialismos.
+- **Texto escrito com IA vai sempre em `::: nota-ia`** (use `ferramenta="NotebookLM"` etc. quando não for o Claude). Nunca misture explicação gerada com a voz do autor fora dessa caixa.
+- Erros de conteúdo (uma derivação errada, uma afirmação duvidosa) são apontados ao autor, e não corrigidos por conta própria.
+- Nunca invente citação, página ou referência.
 
-## R code conventions
+## Estilo de escrita do autor
 
-- Every `.qmd` that uses R starts with a hidden setup chunk:
-  ```r
-  #| include: false
-  library(...)
-  ```
-- DAGs are built with `ggdag::dagify()` + `ggdag()` + `theme_dag()`.
-- IV estimation uses the `ivreg` package (`ivreg(y ~ x | z, data = ...)`).
-- Chunk options go as `#| key: value` YAML, not as `knitr::opts_chunk`.
+- Sem negrito no corpo do texto (só na primeira ocorrência de um termo definido) e sem travessão; use vírgula, dois-pontos ou parênteses.
+- Dois-pontos e ponto e vírgula em enumerações são bem-vindos.
+- Conectivos dele: "De fato", "Note que", "Em particular", "por sua vez", "isto é", "sobretudo", "Por fim". Nunca: "Com efeito", "Nesse sentido", "Dito isso", "Cabe destacar", "É importante notar".
+- Evite marcas de IA: crucial, inovador, abrangente, robusto (fora do sentido técnico), sinergia, panorama, cenário (metafórico), ademais, notavelmente, potencializar.
+- Números com vírgula decimal e `%`. Títulos em *sentence case*. Termos técnicos em inglês em itálico.
+- Comentários em scripts de R e Python são escritos sem acentuação, de propósito.
+
+## Esta disciplina
+
+Lego III: Inferência Causal (IESP-UERJ, 2026.1), com Pedro H. G. Ferreira de Souza, Carlos Antonio Costa Ribeiro e Rogério J. Barbosa. As aulas estão agrupadas por tema em partes do `_quarto.yml`.
+
+- As aulas 09 e 11 ainda não têm anotações e estão guardadas como rascunho em `aulas/_aula-09.qmd` e `aulas/_aula-11.qmd` (arquivos com `_` não são publicados). Ao escrever uma delas, renomeie para `aula-NN.qmd` e registre no `_quarto.yml`.
+- DAGs são feitos com `ggdag::dagify()` + `ggdag()` + `theme_dag()`; variáveis instrumentais com o pacote `ivreg` (`ivreg(y ~ x | z, data = ...)`).
+- As notas de leitura (resumos e citações) estão em inglês, e as anotações de aula em português. Mantenha cada trecho na língua em que foi escrito.

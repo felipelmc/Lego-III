@@ -1,0 +1,15 @@
+Package: lego3notes
+Title: Pacotes de R usados nas anotações de Lego III
+Version: 0.0.1
+Description: Não é um pacote de verdade. Lista as dependências de R para instalar
+    localmente com `pak::local_install_deps()` antes de `quarto render`.
+Imports:
+    fixest,
+    ggdag,
+    ggplot2,
+    here,
+    ivreg,
+    knitr,
+    MatchIt,
+    rmarkdown,
+    tidyverse
