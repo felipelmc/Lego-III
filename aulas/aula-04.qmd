@@ -14,19 +14,19 @@ Para cada unidade $i$, definimos dois **resultados potenciais**:
 O resultado observado é $Y_i = A_i \cdot Y_i(1) + (1 - A_i) \cdot Y_i(0)$.
 
 ::: callout-important
-**Problema fundamental da inferência causal:** para qualquer indivíduo, observamos apenas *um* resultado potencial. Nunca observamos o contrafactual. O efeito causal individual $Y_i(1) - Y_i(0)$ é, portanto, fundamentalmente não identificável.
+*Problema fundamental da inferência causal:* para qualquer indivíduo, observamos apenas *um* resultado potencial. Nunca observamos o contrafactual. O efeito causal individual $Y_i(1) - Y_i(0)$ é, portanto, fundamentalmente não identificável.
 :::
 
 ### SUTVA
 
 O pressuposto SUTVA (*Stable Unit Treatment Value Assumption*) tem duas partes:
 
-1. **Sem interferência:** o resultado potencial de $i$ não depende do tratamento atribuído a $j \neq i$
+1. *Sem interferência:* o resultado potencial de $i$ não depende do tratamento atribuído a $j \neq i$
 $$
 Y_i(a) \perp\!\!\!\perp A_j \quad \forall\, i \neq j
 $$
 
-2. **Versão única do tratamento:** não há versões ocultas de $A$ (cada nível de tratamento é bem definido e consistente entre unidades)
+2. *Versão única do tratamento:* não há versões ocultas de $A$ (cada nível de tratamento é bem definido e consistente entre unidades)
 
 SUTVA é necessário para que a notação $Y_i(a)$ seja bem definida e para que a consistency valha.
 
@@ -87,7 +87,7 @@ $$
 
 ### Estimação ingênua e viés de seleção
 
-Em estudos observacionais, a diferença de médias observadas é um estimador **viesado**. Para ver isso, decomponha:
+Em estudos observacionais, a diferença de médias observadas é um estimador viesado. Para ver isso, decomponha:
 
 $$
 \underbrace{\mathbb{E}[Y \mid A=1] - \mathbb{E}[Y \mid A=0]}_{\text{diferença observada}} = \underbrace{\mathbb{E}[Y(1) - Y(0) \mid A=1]}_{\text{ATT}} + \underbrace{\mathbb{E}[Y(0) \mid A=1] - \mathbb{E}[Y(0) \mid A=0]}_{\text{viés de seleção}}
@@ -103,7 +103,7 @@ $$
 Y^a \perp\!\!\!\perp A \mid L \quad \text{(exchangeability condicional)}
 $$
 
-É como se fosse o mundo observacional: existe alguma variável na qual é preciso condicionar. A diferença é que, por design, sabe-se que condicionar em $L$ é **suficiente** para fazer a análise.
+É como se fosse o mundo observacional: existe alguma variável na qual é preciso condicionar. A diferença é que, por design, sabe-se que condicionar em $L$ é suficiente para fazer a análise.
 
 Sob exchangeability condicional, o ATE é identificado pela **fórmula de padronização**:
 
@@ -115,21 +115,21 @@ $$
 
 Em estudos observacionais:
 
-- O pesquisador **não controla** o tratamento $A$
+- O pesquisador não controla o tratamento $A$
 - A ideia é analisar os dados "como se fossem" de um experimento condicionalmente randomizado
-- Isso exige **condições explícitas de identificabilidade**
+- Isso exige condições explícitas de identificabilidade
 
 ### Três condições para inferência causal em estudos observacionais
 
-**1. Consistency.** A intervenção precisa estar bem definida e o resultado observado deve corresponder ao resultado potencial sob o tratamento recebido:
+*1. Consistency.* A intervenção precisa estar bem definida e o resultado observado deve corresponder ao resultado potencial sob o tratamento recebido:
 
 $$Y_i = Y_i(a) \quad \text{se } A_i = a$$
 
-**2. Exchangeability.** Após condicionar em $L$, tratados e não tratados devem ser comparáveis em termos de resultados potenciais:
+*2. Exchangeability.* Após condicionar em $L$, tratados e não tratados devem ser comparáveis em termos de resultados potenciais:
 
 $$Y^a \perp\!\!\!\perp A \mid L$$
 
-**3. Positivity.** Em cada estrato relevante de $L$, deve haver chance positiva de observar **ambos** os tratamentos:
+*3. Positivity.* Em cada estrato relevante de $L$, deve haver chance positiva de observar ambos os tratamentos:
 
 $$P(A = a \mid L = l) > 0 \quad \forall\, a,\, l$$
 

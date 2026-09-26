@@ -48,7 +48,7 @@ Matching costuma ser mais intuitivo: sob o pressuposto de seleção em observáv
 - combinando as estimativas em uma média ponderada para obter o estimando de interesse
 
 ::: {.callout-note}
-De fato, o argumento aqui é que se eu observo todas as variáveis relevantes (uma hipótese bastante heróica), basta ver quem é igual em termos dessas variáveis e ir comparando tratados e não tratados dentro desses grupos e depois agregar.
+De fato, o argumento aqui é que se eu observo todas as variáveis relevantes (uma hipótese bastante heroica), basta ver quem é igual em termos dessas variáveis e ir comparando tratados e não tratados dentro desses grupos e depois agregar.
 :::
 
 Formalmente, definiríamos:
@@ -100,19 +100,19 @@ De fato, pense na possibilidade de os alunos de colégios cívico-militares sere
 
 : Nota média por estrato e tipo de escola {.striped}
 
-O **ATE** é a média ponderada dos efeitos dentro de cada estrato, usando a distribuição da **população** em cada estrato:
+O ATE é a média ponderada dos efeitos dentro de cada estrato, usando a distribuição da população em cada estrato:
 
 $$
 ATE = \sum_k w_k \delta_k = \frac{700}{2000} \cdot (-6) + \frac{600}{2000} \cdot (3) + \frac{700}{2000} \cdot (2) = 0.35 \cdot (-6) + 0.30 \cdot (3) + 0.35 \cdot (2) = -0.5
 $$
 
-O **ATT** é ponderado pela distribuição dos **tratados** entre os estratos:
+O ATT é ponderado pela distribuição dos tratados entre os estratos:
 
 $$
 ATT = \sum_k w_k^{T} \delta_k = \frac{100}{1000} \cdot (-6) + \frac{300}{1000} \cdot (3) + \frac{600}{1000} \cdot (2) = 0.10 \cdot (-6) + 0.30 \cdot (3) + 0.60 \cdot (2) = 1.5
 $$
 
-O **ATU** é ponderado pela distribuição dos **controles** entre os estratos:
+O ATU é ponderado pela distribuição dos controles entre os estratos:
 
 $$
 ATU = \sum_k w_k^{C} \delta_k = \frac{600}{1000} \cdot (-6) + \frac{300}{1000} \cdot (3) + \frac{100}{1000} \cdot (2) = 0.60 \cdot (-6) + 0.30 \cdot (3) + 0.10 \cdot (2) = -2.5
@@ -161,7 +161,7 @@ $$
 
 onde $j(i)$ denota o controle pareado à unidade tratada $i$. O matching pode ser feito diretamente sobre $\mathbf{X}$ (matching exato ou por distância de Mahalanobis, por exemplo).
 
-Estamos focando no ATT nesse caso, porque, naturalmente quando falamos de políticas públicas focalizadas, é razoável pensarmos que é mais fácil encontrar um matching para um tratado num universo maior de não tratados (isto é, há muito mais não tratados do que tratados).
+Estamos focando no ATT nesse caso, porque, naturalmente, quando falamos de políticas públicas focalizadas, é razoável pensarmos que é mais fácil encontrar um matching para um tratado num universo maior de não tratados (isto é, há muito mais não tratados do que tratados).
 
 Intuição: cada unidade tratada é pareada com seus $k$ vizinhos mais próximos, conforme alguma métrica absoluta de distância entre as unidades. A seleção dos vizinhos para cada unidade depende:
 

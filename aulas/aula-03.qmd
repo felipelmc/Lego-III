@@ -73,12 +73,12 @@ onde $\hat{\gamma}_0 + \hat{\gamma}_1 A$ é o valor predito de $F$ na regressão
 | $F \perp\!\!\!\perp B \mid A$ | — |
 
 ::: callout-note
-As implicações observáveis servem para **testar a validade do DAG**. Se uma independência condicional implicada pelo DAG for refutada nos dados, o diagrama precisa ser revisado.
+As implicações observáveis servem para testar a validade do DAG. Se uma independência condicional implicada pelo DAG for refutada nos dados, o diagrama precisa ser revisado.
 :::
 
-## Front Door Adjustments
+## Front door adjustments
 
-Até aqui estávamos pensando em controlar os *backdoors* (os caminhos com seta para trás). Mas é possível, estrategicamente, controlar os caminhos com seta para frente. Isso equivale a prestar atenção ao **mediador**.
+Até aqui estávamos pensando em controlar os *backdoors* (os caminhos com seta para trás). Mas é possível, estrategicamente, controlar os caminhos com seta para frente. Isso equivale a prestar atenção ao mediador.
 
 ```{r}
 #| message: false
@@ -116,7 +116,7 @@ dag_vacina <- dagify(
 ggdag(dag_vacina) + theme_dag()
 ```
 
-O resultado do sorteio (0 ou 1) determina se o indivíduo recebe ou não a vacina, que por sua vez afeta o resultado imunológico. A correlação entre sorteio e imunidade expressa **tão somente o efeito da vacina**: o sorteio não tem outro caminho até o resultado.
+O resultado do sorteio (0 ou 1) determina se o indivíduo recebe ou não a vacina, que por sua vez afeta o resultado imunológico. A correlação entre sorteio e imunidade expressa tão somente o efeito da vacina: o sorteio não tem outro caminho até o resultado.
 
 ## Exemplo 9: cigarro, alcatrão e câncer
 
@@ -151,13 +151,13 @@ O efeito do cigarro sobre o alcatrão é isolável porque:
 
 Isso permite aplicar o **critério front door** em três passos:
 
-**Passo 1:** Estimar o efeito do cigarro sobre o alcatrão:
+*Passo 1:* Estimar o efeito do cigarro sobre o alcatrão:
 $$\hat{A} = \hat{\alpha}_0 + \hat{\alpha}_1 \cdot \text{Cigarro}$$
 
-**Passo 2:** Estimar o efeito do alcatrão sobre o câncer, controlando pelo cigarro:
+*Passo 2:* Estimar o efeito do alcatrão sobre o câncer, controlando pelo cigarro:
 $$\widehat{\text{Câncer}} = \hat{\beta}_0 + \hat{\beta}_1 \cdot \text{Cigarro} + \hat{\beta}_2 \cdot \text{Alcatrão}$$
 
-**Passo 3:** O efeito causal do cigarro sobre o câncer (via alcatrão) é:
+*Passo 3:* O efeito causal do cigarro sobre o câncer (via alcatrão) é:
 $$\text{Efeito} = \hat{\alpha}_1 \times \hat{\beta}_2$$
 
 ## Exemplo 10: passe livre e comparecimento eleitoral
@@ -180,10 +180,10 @@ ggdag(dag_passe) + theme_dag()
 
 O passe livre afeta o comparecimento eleitoral via mobilidade urbana, mas há um fator não observado $U$ que confunde a relação entre mobilidade e comparecimento. A estratégia front door resolve isso em três passos:
 
-**Passo 1:** Estimar o efeito do passe livre sobre a variação de mobilidade:
+*Passo 1:* Estimar o efeito do passe livre sobre a variação de mobilidade:
 $$\Delta \text{mobilidade} \sim \text{passe livre} \quad (\hat{\alpha})$$
 
-**Passo 2:** Estimar o efeito da variação de mobilidade sobre o comparecimento, controlando pelo passe livre:
+*Passo 2:* Estimar o efeito da variação de mobilidade sobre o comparecimento, controlando pelo passe livre:
 $$\text{comparecimento} \sim \Delta m + \text{passe} \quad (\hat{\beta}_1)$$
 
-**Passo 3:** Efeito causal = $\hat{\alpha} \times \hat{\beta}$
+*Passo 3:* Efeito causal = $\hat{\alpha} \times \hat{\beta}$

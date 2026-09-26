@@ -18,7 +18,7 @@ date: 2026-04-15
 
 > When the purposes of regression are so narrowly restricted, the outcome variable of interest, $Y$, is not generally thought to be a function of potential outcomes associated with well-defined causal states. Consequently, it would be inappropriate to give a causal interpretation to any of the estimated coefficients in $\hat{\beta}$. [@morgan2015counterfactuals, p. 192]
 
-#### Perspective 2 -- Regression adjustment as a strategy to estimate causal effects
+#### Perspective 2 -- regression adjustment as a strategy to estimate causal effects
 
 Suppose the following simple model:
 
@@ -58,7 +58,7 @@ where $\mu^0 \equiv \mathbb{E}[Y^0]$, $\mu^1 \equiv \mathbb{E}[Y^1]$, $v^0 \equi
 >
 > 3. a fully flexible parametrization of $X$ is used. [@morgan2015counterfactuals, pp. 204–205]
 
-#### Perspective 3 -- Regression as conditional-variance-weighted matching
+#### Perspective 3 -- regression as conditional-variance-weighted matching
 
 > We first show why least squares regression can yield misleading causal effect estimates in the presence of individual-level heterogeneity of causal effects, even if the only variable that needs to be adjusted for is given a fully flexible coding (i.e., when the adjustment variable is parameterized with a dummy variable for each of its values, save one for the reference category). In these cases, least squares estimators implicitly invoke conditional-variance weighting of individual-level causal effects. This weighting scheme generates a conditional-variance-weighted estimate of the average causal effect, which is not an average causal effect that is often of any inherent interest to a researcher. [@morgan2015counterfactuals, p. 206]
 
@@ -98,7 +98,7 @@ where $\mathbf{W}$ is a diagonal matrix with the corresponding values of $w_{i, 
 
 > As for the weighted regression estimates of the ATE, these results only hold over repeated samples from the same population or in the probability limit as a single sample approaches infinity. And the same caveats introduced in Section 7.1 still obtain. If the equation that estimates the propensity scores is misspecified, then the estimates of the ATT and ATC will be inconsistent and biased because the weights will not fully balance the underlying determinants of treatment assignment. In addition, disproportionately small or large weights may still emerge even if the propensity scores are estimated flawlessly, and in these cases the estimates may be imprecise (i.e., still consistent but not necessarily close to the true ATT or ATC in the single finite sample under analysis). [@morgan2015counterfactuals, p. 234]
 
-#### Doubly Robust Weighted Regression Estimators
+#### Doubly robust weighted regression estimators
 
 > We already showed in Regression Demonstration 4 that matching performs well when the complete specification of treatment assignment is used, along with a supplementary regression adjustment. The reason for this result is precisely the double protection argument outlined above. The varying level of imbalance that remains for each matching estimator can be seen as slight misspecification of the matching model, which is produced either because the propensity score model has not been respecified to remove as much imbalance as possible or because the matching algorithm has features that render it suboptimal for the particular application. The supplemental regression adjustments, as shown in Table 6.8, reduce the average bias in the matching estimates because they further adjust for remaining imbalance in the means of the matching variables. As such, the matching and supplementary adjustment are working together to minimize bias in the estimates of the ATT, using the double protection reasoning introduced above. [@morgan2015counterfactuals, p. 236]
 
@@ -138,9 +138,9 @@ A principal é a proteção contra má especificação parcial — algo muito re
 
 Em análises de dados observacionais, queremos reconstruir o processo gerador dos dados. Em geral, há muitos modelos plausíveis, mesmo quando o conjunto de variáveis independentes é fixo.
 
-- **Matching sozinho:** melhora comparabilidade, mas pode deixar desequilíbrio residual
-- **Regressão sozinha:** ajusta muitas covariadas de uma vez, mas pode depender demais de extrapolação e forma funcional
-- **Matching + regressão:** matching melhora o desenho e regressão ajusta o que restou; juntos, podem produzir inferências robustas e menos dependentes do modelo.
+- *Matching sozinho:* melhora comparabilidade, mas pode deixar desequilíbrio residual
+- *Regressão sozinha:* ajusta muitas covariadas de uma vez, mas pode depender demais de extrapolação e forma funcional
+- *Matching + regressão:* matching melhora o desenho e regressão ajusta o que restou; juntos, podem produzir inferências robustas e menos dependentes do modelo.
 
 ### Regressão como estratégia para estimar efeitos causais
 
@@ -204,7 +204,7 @@ Sob o pressuposto de que $\delta_i = \delta$, isto é, de que os efeitos do trat
 
 > Sob independência condicional e com parametrização completamente flexível, se os efeitos forem heterogêneos  os coeficientes estimados por OLS para o tratamento $D$ serão consistentes e não viesados para o efeito médio do tratamento calculado com ponderação dos casos pela variância condicional do tratamento.
 
-Por independência condicional, queremos dizer o seguinte: condicional a uma característica específica, tudo passa como se tivesse havido aleatorização. Vamos formando grupos que são combinações de características, até o ponto em que, dentro desses grupos, tudo se passa como se tivesse acontecido de maneira aleatória.
+Por independência condicional, queremos dizer o seguinte: condicional a uma característica específica, tudo se passa como se tivesse havido aleatorização. Vamos formando grupos que são combinações de características, até o ponto em que, dentro desses grupos, tudo se passa como se tivesse acontecido de maneira aleatória.
 
 $$
 (Y^1, Y^0) \perp\!\!\!\perp D \mid X
@@ -212,4 +212,4 @@ $$
 
 Se você tiver feito todos os grupos necessários, então todos os demais erros são ignoráveis; se isso não é verdade, você tem tão somente uma correlação. O pressuposto da independência condicional pode ser chamado também de ignorabilidade -- isto é, você pode ignorar todo o resto.
 
-Por parametrização completamente flexível significa dizer que você acertou a forma funcional da regressão.
+Parametrização completamente flexível significa dizer que você acertou a forma funcional da regressão.

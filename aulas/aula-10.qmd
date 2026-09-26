@@ -76,7 +76,7 @@ $$
 y_{it} = \delta d_{it} + \mathbf{x}^\top_{it} \beta + \alpha_i + \epsilon_{it},
 $$
 
-Como $\alpha_i$ é fixo no tempo, podemos subtrair a média temporal **de cada unidade** (ou seja, _within_):
+Como $\alpha_i$ é fixo no tempo, podemos subtrair a média temporal de cada unidade (ou seja, _within_):
 
 $$
 y_{it} - \bar{y}_i = \delta(d_{it} - \bar{d}_i) + (\mathbf{x}_{it} - \bar{\mathbf{x}}_i)^\top\beta + (\alpha_i - \bar{\alpha}_i) + (\epsilon_{it} - \bar{\epsilon}_i)
@@ -120,7 +120,7 @@ $$
 y_{it} = \delta d_{it} + \mathbf{x}^\top_{it} \beta + \alpha_i + \lambda_t + \epsilon_{it}
 $$
 
-Nesse caso, temos o estimador TWFE. Na formulação com dummies, TWFE equivale a uma regressão dummies de unidade e dummies de período. Em um painel balanceado, a formulação em desvios é:
+Nesse caso, temos o estimador TWFE. Na formulação com dummies, TWFE equivale a uma regressão com dummies de unidade e dummies de período. Em um painel balanceado, a formulação em desvios é:
 
 $$
 y_{it} - \bar{y_i} - \bar{y_t} + \bar{y} = \delta(d_{it} - \bar{d_i} - \bar{d_t} + \bar{d}) + (\mathbf{x}^\top_{it} - \bar{\mathbf{x}^\top_i} - \bar{\mathbf{x}^\top_t} + \bar{\mathbf{x}^\top}) + (\epsilon_{it} - \bar{\epsilon_i} - \bar{\epsilon_t} + \bar{\epsilon})

@@ -17,23 +17,23 @@ Um **grafo acíclico dirigido** (DAG) é uma representação gráfica de relaç�
 - $X$ é parte do processo gerador de dados (PGD) de $Y$
 - Contrafactual: se $X$ não tivesse ocorrido, $Y$ provavelmente também não teria
 - Se propositalmente mudássemos o valor de $X$, $Y$ provavelmente se alteraria
-- Em resumo: $X$ **causa** $Y$
+- Em resumo: $X$ causa $Y$
 
 Duas propriedades importantes das causas nos DAGs:
 
-1. **Múltiplas causas.** Um mesmo $Y$ pode ter várias causas: $X_1 \rightarrow Y$, $X_2 \rightarrow Y$, $X_3 \rightarrow Y$. Cada $X_i$ é uma causa parcial.
-2. **Causas são probabilísticas.** Elas alteram a distribuição de $Y$, não determinam seu valor com certeza. Estamos falando de coletivos de unidades de observação.
+1. *Múltiplas causas.* Um mesmo $Y$ pode ter várias causas: $X_1 \rightarrow Y$, $X_2 \rightarrow Y$, $X_3 \rightarrow Y$. Cada $X_i$ é uma causa parcial.
+2. *Causas são probabilísticas.* Elas alteram a distribuição de $Y$, não determinam seu valor com certeza. Estamos falando de coletivos de unidades de observação.
 
 ### Por que acíclico?
 
-Setas unidirecionais não funcionam em ciclos. Um DAG **deve** ser acíclico: cadeias do tipo $A \rightarrow D \rightarrow E \rightarrow F \rightarrow A$ são proibidas. Há uma justificativa lógica: ciclos geram tautologias. Há também uma justificativa operacional: o aciclo viabiliza certas propriedades matemáticas que seriam impossíveis de outra forma.
+Setas unidirecionais não funcionam em ciclos. Um DAG deve ser acíclico: cadeias do tipo $A \rightarrow D \rightarrow E \rightarrow F \rightarrow A$ são proibidas. Há uma justificativa lógica: ciclos geram tautologias. Há também uma justificativa operacional: a aciclicidade viabiliza certas propriedades matemáticas que seriam impossíveis de outra forma.
 
 ## Como escolher as setas
 
-É muito difícil escolher quais setas *não* criar, porque o mundo é de fato complicado. A melhor forma de decidir quais setas incluir é por meio de **revisão de literatura**, em particular, revisão sistemática e meta-análise.
+É muito difícil escolher quais setas *não* criar, porque o mundo é de fato complicado. A melhor forma de decidir quais setas incluir é por meio de revisão de literatura, em particular, revisão sistemática e meta-análise.
 
-- **Revisão sistemática:** permite identificar se o efeito existe e em que direção opera
-- **Meta-análise:** fornece pistas sobre a magnitude e a forma funcional da relação
+- *Revisão sistemática:* permite identificar se o efeito existe e em que direção opera
+- *Meta-análise:* fornece pistas sobre a magnitude e a forma funcional da relação
 
 ::: callout-note
 O DAG não informa nada sobre a forma funcional da relação entre as variáveis, apenas sobre sua existência e direção. A revisão de literatura preenche essa lacuna.
@@ -115,14 +115,14 @@ ggdag(dag_collider) + theme_dag()
 
 Suponha que atores em Hollywood sejam selecionados por talento *ou* beleza, e que, na população geral, talento e beleza sejam independentes. Uma vez dentro desse grupo, observamos uma correlação negativa entre as duas características: quanto menos talentoso, mais belo, e vice-versa.
 
-Essa correlação não existe na população; ela é **criada pela seleção**. Beleza e talento explicam conjuntamente a chance de estar em Hollywood, que é o collider.
+Essa correlação não existe na população; ela é criada pela seleção. Beleza e talento explicam conjuntamente a chance de estar em Hollywood, que é o collider.
 
 ::: callout-warning
-**Controlar por um collider tem o mesmo efeito de selecionar uma amostra que é fruto de um collider.** Colliders são armadilhas como variáveis de controle.
+Controlar por um collider tem o mesmo efeito de selecionar uma amostra que é fruto de um collider. Colliders são armadilhas como variáveis de controle.
 :::
 
 ## Implicações observáveis
 
 O DAG nos ajuda a desenhar diversas formas funcionais que, na prática, deveriam produzir os mesmos efeitos causais para uma variável de interesse. Um único DAG pode gerar dezenas de proposições empiricamente testáveis: independências condicionais, regressões equivalentes, restrições de sobreidentificação.
 
-A função principal dos DAGs é, portanto, **gerar implicações observáveis** que podem ser confrontadas com os dados.
+A função principal dos DAGs é, portanto, gerar implicações observáveis que podem ser confrontadas com os dados.
